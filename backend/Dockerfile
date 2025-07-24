@@ -1,28 +1,38 @@
 FROM python:3.12-slim
 
-# Variables de entorno para desarrollo
+# no escribir .pyc y output sin buffer
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Instala dependencias del sistema
-RUN apt-get update && apt-get install -y build-essential libpq-dev curl && rm -rf /var/lib/apt/lists/*
+# instalar dependencias del sistema
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+       build-essential \
+       libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Crea un usuario no root
-RUN adduser --disabled-password --gecos "" appuser
-USER appuser
+# crear grupo y usuario sin privilegios
+RUN addgroup --system appgroup \
+    && adduser --system --ingroup appgroup --disabled-password appuser
 
-# Establece directorio de trabajo
 WORKDIR /app
 
-# Copia e instala dependencias
-COPY --chown=appuser:appuser requirements.txt .
+# copiar e instalar requerimientos con pip
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia el resto del código
-COPY --chown=appuser:appuser . .
+# copiar el resto del código
+COPY . .
 
-# Expone el puerto de la API
+# asegurar permisos correctos
+RUN chown -R appuser:appgroup /app
+
+# cambiar a usuario no root
+USER appuser
+
+# exponer puerto de la API
 EXPOSE 8000
 
-# Comando por defecto
-CMD ["fastapi", "dev", "app/main.py", "--host", "0.0.0.0", "--port", "8000"]
+# comando por defecto para producción
+# usa Gunicorn con Uvicorn workers
+CMD ["fastapi", "run", "app/main.py", "--host", "0.0.0.0", "--port", "8000"]
