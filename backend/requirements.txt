@@ -1,2 +1,5 @@
-# To ensure app dependencies are ported from your virtual environment/host machine into your container, run 'pip freeze > requirements.txt' in the terminal to overwrite this file
 fastapi[standard]>=0.112.0,<0.113.0
+pydantic-settings
+python-dotenv
+sqlalchemy
+psycopg2-binary
