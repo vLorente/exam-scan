@@ -9,7 +9,6 @@ venv/
 
 # Env config
 .env
-.env.*
 
 # Dev containers
 .devcontainer/.env

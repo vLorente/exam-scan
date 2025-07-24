@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
+from prometheus_fastapi_instrumentator import Instrumentator
 from app.config.settings import settings
-from app.api.v1.routers import upload, questions, exams  # importa los routers (cuando estén listos)
+# from app.api.v1.routers import upload, questions, exams
 
 app = FastAPI(
     title="Exam Scan API",
@@ -21,7 +21,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Endpoints para metricas de prometheus
+instrumentator = Instrumentator()
+instrumentator.instrument(app).expose(app, include_in_schema=False)
+
 # Incluir routers
-app.include_router(upload.router, prefix="/api/v1/upload", tags=["upload"])
-app.include_router(questions.router, prefix="/api/v1/questions", tags=["questions"])
-app.include_router(exams.router, prefix="/api/v1/exams", tags=["exams"])
+# app.include_router(upload.router, prefix="/api/v1/upload", tags=["upload"])
+# app.include_router(questions.router, prefix="/api/v1/questions", tags=["questions"])
+# app.include_router(exams.router, prefix="/api/v1/exams", tags=["exams"])
