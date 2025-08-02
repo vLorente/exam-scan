@@ -5,11 +5,14 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "alembic>=1.16.4",
     "fastapi[standard]>=0.113.0,<0.114.0",
-    "prometheus-fastapi-instrumentator>=7.1.0",
-    "psycopg2-binary>=2.9.10",
+    "sqlmodel>=0.0.24",
     "pydantic>=2.7.0,<3.0.0",
     "pydantic-settings>=2.10.1",
-    "python-dotenv>=1.1.1",
-    "sqlalchemy>=2.0.42",
+    "python-dotenv>=1.1.1", 
+    "psycopg2-binary>=2.9.10",
+    "prometheus-fastapi-instrumentator>=7.1.0",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
 ]

@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
-from app.config.settings import settings
-# from app.api.v1.routers import upload, questions, exams
+
+from app.core.config import settings
+from app.core.database import create_db_and_tables
+# from app.api.v1.router import api_router
 
 app = FastAPI(
     title="Exam Scan API",
@@ -25,13 +27,15 @@ app.add_middleware(
 instrumentator = Instrumentator()
 instrumentator.instrument(app).expose(app, include_in_schema=False)
 
-# Incluir routers
-# app.include_router(upload.router, prefix="/api/v1/upload", tags=["upload"])
-# app.include_router(questions.router, prefix="/api/v1/questions", tags=["questions"])
-# app.include_router(exams.router, prefix="/api/v1/exams", tags=["exams"])
+# Create database tables on startup
+@app.on_event("startup")
+def on_startup():
+    create_db_and_tables()
 
+# Include API routers
+# app.include_router(api_router, prefix="/api/v1")
 
 # Test inicial, elimina cuando tengas tus propios endpoints
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"message": "Exam Scan API is running!"}
