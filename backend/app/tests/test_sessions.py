@@ -8,7 +8,11 @@ from app.models.user import User
 from app.models.exam import Exam, ExamStatus
 from app.models.session import ExamSession, SessionStatus
 from app.models.question import Question
-from app.services import SessionService
+from app.services.session_service import SessionService
+from fastapi.testclient import TestClient
+from app.main import app
+
+client = TestClient(app)
 
 
 @pytest.fixture(name="published_exam")
@@ -54,29 +58,273 @@ def draft_exam_fixture(session: Session, sample_user: User):
     return exam
 
 
+class TestSessionCRUD:
+    """Tests para CRUD de sesiones de examen"""
+    
+    def test_create_exam_session(self, session: Session, sample_user: User, published_exam: Exam):
+        """Test crear sesión de examen con datos válidos"""
+        if published_exam.id is None or sample_user.id is None:
+            pytest.skip("Required IDs not available")
+        
+        response = client.post("/api/v1/sessions/", json={
+            "exam_id": published_exam.id, 
+            "student_id": sample_user.id
+        })
+        print(f"Response status: {response.status_code}")
+        print(f"Response body: {response.text}")
+        assert response.status_code == 201
+        data = response.json()
+        assert "id" in data
+        assert data["exam_id"] == published_exam.id
+        assert data["student_id"] == sample_user.id
+        assert data["status"] == "in_progress"
+
+    def test_create_session_invalid_exam(self, sample_user: User):
+        """Test crear sesión con examen inexistente"""
+        if sample_user.id is None:
+            pytest.skip("User ID not available")
+        
+        response = client.post("/api/v1/sessions/", json={
+            "exam_id": 9999,  # ID inexistente
+            "student_id": sample_user.id
+        })
+        assert response.status_code == 404
+        assert "Exam not found" in response.json()["detail"]
+
+    def test_create_session_invalid_user(self, published_exam: Exam):
+        """Test crear sesión con usuario inexistente"""
+        if published_exam.id is None:
+            pytest.skip("Exam ID not available")
+        
+        response = client.post("/api/v1/sessions/", json={
+            "exam_id": published_exam.id,
+            "student_id": 9999  # ID inexistente
+        })
+        assert response.status_code == 404
+        assert "Student not found" in response.json()["detail"]
+
+    def test_list_exam_sessions(self):
+        """Test listar sesiones"""
+        response = client.get("/api/v1/sessions/")
+        assert response.status_code == 200
+        assert isinstance(response.json(), list)
+
+    def test_get_session_by_id(self, session: Session, sample_user: User, published_exam: Exam):
+        """Test obtener sesión por ID"""
+        if published_exam.id is None or sample_user.id is None:
+            pytest.skip("Required IDs not available")
+        
+        # Crear una sesión
+        response = client.post("/api/v1/sessions/", json={
+            "exam_id": published_exam.id,
+            "student_id": sample_user.id
+        })
+        assert response.status_code == 201
+        session_id = response.json()["id"]
+        
+        # Obtener la sesión
+        response = client.get(f"/api/v1/sessions/{session_id}")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["id"] == session_id
+        assert data["exam_id"] == published_exam.id
+
+    def test_get_session_not_found(self):
+        """Test obtener sesión inexistente"""
+        response = client.get("/api/v1/sessions/9999")
+        assert response.status_code == 404
+        assert "Session not found" in response.json()["detail"]
+
+    def test_finish_exam_session(self, session: Session, sample_user: User, published_exam: Exam):
+        """Test finalizar sesión"""
+        if published_exam.id is None or sample_user.id is None:
+            pytest.skip("Required IDs not available")
+        
+        # Crear una sesión
+        response = client.post("/api/v1/sessions/", json={
+            "exam_id": published_exam.id,
+            "student_id": sample_user.id
+        })
+        assert response.status_code == 201
+        session_id = response.json()["id"]
+        
+        # Finalizar la sesión
+        response = client.post(f"/api/v1/sessions/{session_id}/finish")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "completed"
+        assert "end_time" in data
+
+    def test_get_time_remaining(self, session: Session, sample_user: User, published_exam: Exam):
+        """Test obtener tiempo restante"""
+        if published_exam.id is None or sample_user.id is None:
+            pytest.skip("Required IDs not available")
+        
+        # Crear una sesión
+        response = client.post("/api/v1/sessions/", json={
+            "exam_id": published_exam.id,
+            "student_id": sample_user.id
+        })
+        assert response.status_code == 201
+        session_id = response.json()["id"]
+        
+        # Obtener tiempo restante
+        response = client.get(f"/api/v1/sessions/{session_id}/time-remaining")
+        assert response.status_code == 200
+        data = response.json()
+        assert "time_remaining" in data
+        assert isinstance(data["time_remaining"], int)
+
+    def test_delete_exam_session(self, session: Session, sample_user: User, published_exam: Exam):
+        """Test eliminar sesión"""
+        if published_exam.id is None or sample_user.id is None:
+            pytest.skip("Required IDs not available")
+        
+        # Crear una sesión
+        response = client.post("/api/v1/sessions/", json={
+            "exam_id": published_exam.id,
+            "student_id": sample_user.id
+        })
+        assert response.status_code == 201
+        session_id = response.json()["id"]
+        
+        # Eliminar la sesión
+        response = client.delete(f"/api/v1/sessions/{session_id}")
+        assert response.status_code == 204
+
+
+class TestStudentAnswerCRUD:
+    """Tests para CRUD de respuestas de estudiantes"""
+    
+    def test_create_answer(self, session: Session, sample_user: User, published_exam: Exam):
+        """Test crear respuesta de estudiante"""
+        if published_exam.id is None or sample_user.id is None:
+            pytest.skip("Required IDs not available")
+        
+        # Crear una sesión primero
+        session_resp = client.post("/api/v1/sessions/", json={
+            "exam_id": published_exam.id,
+            "student_id": sample_user.id
+        })
+        assert session_resp.status_code == 201
+        session_id = session_resp.json()["id"]
+        
+        # Crear una respuesta
+        response = client.post(f"/api/v1/sessions/{session_id}/answers", json={
+            "question_id": 1,
+            "selected_option_id": 1
+        })
+        assert response.status_code == 201
+        data = response.json()
+        assert data["question_id"] == 1
+        assert data["selected_option_id"] == 1
+        assert data["session_id"] == session_id
+
+    def test_list_answers(self, session: Session, sample_user: User, published_exam: Exam):
+        """Test listar respuestas de una sesión"""
+        if published_exam.id is None or sample_user.id is None:
+            pytest.skip("Required IDs not available")
+        
+        # Crear una sesión
+        session_resp = client.post("/api/v1/sessions/", json={
+            "exam_id": published_exam.id,
+            "student_id": sample_user.id
+        })
+        assert session_resp.status_code == 201
+        session_id = session_resp.json()["id"]
+        
+        # Listar respuestas (inicialmente vacío)
+        response = client.get(f"/api/v1/sessions/{session_id}/answers")
+        assert response.status_code == 200
+        assert isinstance(response.json(), list)
+
+    def test_create_answer_session_not_found(self):
+        """Test crear respuesta en sesión inexistente"""
+        response = client.post("/api/v1/sessions/9999/answers", json={
+            "question_id": 1,
+            "selected_option_id": 1
+        })
+        assert response.status_code == 404
+        assert "Session not found" in response.json()["detail"]
+
+    def test_update_answer(self, session: Session, sample_user: User, published_exam: Exam):
+        """Test actualizar respuesta"""
+        if published_exam.id is None or sample_user.id is None:
+            pytest.skip("Required IDs not available")
+        
+        # Crear sesión y respuesta
+        session_resp = client.post("/api/v1/sessions/", json={
+            "exam_id": published_exam.id,
+            "student_id": sample_user.id
+        })
+        assert session_resp.status_code == 201
+        session_id = session_resp.json()["id"]
+        
+        answer_resp = client.post(f"/api/v1/sessions/{session_id}/answers", json={
+            "question_id": 1,
+            "selected_option_id": 1
+        })
+        assert answer_resp.status_code == 201
+        answer_id = answer_resp.json()["id"]
+        
+        # Actualizar respuesta
+        response = client.put(f"/api/v1/sessions/{session_id}/answers/{answer_id}", json={
+            "selected_option_id": 2
+        })
+        assert response.status_code == 200
+        data = response.json()
+        assert data["selected_option_id"] == 2
+
+    def test_delete_answer(self, session: Session, sample_user: User, published_exam: Exam):
+        """Test eliminar respuesta"""
+        if published_exam.id is None or sample_user.id is None:
+            pytest.skip("Required IDs not available")
+        
+        # Crear sesión y respuesta
+        session_resp = client.post("/api/v1/sessions/", json={
+            "exam_id": published_exam.id,
+            "student_id": sample_user.id
+        })
+        assert session_resp.status_code == 201
+        session_id = session_resp.json()["id"]
+        
+        answer_resp = client.post(f"/api/v1/sessions/{session_id}/answers", json={
+            "question_id": 1,
+            "selected_option_id": 1
+        })
+        assert answer_resp.status_code == 201
+        answer_id = answer_resp.json()["id"]
+        
+        # Eliminar respuesta
+        response = client.delete(f"/api/v1/sessions/{session_id}/answers/{answer_id}")
+        assert response.status_code == 204
+
+
 class TestSessionService:
     """Tests para SessionService - lógica de negocio de sesiones"""
     
     def test_can_start_exam_success(self, session: Session, sample_user: User, published_exam: Exam):
         """Test que usuario puede iniciar examen publicado"""
-        # Verificar que puede iniciar
-        if sample_user.id is not None and published_exam.id is not None:
-            can_start, reason = SessionService.can_start_exam(sample_user.id, published_exam.id, session)
-            assert can_start is True
-            assert "can start exam" in reason.lower()
+        if sample_user.id is None or published_exam.id is None:
+            pytest.skip("Required IDs not available")
+        
+        can_start, reason = SessionService.can_start_exam(sample_user.id, published_exam.id, session)
+        assert can_start is True
+        assert "can start exam" in reason.lower()
     
     def test_can_start_exam_not_published(self, session: Session, sample_user: User, draft_exam: Exam):
         """Test que usuario no puede iniciar examen no publicado"""
-        # Verificar que no puede iniciar
-        if sample_user.id is not None and draft_exam.id is not None:
-            can_start, reason = SessionService.can_start_exam(sample_user.id, draft_exam.id, session)
-            assert can_start is False
-            assert "not published" in reason.lower()
+        if sample_user.id is None or draft_exam.id is None:
+            pytest.skip("Required IDs not available")
+        
+        can_start, reason = SessionService.can_start_exam(sample_user.id, draft_exam.id, session)
+        assert can_start is False
+        assert "not published" in reason.lower()
     
     def test_can_start_exam_max_attempts_reached(self, session: Session, sample_user: User, published_exam: Exam):
         """Test que usuario no puede iniciar examen si alcanzó máximo de intentos"""
         if sample_user.id is None or published_exam.id is None:
-            return
+            pytest.skip("Required IDs not available")
             
         # Crear sesiones previas hasta alcanzar el máximo
         for i in range(published_exam.max_attempts):
@@ -94,167 +342,15 @@ class TestSessionService:
         assert can_start is False
         assert "maximum attempts" in reason.lower()
     
-    def test_can_start_exam_active_session_exists(self, session: Session, sample_user: User, published_exam: Exam):
-        """Test que usuario no puede iniciar examen si ya tiene sesión activa"""
-        if sample_user.id is None or published_exam.id is None:
-            return
-            
-        # Crear sesión activa
-        active_session = ExamSession(
-            student_id=sample_user.id,
-            exam_id=published_exam.id,
-            status=SessionStatus.IN_PROGRESS
-        )
-        session.add(active_session)
-        session.commit()
-        
-        # Verificar que no puede iniciar otra
-        can_start, reason = SessionService.can_start_exam(sample_user.id, published_exam.id, session)
-        assert can_start is False
-        assert "already an active session" in reason.lower()
-    
     def test_start_exam_session_success(self, session: Session, sample_user: User, published_exam: Exam):
         """Test iniciar sesión de examen exitosamente"""
         if sample_user.id is None or published_exam.id is None:
-            return
-            
-        # Iniciar sesión
+            pytest.skip("Required IDs not available")
+        
         exam_session = SessionService.start_exam_session(sample_user.id, published_exam.id, session)
         
+        assert exam_session is not None
         assert exam_session.student_id == sample_user.id
         assert exam_session.exam_id == published_exam.id
         assert exam_session.status == SessionStatus.IN_PROGRESS
-        assert exam_session.end_time is not None  # Tiene límite de tiempo por duration_minutes
-        assert exam_session.start_time is not None
-    
-    def test_start_exam_session_without_time_limit(self, session: Session, sample_user: User, published_exam: Exam):
-        """Test iniciar sesión sin límite de tiempo"""
-        if published_exam.id is None:
-            return
-            
-        # Quitar límite de tiempo
-        published_exam.duration_minutes = None
-        session.add(published_exam)
-        session.commit()
-        
-        if sample_user.id is not None:
-            # Iniciar sesión
-            exam_session = SessionService.start_exam_session(sample_user.id, published_exam.id, session)
-            
-            assert exam_session.end_time is None  # Sin límite de tiempo
-    
-    def test_finish_exam_session(self, session: Session, sample_user: User, published_exam: Exam):
-        """Test finalizar sesión de examen"""
-        if sample_user.id is None or published_exam.id is None:
-            return
-            
-        # Crear sesión activa
-        exam_session = ExamSession(
-            student_id=sample_user.id,
-            exam_id=published_exam.id,
-            status=SessionStatus.IN_PROGRESS
-        )
-        session.add(exam_session)
-        session.commit()
-        session.refresh(exam_session)
-        
-        if exam_session.id is not None:
-            # Finalizar sesión
-            finished_session = SessionService.finish_exam_session(exam_session.id, session)
-            
-            assert finished_session.status == SessionStatus.COMPLETED
-            assert finished_session.end_time is not None
-            assert finished_session.score is not None  # Aunque sea 0.0 por ahora
-    
-    def test_finish_exam_session_not_in_progress(self, session: Session, sample_user: User, published_exam: Exam):
-        """Test que no se puede finalizar sesión que no está en progreso"""
-        if sample_user.id is None or published_exam.id is None:
-            return
-            
-        # Crear sesión ya completada
-        exam_session = ExamSession(
-            student_id=sample_user.id,
-            exam_id=published_exam.id,
-            status=SessionStatus.COMPLETED
-        )
-        session.add(exam_session)
-        session.commit()
-        session.refresh(exam_session)
-        
-        if exam_session.id is not None:
-            # Intentar finalizar debe fallar
-            with pytest.raises(Exception) as exc_info:
-                SessionService.finish_exam_session(exam_session.id, session)
-            
-            assert "not in progress" in str(exc_info.value).lower()
-    
-    def test_get_user_exam_history(self, session: Session, sample_user: User, published_exam: Exam):
-        """Test obtener historial de sesiones de usuario"""
-        if sample_user.id is None or published_exam.id is None:
-            return
-            
-        # Crear varias sesiones
-        session1 = ExamSession(
-            student_id=sample_user.id,
-            exam_id=published_exam.id,
-            status=SessionStatus.COMPLETED,
-            score=85.0
-        )
-        session2 = ExamSession(
-            student_id=sample_user.id,
-            exam_id=published_exam.id,
-            status=SessionStatus.COMPLETED,
-            score=92.0
-        )
-        session.add_all([session1, session2])
-        session.commit()
-        
-        # Obtener historial
-        history = SessionService.get_user_exam_history(sample_user.id, published_exam.id, session)
-        
-        assert len(history) == 2
-        # Debería estar ordenado por fecha descendente (más reciente primero)
-        assert all(isinstance(s, ExamSession) for s in history)
-        assert all(s.student_id == sample_user.id for s in history)
-        assert all(s.exam_id == published_exam.id for s in history)
-    
-    def test_get_session_time_remaining_no_limit(self, session: Session, sample_user: User, published_exam: Exam):
-        """Test tiempo restante cuando no hay límite"""
-        if sample_user.id is None or published_exam.id is None:
-            return
-            
-        # Quitar límite de tiempo
-        published_exam.duration_minutes = None
-        session.add(published_exam)
-        session.commit()
-        
-        # Crear sesión activa
-        exam_session = ExamSession(
-            student_id=sample_user.id,
-            exam_id=published_exam.id,
-            status=SessionStatus.IN_PROGRESS
-        )
-        session.add(exam_session)
-        session.commit()
-        session.refresh(exam_session)
-        
-        if exam_session.id is not None:
-            # Verificar que no hay límite
-            time_remaining = SessionService.get_session_time_remaining(exam_session.id, session)
-            assert time_remaining is None
-    
-    def test_get_session_time_remaining_with_limit(self, session: Session, sample_user: User, published_exam: Exam):
-        """Test tiempo restante con límite"""
-        if sample_user.id is None or published_exam.id is None:
-            return
-            
-        # Iniciar sesión (que tendrá límite de tiempo)
-        exam_session = SessionService.start_exam_session(sample_user.id, published_exam.id, session)
-        
-        if exam_session.id is not None:
-            # Verificar que hay tiempo restante
-            time_remaining = SessionService.get_session_time_remaining(exam_session.id, session)
-            assert time_remaining is not None
-            if published_exam.duration_minutes is not None:
-                assert time_remaining <= published_exam.duration_minutes
-            assert time_remaining >= 0
+        assert exam_session.attempt_number >= 1

@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from .routers import auth, users, exams, questions
+from .routers import auth, users, exams, questions, sessions
 
 api_router = APIRouter()
 
@@ -11,3 +11,5 @@ api_router.include_router(users.router)
 api_router.include_router(exams.router)
 # Include questions router
 api_router.include_router(questions.router)
+# Include sessions router
+api_router.include_router(sessions.router)
