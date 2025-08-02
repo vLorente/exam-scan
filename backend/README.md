@@ -89,29 +89,83 @@ ALLOWED_ORIGINS=["http://localhost:4200", "http://localhost:3000"]
 
 ## 🐳 Docker & Dev Containers
 
-El proyecto incluye un `docker-compose.yml` que levanta:
-- **app**: backend FastAPI
-- **db**: PostgreSQL
-- **redis**: (opcional)
+### 🔧 Desarrollo con Docker Compose
 
-Para desarrollo, asegúrate de exponer el puerto 5432 en el servicio `db`:
+```bash
+# Configurar variables de entorno
+cp .env.example .env
 
-```yaml
-  db:
-    image: postgres:latest
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: app
-      POSTGRES_USER: app_user
-      POSTGRES_PASSWORD: app_password
+# Levantar entorno de desarrollo (con hot reload)
+./scripts/docker.sh dev-up
+
+# Ver logs en tiempo real
+./scripts/docker.sh dev-logs
+
+# Ejecutar migraciones
+./scripts/docker.sh migrate
+
+# Parar entorno
+./scripts/docker.sh dev-down
 ```
+
+### 🚀 Producción con Docker
+
+```bash
+# Configurar variables de producción
+cp .env.example .env
+# Editar .env con valores de producción
+
+# Levantar en producción
+./scripts/docker.sh prod-up
+
+# Ver estado
+./scripts/docker.sh status
+```
+
+### 🛠️ Características Docker
+
+- **✅ Migraciones automáticas** al arrancar
+- **🔄 Hot reload** en desarrollo  
+- **🏥 Health checks** en todos los servicios
+- **📦 Volúmenes persistentes** para datos
+- **🔧 Scripts de utilidad** incluidos
+
+### 📋 Servicios Incluidos
+
+| Servicio | Desarrollo | Producción |
+|----------|------------|------------|
+| **FastAPI** | localhost:8000 | localhost:8000 |
+| **PostgreSQL** | localhost:5433 | localhost:5432 |
+| **Redis** | localhost:6380 | localhost:6379 |
+| **Swagger Docs** | /docs | /docs |
+
+El proyecto incluye configuración completa para:
+- **Dev Containers** (VSCode)
+- **Docker Compose** (desarrollo y producción)
+- **Scripts automatizados** para gestión
 
 ---
 
 ## 🚀 Arranque Rápido
 
-### 1. Configuración del entorno
+### 🐳 Opción 1: Docker (Recomendado)
+
+```bash
+# 1. Configurar entorno
+cp .env.example .env
+# Editar .env si es necesario
+
+# 2. Levantar todo el stack
+./scripts/docker.sh dev-up
+
+# 3. ¡Listo! La API está en http://localhost:8000
+# - Documentación: http://localhost:8000/docs
+# - Health Check: http://localhost:8000/health
+```
+
+### 💻 Opción 2: Desarrollo Local
+
+#### 1. Configuración del entorno
 
 Crear archivo `.env`:
 ```env
@@ -122,7 +176,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 ALLOWED_ORIGINS=["http://localhost:4200", "http://localhost:3000"]
 ```
 
-### 2. Instalación y arranque
+#### 2. Instalación y arranque
 
 ```bash
 # En Dev Container (recomendado)
@@ -132,13 +186,13 @@ ALLOWED_ORIGINS=["http://localhost:4200", "http://localhost:3000"]
 uv sync
 
 # Ejecutar migraciones
-uv run alembic upgrade head
+./scripts/migrate.sh apply
 
 # Arrancar servidor de desarrollo
 uv run fastapi dev app/main.py --reload
 ```
 
-### 3. Acceso a la API
+#### 3. Acceso a la API
 
 - **Documentación Swagger**: http://localhost:8000/docs
 - **ReDoc**: http://localhost:8000/redoc

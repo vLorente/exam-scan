@@ -2,6 +2,11 @@ FROM python:3.12-slim
 
 ENV PYTHONUNBUFFERED=1
 
+# Install system dependencies including PostgreSQL client
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app/
 
 # Install uv
@@ -30,8 +35,12 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 ENV PYTHONPATH=/app
 
 COPY ./scripts /app/scripts
+RUN chmod +x /app/scripts/*.sh
 
 COPY ./pyproject.toml ./uv.lock ./alembic.ini /app/
+
+# Copy alembic directory with migrations
+COPY ./alembic /app/alembic
 
 COPY ./app /app/app
 
@@ -40,4 +49,8 @@ COPY ./app /app/app
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync
 
+# Use our initialization script as entrypoint
+ENTRYPOINT ["/app/scripts/docker-init.sh"]
+
+# Default command for the application
 CMD ["fastapi", "run", "--workers", "4", "app/main.py"]

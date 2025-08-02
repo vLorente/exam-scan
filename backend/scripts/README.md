@@ -30,9 +30,58 @@ Script para gestionar migraciones de base de datos con Alembic.
 ./scripts/migrate.sh help
 ```
 
+### 🐳 docker.sh - Gestión de Docker Compose
+Script para gestionar entornos Docker de desarrollo y producción.
+
+```bash
+# Entorno de desarrollo (con hot reload)
+./scripts/docker.sh dev-up      # Levantar desarrollo
+./scripts/docker.sh dev-down    # Parar desarrollo
+./scripts/docker.sh dev-logs    # Ver logs
+./scripts/docker.sh dev-shell   # Shell en contenedor
+
+# Entorno de producción
+./scripts/docker.sh prod-up     # Levantar producción
+./scripts/docker.sh prod-down   # Parar producción
+./scripts/docker.sh prod-logs   # Ver logs
+
+# Utilidades
+./scripts/docker.sh migrate     # Ejecutar migraciones
+./scripts/docker.sh build       # Construir imagen
+./scripts/docker.sh clean       # Limpiar todo
+./scripts/docker.sh status      # Ver estado
+./scripts/docker.sh help        # Ver ayuda
+```
+
+### 🔧 docker-init.sh - Inicialización de Contenedor
+Script interno que se ejecuta automáticamente al arrancar el contenedor:
+- Espera a que PostgreSQL esté disponible
+- Ejecuta migraciones automáticamente
+- Verifica configuración
+- Inicia la aplicación
+
 ### Ejemplos de Uso
 
-#### Después de modificar un modelo:
+#### Desarrollo con Docker:
+```bash
+# 1. Levantar entorno completo de desarrollo
+./scripts/docker.sh dev-up
+
+# 2. Verificar que todo funciona
+curl http://localhost:8000/health
+
+# 3. Ver documentación
+open http://localhost:8000/docs
+
+# 4. Modificar código (hot reload automático)
+# 5. Si cambias modelos, ejecutar migraciones
+./scripts/docker.sh migrate
+
+# 6. Ver logs en tiempo real
+./scripts/docker.sh dev-logs
+```
+
+#### Desarrollo local tradicional:
 ```bash
 # 1. Verificar qué cambios hay
 ./scripts/migrate.sh check
@@ -58,15 +107,64 @@ git add .
 git commit -m "feat: add user preferences model with migration"
 ```
 
+#### Producción:
+```bash
+# 1. Configurar variables de entorno
+cp .env.example .env
+# Editar .env con valores de producción
+
+# 2. Levantar en producción
+./scripts/docker.sh prod-up
+
+# 3. Verificar estado
+./scripts/docker.sh status
+
+# 4. Ver logs
+./scripts/docker.sh prod-logs
+```
+
 ---
 
-## 🛡️ Buenas Prácticas
+## � Configuración Docker
 
-1. **Siempre verificar antes de aplicar**: Usar `./scripts/migrate.sh status` antes de hacer cambios
-2. **Nombres descriptivos**: Usar descripciones claras en las migraciones
-3. **Revisar archivos generados**: Verificar el contenido de la migración antes de aplicar
-4. **Tests después de migración**: Ejecutar tests después de aplicar migraciones
-5. **Backup en producción**: Siempre hacer backup antes de aplicar en producción
+### Entornos Disponibles
+
+#### 🔧 Desarrollo (`docker-compose.dev.yml`)
+- **Hot reload** automático
+- **PostgreSQL**: Puerto 5433 (para no conflictar)
+- **Redis**: Puerto 6380
+- **Bind mounts** para desarrollo
+- **Migraciones automáticas** al iniciar
+
+#### 🚀 Producción (`docker-compose.yml`)
+- **Optimizado** para producción
+- **Health checks** en todos los servicios
+- **Volúmenes persistentes**
+- **Reinicio automático**
+- **Configuración vía variables de entorno**
+
+### Variables de Entorno
+
+Copia el archivo de ejemplo y personaliza:
+```bash
+cp .env.example .env
+# Editar .env según tu entorno
+```
+
+### Características de Inicialización
+
+El script `docker-init.sh` se ejecuta automáticamente y:
+1. ✅ Verifica configuración
+2. ⏳ Espera a que PostgreSQL esté listo
+3. 🗄️ Ejecuta migraciones automáticamente
+4. 🚀 Inicia la aplicación
+
+### Puertos por Defecto
+
+| Entorno | API | PostgreSQL | Redis |
+|---------|-----|------------|-------|
+| Desarrollo | 8000 | 5433 | 6380 |
+| Producción | 8000 | 5432 | 6379 |
 
 ---
 
