@@ -1,10 +1,21 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from app.core.config import settings
 from app.core.database import create_db_and_tables
-# from app.api.v1.router import api_router
+from app.api.v1.api import api_router
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    create_db_and_tables()
+    print("✅ Database tables created successfully!")
+    yield
+    # Shutdown (if needed)
+
 
 app = FastAPI(
     title="Exam Scan API",
@@ -12,6 +23,7 @@ app = FastAPI(
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
+    lifespan=lifespan,
 )
 
 # CORS
@@ -27,14 +39,8 @@ app.add_middleware(
 instrumentator = Instrumentator()
 instrumentator.instrument(app).expose(app, include_in_schema=False)
 
-# Create database tables on startup
-@app.on_event("startup")
-def on_startup():
-    create_db_and_tables()
-    print("✅ Database tables created successfully!")
-
 # Include API routers
-# app.include_router(api_router, prefix="/api/v1")
+app.include_router(api_router, prefix="/api/v1")
 
 # Test inicial, elimina cuando tengas tus propios endpoints
 @app.get("/")

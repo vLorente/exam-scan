@@ -18,7 +18,8 @@
                 "ms-vscode.live-server",
                 "meta.pyrefly",
                 "humao.rest-client",
-                "ms-ossdata.vscode-pgsql"
+                "ms-ossdata.vscode-pgsql",
+                "yzhang.markdown-all-in-one"
             ],
             "settings": {
                 "workbench.colorTheme": "Default Dark+",

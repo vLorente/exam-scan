@@ -1,0 +1,46 @@
+### Test Authentication Endpoints
+
+# Registro de usuario
+POST http://localhost:8000/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "username": "testuser", 
+  "full_name": "Test User",
+  "password": "testpassword123"
+}
+
+###
+
+# Login de usuario
+POST http://localhost:8000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "testpassword123"
+}
+
+###
+
+# Obtener información del usuario actual (requiere token)
+GET http://localhost:8000/api/v1/auth/me
+Authorization: Bearer {{token}}
+
+###
+
+# Variables para reutilizar
+@baseUrl = http://localhost:8000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+### Test con variables
+POST {{baseUrl}}/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "test2@example.com",
+  "username": "testuser2", 
+  "full_name": "Test User 2",
+  "password": "testpassword123"
+}
