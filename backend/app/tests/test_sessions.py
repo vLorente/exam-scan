@@ -12,8 +12,6 @@ from app.services.session_service import SessionService
 from fastapi.testclient import TestClient
 from app.main import app
 
-client = TestClient(app)
-
 
 @pytest.fixture(name="published_exam")
 def published_exam_fixture(session: Session, sample_user: User):
@@ -61,7 +59,7 @@ def draft_exam_fixture(session: Session, sample_user: User):
 class TestSessionCRUD:
     """Tests para CRUD de sesiones de examen"""
     
-    def test_create_exam_session(self, session: Session, sample_user: User, published_exam: Exam):
+    def test_create_exam_session(self, session: Session, sample_user: User, published_exam: Exam, client: TestClient):
         """Test crear sesión de examen con datos válidos"""
         if published_exam.id is None or sample_user.id is None:
             pytest.skip("Required IDs not available")
@@ -79,7 +77,7 @@ class TestSessionCRUD:
         assert data["student_id"] == sample_user.id
         assert data["status"] == "in_progress"
 
-    def test_create_session_invalid_exam(self, sample_user: User):
+    def test_create_session_invalid_exam(self, sample_user: User, client: TestClient):
         """Test crear sesión con examen inexistente"""
         if sample_user.id is None:
             pytest.skip("User ID not available")
@@ -91,7 +89,7 @@ class TestSessionCRUD:
         assert response.status_code == 404
         assert "Exam not found" in response.json()["detail"]
 
-    def test_create_session_invalid_user(self, published_exam: Exam):
+    def test_create_session_invalid_user(self, published_exam: Exam, client: TestClient):
         """Test crear sesión con usuario inexistente"""
         if published_exam.id is None:
             pytest.skip("Exam ID not available")
@@ -103,13 +101,13 @@ class TestSessionCRUD:
         assert response.status_code == 404
         assert "Student not found" in response.json()["detail"]
 
-    def test_list_exam_sessions(self):
+    def test_list_exam_sessions(self, client: TestClient):
         """Test listar sesiones"""
         response = client.get("/api/v1/sessions/")
         assert response.status_code == 200
         assert isinstance(response.json(), list)
 
-    def test_get_session_by_id(self, session: Session, sample_user: User, published_exam: Exam):
+    def test_get_session_by_id(self, session: Session, sample_user: User, published_exam: Exam, client: TestClient):
         """Test obtener sesión por ID"""
         if published_exam.id is None or sample_user.id is None:
             pytest.skip("Required IDs not available")
@@ -129,13 +127,13 @@ class TestSessionCRUD:
         assert data["id"] == session_id
         assert data["exam_id"] == published_exam.id
 
-    def test_get_session_not_found(self):
+    def test_get_session_not_found(self, client: TestClient):
         """Test obtener sesión inexistente"""
         response = client.get("/api/v1/sessions/9999")
         assert response.status_code == 404
         assert "Session not found" in response.json()["detail"]
 
-    def test_finish_exam_session(self, session: Session, sample_user: User, published_exam: Exam):
+    def test_finish_exam_session(self, session: Session, sample_user: User, published_exam: Exam, client: TestClient):
         """Test finalizar sesión"""
         if published_exam.id is None or sample_user.id is None:
             pytest.skip("Required IDs not available")
@@ -155,7 +153,7 @@ class TestSessionCRUD:
         assert data["status"] == "completed"
         assert "end_time" in data
 
-    def test_get_time_remaining(self, session: Session, sample_user: User, published_exam: Exam):
+    def test_get_time_remaining(self, session: Session, sample_user: User, published_exam: Exam, client: TestClient):
         """Test obtener tiempo restante"""
         if published_exam.id is None or sample_user.id is None:
             pytest.skip("Required IDs not available")
@@ -175,7 +173,7 @@ class TestSessionCRUD:
         assert "time_remaining" in data
         assert isinstance(data["time_remaining"], int)
 
-    def test_delete_exam_session(self, session: Session, sample_user: User, published_exam: Exam):
+    def test_delete_exam_session(self, session: Session, sample_user: User, published_exam: Exam, client: TestClient):
         """Test eliminar sesión"""
         if published_exam.id is None or sample_user.id is None:
             pytest.skip("Required IDs not available")
@@ -196,7 +194,7 @@ class TestSessionCRUD:
 class TestStudentAnswerCRUD:
     """Tests para CRUD de respuestas de estudiantes"""
     
-    def test_create_answer(self, session: Session, sample_user: User, published_exam: Exam):
+    def test_create_answer(self, session: Session, sample_user: User, published_exam: Exam, client: TestClient):
         """Test crear respuesta de estudiante"""
         if published_exam.id is None or sample_user.id is None:
             pytest.skip("Required IDs not available")
@@ -220,7 +218,7 @@ class TestStudentAnswerCRUD:
         assert data["selected_option_id"] == 1
         assert data["session_id"] == session_id
 
-    def test_list_answers(self, session: Session, sample_user: User, published_exam: Exam):
+    def test_list_answers(self, session: Session, sample_user: User, published_exam: Exam, client: TestClient):
         """Test listar respuestas de una sesión"""
         if published_exam.id is None or sample_user.id is None:
             pytest.skip("Required IDs not available")
@@ -238,7 +236,7 @@ class TestStudentAnswerCRUD:
         assert response.status_code == 200
         assert isinstance(response.json(), list)
 
-    def test_create_answer_session_not_found(self):
+    def test_create_answer_session_not_found(self, client: TestClient):
         """Test crear respuesta en sesión inexistente"""
         response = client.post("/api/v1/sessions/9999/answers", json={
             "question_id": 1,
@@ -247,7 +245,7 @@ class TestStudentAnswerCRUD:
         assert response.status_code == 404
         assert "Session not found" in response.json()["detail"]
 
-    def test_update_answer(self, session: Session, sample_user: User, published_exam: Exam):
+    def test_update_answer(self, session: Session, sample_user: User, published_exam: Exam, client: TestClient):
         """Test actualizar respuesta"""
         if published_exam.id is None or sample_user.id is None:
             pytest.skip("Required IDs not available")
@@ -275,7 +273,7 @@ class TestStudentAnswerCRUD:
         data = response.json()
         assert data["selected_option_id"] == 2
 
-    def test_delete_answer(self, session: Session, sample_user: User, published_exam: Exam):
+    def test_delete_answer(self, session: Session, sample_user: User, published_exam: Exam, client: TestClient):
         """Test eliminar respuesta"""
         if published_exam.id is None or sample_user.id is None:
             pytest.skip("Required IDs not available")
