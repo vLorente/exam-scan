@@ -1,7 +1,8 @@
 from typing import Optional, List, TYPE_CHECKING
 from sqlmodel import Field, SQLModel, Relationship
+from datetime import datetime
 from enum import Enum
-from .base import BaseModel
+from .base import BaseModel, TimestampMixin
 
 if TYPE_CHECKING:
     from .exam import Exam
@@ -44,12 +45,10 @@ class QuestionCreate(QuestionBase):
     """Modelo para crear pregunta"""
     pass
 
-class QuestionRead(QuestionBase):
+class QuestionRead(QuestionBase, TimestampMixin):
     """Modelo para leer pregunta"""
     id: int
     exam_id: int
-    created_at: str
-    updated_at: Optional[str] = None
 
 class QuestionReadWithOptions(QuestionRead):
     """Modelo para leer pregunta con opciones"""
@@ -88,12 +87,10 @@ class OptionCreate(OptionBase):
     """Modelo para crear opción"""
     pass
 
-class OptionRead(OptionBase):
+class OptionRead(OptionBase, TimestampMixin):
     """Modelo para leer opción"""
     id: int
     question_id: int
-    created_at: str
-    updated_at: Optional[str] = None
 
 class OptionUpdate(SQLModel):
     """Modelo para actualizar opción"""

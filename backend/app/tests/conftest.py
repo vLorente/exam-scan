@@ -43,3 +43,19 @@ def test_user_data_fixture():
         "full_name": "Test User",
         "password": "testpassword123"
     }
+
+
+@pytest.fixture(name="sample_user")
+def sample_user_fixture(session: Session):
+    """Create a sample user for testing"""
+    user = User(
+        email="test@example.com",
+        username="testuser",
+        full_name="Test User",
+        hashed_password="hashed_password_123",
+        is_active=True
+    )
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user

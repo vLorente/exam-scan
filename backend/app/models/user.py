@@ -2,7 +2,7 @@ from typing import Optional, List, TYPE_CHECKING
 from sqlmodel import Field, SQLModel, Relationship
 from enum import Enum
 from datetime import datetime
-from .base import BaseModel
+from .base import BaseModel, TimestampMixin
 
 if TYPE_CHECKING:
     from .exam import Exam
@@ -40,17 +40,13 @@ class UserLogin(SQLModel):
     email: str
     password: str
 
-class UserRead(UserBase):
+class UserRead(UserBase, TimestampMixin):
     """Modelo para leer usuario (sin password)"""
     id: int
-    created_at: datetime
-    updated_at: Optional[datetime] = None
 
-class UserReadFull(UserBase):
+class UserReadFull(UserBase, TimestampMixin):
     """Modelo completo para leer usuario con timestamps"""
     id: int
-    created_at: datetime
-    updated_at: Optional[datetime] = None
 
 class UserUpdate(SQLModel):
     """Modelo para actualizar usuario"""
