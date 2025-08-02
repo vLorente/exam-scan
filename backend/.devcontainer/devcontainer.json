@@ -1,8 +1,11 @@
 {
-    "name": "FastAPI Backend DevContainer",
+    "name": "FastAPI Backend DevContainer", 
     "dockerComposeFile": "docker-compose.yml",
     "service": "app",
     "workspaceFolder": "/workspace/backend",
+    "mounts": [
+        "source=${localWorkspaceFolder}/..,target=/workspace,type=bind,consistency=cached"
+    ],
     "customizations": {
         "vscode": {
             "extensions": [
@@ -26,6 +29,17 @@
                 "python.formatting.blackArgs": [
                     "--line-length=88"
                 ],
+                "files.exclude": {
+                    "../frontend": true,
+                    "../Frontend": true,
+                    "../*.md": true,
+                    "../docker-compose.yml": true,
+                    "../exam_scan.code-workspace": true
+                },
+                "search.exclude": {
+                    "../frontend": true,
+                    "../Frontend": true
+                },
                 "sqltools.connections": [
                     {
                         "name": "PostgreSQL (devcontainer)",
