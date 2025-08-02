@@ -17,7 +17,8 @@
                 "github.vscode-pull-request-github",
                 "ms-vscode.live-server",
                 "meta.pyrefly",
-                "humao.rest-client"
+                "humao.rest-client",
+                "ms-ossdata.vscode-pgsql"
             ],
             "settings": {
                 "workbench.colorTheme": "Default Dark+",
