@@ -14,6 +14,11 @@ engine = create_engine(
 
 def create_db_and_tables():
     """Create database tables"""
+    # Import models to register them with SQLModel
+    from app.models import (
+        User, Exam, Question, Option, 
+        ExamSession, StudentAnswer, Tag
+    )
     SQLModel.metadata.create_all(engine)
 
 def get_session() -> Generator[Session, None, None]:
