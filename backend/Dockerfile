@@ -1,38 +1,43 @@
 FROM python:3.12-slim
 
-# no escribir .pyc y output sin buffer
-ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# instalar dependencias del sistema
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-       build-essential \
-       libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR /app/
 
-# crear grupo y usuario sin privilegios
-RUN addgroup --system appgroup \
-    && adduser --system --ingroup appgroup --disabled-password --home /app appuser
+# Install uv
+# Ref: https://docs.astral.sh/uv/guides/integration/docker/#installing-uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-WORKDIR /app
+# Place executables in the environment at the front of the path
+# Ref: https://docs.astral.sh/uv/guides/integration/docker/#using-the-environment
+ENV PATH="/app/.venv/bin:$PATH"
 
-# copiar e instalar requerimientos con pip
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Compile bytecode
+# Ref: https://docs.astral.sh/uv/guides/integration/docker/#compiling-bytecode
+ENV UV_COMPILE_BYTECODE=1
 
-# copiar el resto del código
-COPY . .
+# uv Cache
+# Ref: https://docs.astral.sh/uv/guides/integration/docker/#caching
+ENV UV_LINK_MODE=copy
 
-# asegurar permisos correctos
-RUN chown -R appuser:appgroup /app
+# Install dependencies
+# Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --frozen --no-install-project
 
-# cambiar a usuario no root
-USER appuser
+ENV PYTHONPATH=/app
 
-# exponer puerto de la API
-EXPOSE 8000
+COPY ./scripts /app/scripts
 
-# comando por defecto para producción
-# usa Gunicorn con Uvicorn workers
-CMD ["fastapi", "run", "app/main.py", "--host", "0.0.0.0", "--port", "8000"]
+COPY ./pyproject.toml ./uv.lock ./alembic.ini /app/
+
+COPY ./app /app/app
+
+# Sync the project
+# Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync
+
+CMD ["fastapi", "run", "--workers", "4", "app/main.py"]

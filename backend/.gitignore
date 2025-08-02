@@ -7,6 +7,9 @@ __pycache__/
 venv/
 .venv/
 
+# uv
+.python-version
+
 # Env config
 .env
 
@@ -21,9 +24,6 @@ build/
 *.egg
 pip-wheel-metadata/
 
-# VSCode
-.vscode/
-*.code-workspace
 
 # PyCharm
 .idea/
