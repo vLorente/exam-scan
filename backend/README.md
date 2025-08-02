@@ -257,7 +257,12 @@ uv run pytest --cov=app --cov-report=html
 # Desarrollo
 uv run fastapi dev app/main.py --reload
 
-# Migraciones
+# Migraciones (recomendado usar el script)
+./scripts/migrate.sh status          # Ver estado actual
+./scripts/migrate.sh generate "desc" # Generar migración
+./scripts/migrate.sh apply           # Aplicar migraciones
+
+# Migraciones (comandos directos)
 uv run alembic revision --autogenerate -m "descripción"
 uv run alembic upgrade head
 
@@ -272,39 +277,38 @@ uv run python -c "from app.core.database import create_tables; create_tables()"
 
 ---
 
-## 🛠️ Troubleshooting
+## 🗄️ Migraciones de Base de Datos
 
-### Problemas de Base de Datos
-- **Error de conexión**: Verificar `.env` y que PostgreSQL esté corriendo
-- **Tablas no creadas**: Ejecutar `alembic upgrade head`
-- **Puerto 5432 ocupado**: Cambiar puerto en `docker-compose.yml`
+### Sistema de Control de Versiones
+- **Herramienta**: Alembic (SQLAlchemy migration tool)
+- **Estado actual**: Migración `4de3509c4210` (sincronizado)
+- **Ubicación**: `/alembic/versions/`
 
-### Problemas de Dev Container
-- **uv no encontrado**: Rebuild container
-- **Puerto 8000 ocupado**: Cambiar puerto en launch settings
+### 🚀 Script de Migraciones (Recomendado)
+```bash
+# Verificar estado y cambios pendientes
+./scripts/migrate.sh status
 
-### Problemas de Tests
-- **Tests fallan**: Verificar que la base de datos de tests funciona
-- **Import errors**: Verificar PYTHONPATH y estructura de módulos
+# Generar migración después de cambios en modelos
+./scripts/migrate.sh generate "add user preferences field"
 
----
+# Aplicar migraciones pendientes
+./scripts/migrate.sh apply
 
-## 📈 Próximas Implementaciones
+# Ver historial completo
+./scripts/migrate.sh history
+```
 
-### Fase 3 (Completar)
-- [ ] **Sessions CRUD**: Endpoints para gestión de sesiones
-- [ ] **Tags CRUD**: Sistema de etiquetado y filtrado
-- [ ] **Tests adicionales**: Completar cobertura de nuevos endpoints
+### ⚡ Flujo de Trabajo Recomendado
+1. **Modificar modelos** en `app/models/*.py`
+2. **Verificar cambios**: `./scripts/migrate.sh check`
+3. **Generar migración**: `./scripts/migrate.sh generate "descripción"`
+4. **Revisar archivo** generado en `alembic/versions/`
+5. **Aplicar migración**: `./scripts/migrate.sh apply`
+6. **Ejecutar tests**: `uv run pytest`
 
-### Fase 4 (Futuro)
-- [ ] **Procesamiento PDF**: Subida y extracción de preguntas
-- [ ] **IA Integration**: Extracción automática con LLM
-- [ ] **Bulk Operations**: Importación masiva de preguntas
-
-### Fase 5 (Monitorización)
-- [ ] **Prometheus**: Métricas de rendimiento
-- [ ] **Health Checks**: Endpoints de salud detallados
-- [ ] **Logging**: Sistema de logs estructurado
+### 📖 Documentación Completa
+Ver [`MIGRATIONS.md`](./MIGRATIONS.md) para guía detallada y mejores prácticas.
 
 ---
 
