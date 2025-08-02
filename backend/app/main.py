@@ -29,3 +29,9 @@ instrumentator.instrument(app).expose(app, include_in_schema=False)
 # app.include_router(upload.router, prefix="/api/v1/upload", tags=["upload"])
 # app.include_router(questions.router, prefix="/api/v1/questions", tags=["questions"])
 # app.include_router(exams.router, prefix="/api/v1/exams", tags=["exams"])
+
+
+# Test inicial, elimina cuando tengas tus propios endpoints
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}

@@ -13,7 +13,7 @@ RUN apt-get update \
 
 # crear grupo y usuario sin privilegios
 RUN addgroup --system appgroup \
-    && adduser --system --ingroup appgroup --disabled-password appuser
+    && adduser --system --ingroup appgroup --disabled-password --home /app appuser
 
 WORKDIR /app
 

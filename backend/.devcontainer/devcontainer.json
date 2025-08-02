@@ -1,27 +1,46 @@
 {
-  "name": "Exam Scan Backend",
-  "dockerFile": "../Dockerfile",
-  "context": "..",
-  "workspaceFolder": "/app",
-  "features": {
-    "ghcr.io/devcontainers/features/python:1": {
-      "version": "3.12"
-    }
-  },
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "ms-python.python",
-        "ms-python.vscode-pylance"
-      ],
-      "settings": {
-        "python.defaultInterpreterPath": "/usr/local/bin/python"
-      }
-    }
-  },
-  "forwardPorts": [8000, 5432, 6379],
-  "remoteEnv": {
-    "PYTHONPATH": "/app"
-  },
-  "postCreateCommand": "pip install -r requirements.txt"
+    "name": "FastAPI Backend DevContainer",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspace",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "mtxr.sqltools",
+                "mtxr.sqltools-driver-pg",
+                "GitHub.copilot",
+                "github.vscode-pull-request-github",
+                "ms-vscode.live-server",
+                "meta.pyrefly",
+                "humao.rest-client"
+            ],
+            "settings": {
+                "workbench.colorTheme": "Default Dark+",
+                "python.languageServer": "Pylance",
+                "python.linting.enabled": true,
+                "python.linting.mypyEnabled": true,
+                "python.testing.pytestEnabled": true,
+                "python.formatting.provider": "black",
+                "python.formatting.blackArgs": [
+                    "--line-length=88"
+                ],
+                "sqltools.connections": [
+                    {
+                        "name": "PostgreSQL (devcontainer)",
+                        "driver": "PostgreSQL",
+                        "server": "db",
+                        "port": 5432,
+                        "database": "app",
+                        "username": "app_user",
+                        "password": "app_password"
+                    }
+                ]
+            }
+        }
+    },
+    "forwardPorts": [8000, 5432],
+    "postCreateCommand": "pip install -r requirements.txt",
+    "remoteUser": "vscode"
 }

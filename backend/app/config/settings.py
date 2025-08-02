@@ -8,8 +8,8 @@ class Settings(BaseSettings):
     HOST: str = "0.0.0.0"
     PORT: int = 8000
 
-    DATABASE_URL: str
-    SECRET_KEY: str
+    DATABASE_URL: str = "postgresql+psycopg2://user:password@localhost:5432/exams"
+    SECRET_KEY: str = "your-secret-key"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
