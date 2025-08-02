@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     PORT: int = 8000
 
     # Database Configuration
-    DATABASE_URL: str = "postgresql+psycopg2://app_user:app_password@db:5432/app"
+    DATABASE_URL: str = "postgresql+psycopg2://app_user:app_password@localhost:5432/app"
     
     # Security Configuration
     SECRET_KEY: str = "your-super-secret-key-change-in-production"

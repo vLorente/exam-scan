@@ -1,7 +1,11 @@
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 from sqlmodel import Field, SQLModel, Relationship
 from enum import Enum
 from .base import BaseModel
+
+if TYPE_CHECKING:
+    from .exam import Exam
+    from .session import ExamSession
 
 class UserRole(str, Enum):
     """Roles de usuario en el sistema"""

@@ -31,6 +31,7 @@ instrumentator.instrument(app).expose(app, include_in_schema=False)
 @app.on_event("startup")
 def on_startup():
     create_db_and_tables()
+    print("✅ Database tables created successfully!")
 
 # Include API routers
 # app.include_router(api_router, prefix="/api/v1")

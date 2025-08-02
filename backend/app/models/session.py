@@ -1,8 +1,13 @@
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 from sqlmodel import Field, SQLModel, Relationship
 from enum import Enum
 from datetime import datetime
 from .base import BaseModel
+
+if TYPE_CHECKING:
+    from .exam import Exam, ExamRead
+    from .question import Question, QuestionRead, Option, OptionRead
+    from .user import User
 
 class SessionStatus(str, Enum):
     """Estados de una sesión de examen"""

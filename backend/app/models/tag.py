@@ -3,7 +3,7 @@ from sqlmodel import Field, SQLModel, Relationship
 from .base import BaseModel
 
 if TYPE_CHECKING:
-    from .exam import Exam, ExamTagLink
+    from .exam import Exam
 
 class TagBase(SQLModel):
     """Modelo base para Tag - campos compartidos"""

@@ -1,7 +1,12 @@
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 from sqlmodel import Field, SQLModel, Relationship
 from enum import Enum
 from .base import BaseModel
+
+if TYPE_CHECKING:
+    from .exam import Exam
+    from .session import StudentAnswer
+
 
 class QuestionType(str, Enum):
     """Tipos de pregunta"""
