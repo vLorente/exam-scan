@@ -1,0 +1,53 @@
+{
+  "name": "Exam Scan Fullstack",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "GitHub.copilot",
+        "github.vscode-pull-request-github",
+        "ms-vscode.live-server",
+        "meta.pyrefly",
+        "humao.rest-client",
+        "ms-ossdata.vscode-pgsql",
+        "yzhang.markdown-all-in-one",
+        "angular.ng-template",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "AykutSarac.jsoncrack-vscode",
+        "github.vscode-github-actions"
+      ],
+      "settings": {
+        "python.languageServer": "Pylance",
+        "python.linting.enabled": true,
+        "python.linting.mypyEnabled": true,
+        "python.testing.pytestEnabled": true,
+        "python.formatting.provider": "black",
+        "python.formatting.blackArgs": ["--line-length=88"]
+      },
+      "pgsql.connections": [
+        {
+          "authenticationType": "SqlLogin",
+          "connectTimeout": 15,
+          "applicationName": "vscode-pgsql",
+          "clientEncoding": "utf8",
+          "sslmode": "prefer",
+          "server": "localhost",
+          "user": "app_user",
+          "password": "app_password",
+          "database": "app",
+          "profileName": "exams",
+          "expiresOn": 0
+        }
+      ]
+    }
+  },
+  "forwardPorts": [8000, 4200, 5432],
+  "mounts": ["source=${localWorkspaceFolder},target=/workspace,type=bind"],
+  "postCreateCommand": "cd /workspace/backend && uv sync && cd /workspace/frontend && pnpm install",
+  "remoteUser": "vscode"
+}
