@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'fastapi'
+    static_configs:
+      - targets: ['fastapi:8000']  # Asegúrate de que FastAPI exponga métricas en esta ruta.

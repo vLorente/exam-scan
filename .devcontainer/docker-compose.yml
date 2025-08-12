@@ -1,78 +1,150 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  app:
+  # Servicio para el backend (FastAPI)
+  backend:
     build:
-      context: ..
-      dockerfile: .devcontainer/Dockerfile.fullstack
-    volumes:
-      - ../:/workspace:cached
+      context: ../.devcontainer/python-container
+      dockerfile: Dockerfile
+    container_name: fastapi_backend
     ports:
       - "8000:8000"
-      - "4200:4200"
-    command: sleep infinity
+    volumes:
+      - ../backend:/app
     depends_on:
-      - db
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - ./.env.db
+    command: sleep infinity
     networks:
-      - examscan
+      - dev-network
 
-  # backend:
-  #   container_name: dev_backend
-  #   build:
-  #     context: ../backend
-  #     dockerfile: ../.devcontainer/Dockerfile.backend
-  #   volumes:
-  #     - ../:/workspace:cached
-  #   ports:
-  #     - "8000:8000"
-  #   command: sleep infinity
-  #   depends_on:
-  #     - db
-  #     - redis
-  #   networks:
-  #     - examscan
+  # Servicio para el frontend (Angular)
+  frontend:
+    build:
+      context: ../.devcontainer/angular-container
+      dockerfile: Dockerfile
+    container_name: angular_frontend
+    ports:
+      - "4200:4200"
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
+    command: sleep infinity
+    networks:
+      - dev-network
 
-  # frontend:
-  #   container_name: dev_frontend
-  #   build:
-  #     context: ../frontend
-  #     dockerfile: ../.devcontainer/Dockerfile.frontend
-  #   volumes:
-  #     - ../:/workspace:cached
-  #   ports:
-  #     - "4200:4200"
-  #   command: sleep infinity
-  #   networks:
-  #     - examscan
-
-  db:
-    container_name: dev_db
+  # Servicio para la base de datos PostgreSQL
+  postgres:
     image: postgres:17.5
+    container_name: postgres_db
     restart: unless-stopped
+    env_file:
+      - ./.env.db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    volumes:
-      - postgres-data-dev:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: app
-      POSTGRES_USER: app_user
-      POSTGRES_PASSWORD: app_password
     networks:
-      - examscan
+      - dev-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  redis:
-    container_name: dev_redis
-    image: redis:8.0.3
+  # Servicio para pgAdmin (nuevo)
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_dashboard
     restart: unless-stopped
     ports:
-    - "6379:6379" # Puerto por defecto de Redis
+      - "5050:80"
+    env_file:
+      - ./.env.db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: mysecretpassword
+      PGADMIN_LISTEN_PORT: 80
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
-      - examscan
+      - dev-network
 
+  # Servicio para Redis
+  redis:
+    image: redis:8.2.0-alpine
+    container_name: redis_cache
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+    - redis_data:/data
+    networks:
+      - dev-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Servicio para Prometheus
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    container_name: prometheus_server
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ../prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    depends_on:
+      - backend
+    networks:
+      - dev-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Servicio para Grafana
+  grafana:
+    image: grafana/grafana:12.1.0
+    container_name: grafana_dashboard
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ../grafana/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    networks:
+      - dev-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+# Volúmenes para persistencia de datos
 volumes:
-  postgres-data-dev:
+  postgres_data:
+  redis_data:
+  grafana_data:
+  pgadmin_data:
 
+# Redes
 networks:
-  examscan:
+  dev-network:
     driver: bridge

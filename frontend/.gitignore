@@ -45,3 +45,5 @@ Thumbs.db
 .pnpm-debug.log
 .pnpm-lock.yaml
 .pnpmfile.cjs
+.pnpm-store/
+pnpm-store/

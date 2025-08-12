@@ -1,0 +1,37 @@
+{
+  "name": "Angular Frontend DevContainer",
+  "dockerComposeFile": [
+    "../docker-compose.yml"
+  ],
+  "service": "frontend",
+  "workspaceFolder": "/app",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "angular.ng-template",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "ms-azuretools.vscode-docker",
+        "pnpm.pnpm-vscode-helper"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+
+  // Usamos 'pnpm install' para instalar las dependencias
+  "postCreateCommand": "pnpm install",
+  
+  "forwardPorts": [4200],
+  
+  "portsAttributes": {
+    "4200": {
+      "label": "Angular App",
+      "onAutoForward": "notify"
+    }
+  },
+
+  "remoteUser": "node"
+}
