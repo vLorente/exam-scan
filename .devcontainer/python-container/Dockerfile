@@ -6,17 +6,27 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get install -y --no-install-recommends curl postgresql-client git \
     && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
-# Crea un usuario no-root llamado 'pythonuser'
-RUN adduser --disabled-password --gecos '' pythonuser
-
-# Instala uv, el gestor de paquetes
+# Instala el gestor de paquetes uv
 RUN pip install uv
 
 # Establece el directorio de trabajo
-WORKDIR /workspace
+WORKDIR /app
 
-# Da permisos de escritura al nuevo usuario sobre el directorio /app
-RUN chown -R pythonuser:pythonuser /workspace
+# Copia el archivo de dependencias y instala todos los paquetes
+# Asumiendo que usas pyproject.toml
+# Si usas requirements.txt, reemplaza las siguientes líneas con:
+# COPY ../../backend/requirements.txt .
+# RUN uv sync
+COPY backend/pyproject.toml .
+
+# Instala dependencias
+RUN uv sync
+
+# Crea un usuario no-root
+RUN adduser --disabled-password --gecos '' pythonuser
+
+# Da permisos de escritura al nuevo usuario
+RUN chown -R pythonuser:pythonuser /app
 
 # Cambia al nuevo usuario para el resto de las operaciones
 USER pythonuser

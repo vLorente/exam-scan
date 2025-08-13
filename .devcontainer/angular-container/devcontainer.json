@@ -1,12 +1,14 @@
 {
   "name": "Angular Frontend DevContainer",
   "dockerComposeFile": [
-    "../docker-compose.yml"
+    "../docker-compose.devcontainer.yml"
   ],
   "service": "frontend",
   "workspaceFolder": "/app",
   // Agrega la siguiente línea
-  "mounts": ["source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached"],
+  "mounts": [
+  "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached"
+  ],
   "customizations": {
     "vscode": {
       "extensions": [
@@ -23,7 +25,7 @@
   },
 
   // Usamos 'pnpm install' para instalar las dependencias
-  "postCreateCommand": "pnpm install",
+  // "postCreateCommand": "pnpm install",
   
   "forwardPorts": [4200],
   
