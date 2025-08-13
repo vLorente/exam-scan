@@ -6,7 +6,6 @@
 The repository is medium-sized (~50 files) with a hybrid monorepo structure containing backend (Python/FastAPI), frontend (Angular/TypeScript), and Docker orchestration for both development and production environments.
 
 ## High Level Repository Information
-- **Size**: Medium monorepo (~50 files, multiple services)
 - **Type**: Full-stack web application (educational/exam management)
 - **Languages**: Python 3.12 (backend), TypeScript/Angular 20+ (frontend)
 - **Frameworks**: FastAPI, SQLModel, Angular with standalone components

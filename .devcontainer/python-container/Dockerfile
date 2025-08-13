@@ -2,7 +2,9 @@
 FROM python:3.12-slim
 
 # Instala las dependencias del sistema necesarias
-RUN apt-get update && apt-get install -y curl
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get install -y --no-install-recommends curl postgresql-client git \
+    && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 # Crea un usuario no-root llamado 'pythonuser'
 RUN adduser --disabled-password --gecos '' pythonuser
@@ -11,10 +13,10 @@ RUN adduser --disabled-password --gecos '' pythonuser
 RUN pip install uv
 
 # Establece el directorio de trabajo
-WORKDIR /app
+WORKDIR /workspace
 
 # Da permisos de escritura al nuevo usuario sobre el directorio /app
-RUN chown -R pythonuser:pythonuser /app
+RUN chown -R pythonuser:pythonuser /workspace
 
 # Cambia al nuevo usuario para el resto de las operaciones
 USER pythonuser

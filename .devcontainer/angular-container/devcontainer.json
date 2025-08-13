@@ -5,7 +5,8 @@
   ],
   "service": "frontend",
   "workspaceFolder": "/app",
-
+  // Agrega la siguiente línea
+  "mounts": ["source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached"],
   "customizations": {
     "vscode": {
       "extensions": [

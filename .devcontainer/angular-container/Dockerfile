@@ -2,11 +2,11 @@
 FROM node:20-alpine
 
 # Establece el directorio de trabajo
-WORKDIR /app
+WORKDIR /workspace
 
 # (Opcional pero buena práctica) Da permisos de escritura al usuario 'node'
 # Esto asegura que el usuario no-root pueda escribir en el directorio
-RUN chown -R node:node /app
+RUN chown -R node:node /workspace
 
 # Habilita Corepack como 'root' para que pueda modificar la configuración del sistema
 USER root
