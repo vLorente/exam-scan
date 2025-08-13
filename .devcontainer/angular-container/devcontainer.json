@@ -16,7 +16,16 @@
         "esbenp.prettier-vscode",
         "dbaeumer.vscode-eslint",
         "ms-azuretools.vscode-docker",
-        "pnpm.pnpm-vscode-helper"
+        "pnpm.pnpm-vscode-helper",
+        "rvest.vs-code-prettier-eslint",
+        "yzhang.markdown-all-in-one",
+        "ms-vscode.live-server",
+        "AykutSarac.jsoncrack-vscode",
+        "EditorConfig.EditorConfig",
+        "pranaygp.vscode-css-peek",
+        "GitHub.vscode-pull-request-github",
+        "humao.rest-client",
+        "cyrilletuzi.angular-schematics"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash"
