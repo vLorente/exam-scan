@@ -17,16 +17,16 @@ services:
     env_file:
       - ./.env.db
     # command: uv run fastapi dev app/main.py
-    # command: ["uv", "run", "fastapi", "dev", "app/main.py", "--host", "0.0.0.0", "--port", "8000", "--reload"]
-    command: sleep infinity
+    command: ["uv", "run", "fastapi", "dev", "app/main.py", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    # command: sleep infinity
     networks:
       - dev-network
-    # healthcheck:
-    #   test: ["CMD-SHELL", "curl -f http://localhost:8000/docs || exit 1"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 5
-    #   start_period: 30s
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/docs || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
 
   # Servicio para el frontend (Angular)
@@ -44,16 +44,16 @@ services:
       - backend
     #   backend:
     #     condition: service_healthy
-    # command: cd frontend && pnpm install && ng serve --host 0.0.0.0 --disable-host-check # Ejecutamos install y ng serve
-    command: sleep infinity
+    command: pnpm install && ng serve --host 0.0.0.0 --disable-host-check
+    # command: sleep infinity
     networks:
       - dev-network
-    # healthcheck:
-    #   test: ["CMD", "curl", "-f", "http://localhost:4200"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 5
-    #   start_period: 30s
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4200"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   # Servicio para la base de datos PostgreSQL
   postgres:

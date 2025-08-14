@@ -5,19 +5,16 @@ FROM node:20-alpine
 RUN apk add --no-cache bash curl git
 
 # Establece el directorio de trabajo
-WORKDIR /app
+WORKDIR /app/frontend
 
 # (Opcional pero buena práctica) Da permisos de escritura al usuario 'node'
 # Esto asegura que el usuario no-root pueda escribir en el directorio
 RUN chown -R node:node /app
 
-# Habilita Corepack como 'root' para que pueda modificar la configuración del sistema
+# Habilita Corepack y configura pnpm como por defecto (como root)
+# Esto asegura que los comandos de pnpm se resuelvan correctamente.
 USER root
-RUN corepack enable
-
-# Prepara y activa pnpm como el gestor de paquetes por defecto
-# Esto asegura que pnpm se use incluso si no hay una clave 'packageManager'
-RUN corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # Instalar el cli de angular
 RUN npm install -g @angular/cli@latest

@@ -4,7 +4,7 @@
     "../docker-compose.devcontainer.yml"
   ],
   "service": "frontend",
-  "workspaceFolder": "/app",
+  "workspaceFolder": "/app/frontend",
   // Agrega la siguiente línea
   "mounts": [
   "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached"
