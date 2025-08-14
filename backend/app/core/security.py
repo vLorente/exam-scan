@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
-from typing import Any, Union
-from jose import JWTError, jwt
+from typing import Any, Union, Optional
+import jwt
+from jwt import ExpiredSignatureError, InvalidTokenError
 from passlib.context import CryptContext
 from fastapi import HTTPException, status
 from .config import settings
@@ -8,7 +9,7 @@ from .config import settings
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-from typing import Optional
+# TODO: Actualizar usando bcrypt y pyjwt
 
 def create_access_token(
     subject: Union[str, Any], expires_delta: Optional[timedelta] = None
@@ -37,9 +38,11 @@ def verify_token(token: str) -> Union[str, None]:
     """Verify JWT token and return subject"""
     try:
         payload = jwt.decode(
-            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+            token,
+            settings.SECRET_KEY,
+            algorithms=[settings.ALGORITHM],
+            options={"require": ["exp", "sub"]},
         )
-        token_data = payload.get("sub")
-        return token_data
-    except JWTError:
+        return payload.get("sub")
+    except (ExpiredSignatureError, InvalidTokenError):
         return None
