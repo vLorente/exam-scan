@@ -26,7 +26,6 @@ yarn-error.log
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-!.vscode/mcp.json
 .history/*
 
 # Miscellaneous
@@ -41,10 +40,3 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-
-# Excluir fichero pnpm
-.pnpm-debug.log
-.pnpm-lock.yaml
-.pnpmfile.cjs
-.pnpm-store/
-pnpm-store/
