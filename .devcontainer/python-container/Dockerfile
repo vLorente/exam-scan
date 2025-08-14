@@ -10,7 +10,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 RUN pip install uv
 
 # Establece el directorio de trabajo
-WORKDIR /app
+WORKDIR /app/backend
 
 # Copia el archivo de dependencias y instala todos los paquetes
 # Asumiendo que usas pyproject.toml

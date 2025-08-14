@@ -4,7 +4,7 @@
     "../docker-compose.devcontainer.yml"
   ],
   "service": "backend",
-  "workspaceFolder": "/app",
+  "workspaceFolder": "/app/backend",
   // Monta el proyecto completo en el contenedor
 // Especifica el usuario no-root que creaste
   "remoteUser": "pythonuser",

@@ -38,6 +38,17 @@ Este proyecto tiene como objetivo facilitar la creación y gestión de exámenes
 - **Infrastructure**: Docker Compose, Dev Containers, Prometheus/Grafana monitoring
 - **Package Managers**: uv (Python), pnpm (Node.js)
 
+## Autenticación y Seguridad
+
+La autenticación y seguridad son aspectos críticos de esta aplicación. Se implementarán las siguientes medidas:
+
+- **Autenticación de Usuarios**: Se utilizará JWT (JSON Web Tokens) para la autenticación de usuarios. Los usuarios deberán iniciar sesión para obtener un token que se incluirá en las cabeceras de las solicitudes a los endpoints protegidos.
+- **Autorización**: Se implementarán roles y permisos para controlar el acceso a diferentes partes de la aplicación. Solo los usuarios con los permisos adecuados podrán realizar ciertas acciones (por ejemplo, crear o eliminar exámenes).
+- **Validación de Datos**: Se realizarán validaciones exhaustivas de los datos de entrada en todos los endpoints para prevenir ataques de inyección y garantizar la integridad de los datos.
+- **Cifrado de Contraseñas**: Las contraseñas de los usuarios se almacenarán de forma segura utilizando un algoritmo de hash (por ejemplo, passlib.context) para protegerlas en caso de que la base de datos sea comprometida.
+- **Protección contra CSRF**: Se implementarán medidas para proteger la aplicación contra ataques de falsificación de solicitudes entre sitios (CSRF).
+- **Registro y Monitoreo**: Se registrarán todas las actividades de los usuarios y se monitorearán en busca de comportamientos sospechosos.
+
 ## Backend Instructions
 
 Esta sección proporciona instrucciones para el desarrollo del backend de la aplicación.
