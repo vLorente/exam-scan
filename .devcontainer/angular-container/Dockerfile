@@ -1,5 +1,5 @@
-# Usa la imagen oficial de Node.js 20, la última versión LTS
-FROM node:20-alpine
+# Usa la imagen oficial de Node.js 22, la última versión LTS
+FROM node:22-alpine
 
 # Instala las dependencias del sistema necesarias (Alpine usa apk)
 RUN apk add --no-cache bash curl git
@@ -7,19 +7,14 @@ RUN apk add --no-cache bash curl git
 # Establece el directorio de trabajo
 WORKDIR /app/frontend
 
-# (Opcional pero buena práctica) Da permisos de escritura al usuario 'node'
-# Esto asegura que el usuario no-root pueda escribir en el directorio
-RUN chown -R node:node /app
-
-# Habilita Corepack y configura pnpm como por defecto (como root)
-# Esto asegura que los comandos de pnpm se resuelvan correctamente.
+# Instala npm y el Angular CLI de forma global como root
 USER root
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN npm install -g npm@latest && npm install -g @angular/cli@latest
 
-# Instalar el cli de angular
-RUN npm install -g @angular/cli@latest
+# Da permisos de escritura al usuario 'node' sobre el directorio /app
+RUN chown -R node:node /app/frontend
 
-ENV SHELL=/bin/bash
+# Vuelve a cambiar al usuario 'node' para el resto de las operaciones
 USER node
 
 # Expon el puerto por defecto de Angular

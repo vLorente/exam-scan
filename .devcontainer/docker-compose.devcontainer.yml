@@ -8,7 +8,9 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ../backend:/app
+      - ..:/app
+    # tmpfs:
+    #   - /app/backend/.venv
     depends_on:
       postgres:
         condition: service_healthy
@@ -17,8 +19,7 @@ services:
     env_file:
       - ./.env.db
     # command: uv run fastapi dev app/main.py
-    command: ["uv", "run", "fastapi", "dev", "app/main.py", "--host", "0.0.0.0", "--port", "8000", "--reload"]
-    # command: sleep infinity
+    command: bash -lc "uv sync && uv run fastapi dev app/main.py --host 0.0.0.0 --port 8000 --reload"
     networks:
       - dev-network
     healthcheck:
@@ -38,22 +39,20 @@ services:
     ports:
       - "4200:4200"
     volumes:
-      - ../frontend:/app
-      - /app/frontend/node_modules
+      - ..:/app
     depends_on:
-      - backend
-    #   backend:
-    #     condition: service_healthy
-    command: pnpm install && ng serve --host 0.0.0.0 --disable-host-check
-    # command: sleep infinity
+      backend:
+        condition: service_healthy
+    # command: bash -lc "npm install"
+    command: sleep infinity
     networks:
       - dev-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4200"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:4200"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 5
+    #   start_period: 30s
 
   # Servicio para la base de datos PostgreSQL
   postgres:

@@ -49,5 +49,6 @@
     }
   },
 
-  "remoteUser": "node"
+  // En desarrollo usar usuario root, en producción usar usuario node
+  "remoteUser": "root"
 }
