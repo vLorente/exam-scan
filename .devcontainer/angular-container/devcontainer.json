@@ -4,15 +4,7 @@
     "../docker-compose.devcontainer.yml"
   ],
   "service": "frontend",
-  "workspaceFolder": "/app/frontend",
-  // Agrega la siguiente línea
-  "mounts": [
-    {
-        "source": "${localWorkspaceFolder}",
-        "target": "/app",
-        "type": "bind"
-    }
-  ],
+  "workspaceFolder": "/app",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -37,8 +29,7 @@
     }
   },
 
-  // Usamos 'pnpm install' para instalar las dependencias
-  // "postCreateCommand": "pnpm install",
+//   "postCreateCommand": "npm start",
   
   "forwardPorts": [4200],
   

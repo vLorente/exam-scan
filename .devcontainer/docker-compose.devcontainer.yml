@@ -39,20 +39,29 @@ services:
     ports:
       - "4200:4200"
     volumes:
-      - ..:/app
+      - ../frontend:/app
+      - /app/node_modules
     depends_on:
       backend:
         condition: service_healthy
-    # command: bash -lc "npm install"
-    command: sleep infinity
     networks:
       - dev-network
-    # healthcheck:
-    #   test: ["CMD", "curl", "-f", "http://localhost:4200"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 5
-    #   start_period: 30s
+    environment:
+      # Variables de entorno para desarrollo
+      - NODE_ENV=development
+      - NG_CLI_ANALYTICS=false
+    user: node
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4200"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
   # Servicio para la base de datos PostgreSQL
   postgres:

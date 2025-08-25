@@ -1,24 +1,33 @@
-# Usa la imagen oficial de Node.js 22, la última versión LTS
-FROM node:22-alpine
+# =========================================
+# Stage 1: Development - Angular Application
+# =========================================
 
-# Instala las dependencias del sistema necesarias (Alpine usa apk)
+# Define the Node.js version to use (Alpine for a small footprint)
+ARG NODE_VERSION=22.14.0-alpine
+
+# Set the base image for development
+FROM node:${NODE_VERSION} AS dev
+
+# Install dependencies
 RUN apk add --no-cache bash curl git
 
-# Establece el directorio de trabajo
-WORKDIR /app/frontend
+# Set environment variable to indicate development mode
+ENV NODE_ENV=development
 
-# Instala npm y el Angular CLI de forma global como root
-USER root
-RUN npm install -g npm@latest && npm install -g @angular/cli@latest
+# Set the working directory inside the container
+WORKDIR /app
 
-# Da permisos de escritura al usuario 'node' sobre el directorio /app
-RUN chown -R node:node /app/frontend
+# Copy only the dependency files first to optimize Docker caching
+COPY ./frontend/package.json ./frontend/package-lock.json ./
 
-# Vuelve a cambiar al usuario 'node' para el resto de las operaciones
-USER node
+# Install dependencies using npm with caching to speed up subsequent builds
+RUN --mount=type=cache,target=/root/.npm npm install
 
-# Expon el puerto por defecto de Angular
+# Copy all application source files into the container
+COPY ./frontend .
+
+# Expose the port Angular uses for the dev server (default is 4200)
 EXPOSE 4200
 
-# El comando de inicio será gestionado por docker-compose
-CMD ["/bin/bash"]
+# Start the Angular dev server and bind it to all network interfaces
+CMD ["npm", "start", "--", "--host=0.0.0.0"]

@@ -23,8 +23,16 @@
 **/docker-compose*
 **/compose.y*ml
 **/Dockerfile*
+# Node.js specific exclusions
+node_modules
 **/node_modules
+**/.bin
 **/npm-debug.log
+**/yarn-debug.log*
+**/yarn-error.log*
+.npm
+.pnpm-debug.log*
+.yarn-integrity
 **/obj
 **/secrets.dev.yaml
 **/values.dev.yaml
