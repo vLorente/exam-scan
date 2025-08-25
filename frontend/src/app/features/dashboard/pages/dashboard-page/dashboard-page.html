@@ -11,9 +11,10 @@
           [title]="card.title"
           [description]="card.description"
           [buttonText]="card.buttonText"
+          [icon]="card.icon"
           [routerLink]="card.routerLink"
-          [disabled]="card.disabled"
-          [buttonClass]="card.buttonClass"
+          [disabled]="card.disabled ?? false"
+          [buttonClass]="card.buttonClass ?? 'btn-primary'"
           (buttonClick)="handleCardAction(card.id)"
         />
       }

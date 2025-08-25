@@ -1,16 +1,29 @@
-<div class="card">
-  <h2>{{ title() }}</h2>
-  <p>{{ description() }}</p>
+<mat-card class="dashboard-card">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon class="card-icon">{{ icon() }}</mat-icon>
+    </div>
+    <mat-card-title>{{ title() }}</mat-card-title>
+  </mat-card-header>
 
-  @if (routerLink(); as link) {
-    <a [routerLink]="link" class="btn-primary">{{ buttonText() }}</a>
-  } @else {
-    <button
-      [class]="buttonClass()"
-      [disabled]="disabled()"
-      (click)="onButtonClick()"
-    >
-      {{ buttonText() }}
-    </button>
-  }
-</div>
+  <mat-card-content>
+    <p>{{ description() }}</p>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    @if (routerLink(); as link) {
+      <a mat-raised-button color="primary" [routerLink]="link">
+        {{ buttonText() }}
+      </a>
+    } @else {
+      <button
+        mat-raised-button
+        [color]="disabled() ? '' : 'primary'"
+        [disabled]="disabled()"
+        (click)="onButtonClick()"
+      >
+        {{ buttonText() }}
+      </button>
+    }
+  </mat-card-actions>
+</mat-card>

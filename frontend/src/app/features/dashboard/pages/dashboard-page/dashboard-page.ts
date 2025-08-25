@@ -10,6 +10,7 @@ interface DashboardCard {
   title: string;
   description: string;
   buttonText: string;
+  icon: string;
   routerLink?: string;
   disabled?: boolean;
   buttonClass?: string;
@@ -35,6 +36,7 @@ export class DashboardPageComponent {
       title: 'Exámenes',
       description: 'Gestiona tus exámenes, crea nuevos o revisa los existentes.',
       buttonText: 'Ver Exámenes',
+      icon: 'quiz',
       routerLink: '/exams'
     },
     {
@@ -42,6 +44,7 @@ export class DashboardPageComponent {
       title: 'Procesamiento IA',
       description: 'Sube archivos PDF para extraer preguntas automáticamente.',
       buttonText: 'Próximamente',
+      icon: 'smart_toy',
       disabled: true,
       buttonClass: 'btn-secondary'
     },
@@ -50,6 +53,7 @@ export class DashboardPageComponent {
       title: 'Usuarios',
       description: 'Administra usuarios y permisos del sistema.',
       buttonText: 'Gestionar Usuarios',
+      icon: 'people',
       routerLink: '/users',
       requiresRole: ['admin']
     },
@@ -58,6 +62,7 @@ export class DashboardPageComponent {
       title: 'Estadísticas',
       description: 'Revisa el rendimiento y estadísticas de exámenes.',
       buttonText: 'Próximamente',
+      icon: 'analytics',
       disabled: true,
       buttonClass: 'btn-secondary'
     }

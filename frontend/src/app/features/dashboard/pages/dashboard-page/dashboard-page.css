@@ -1,6 +1,6 @@
 .dashboard {
   min-height: 100vh;
-  background-color: #f8f9fa;
+  background-color: #fafafa;
 }
 
 .main-content {
@@ -11,6 +11,17 @@
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 }
