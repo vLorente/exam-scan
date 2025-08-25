@@ -1,126 +1,158 @@
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
-  <div class="form-group">
-    <label for="full_name">Nombre Completo</label>
+  <!-- Nombre Completo -->
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Nombre Completo</mat-label>
     <input
-      id="full_name"
-      type="text"
+      matInput
       formControlName="full_name"
-      [class.error]="registerForm.get('full_name')?.invalid && registerForm.get('full_name')?.touched"
       placeholder="Tu nombre completo"
+      autocomplete="name"
     >
+    <mat-icon matSuffix>person</mat-icon>
     @if (registerForm.get('full_name')?.invalid && registerForm.get('full_name')?.touched) {
-      <div class="error-message">
-        El nombre es requerido
-      </div>
+      <mat-error>El nombre es requerido</mat-error>
     }
-  </div>
+  </mat-form-field>
 
-  <div class="form-group">
-    <label for="username">Nombre de Usuario</label>
+  <!-- Nombre de Usuario -->
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Nombre de Usuario</mat-label>
     <input
-      id="username"
-      type="text"
+      matInput
       formControlName="username"
-      [class.error]="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
       placeholder="Usuario único"
+      autocomplete="username"
     >
+    <mat-icon matSuffix>account_circle</mat-icon>
     @if (registerForm.get('username')?.invalid && registerForm.get('username')?.touched) {
-      <div class="error-message">
-        El nombre de usuario es requerido
-      </div>
+      <mat-error>El nombre de usuario es requerido</mat-error>
     }
-  </div>
+  </mat-form-field>
 
-  <div class="form-group">
-    <label for="email">Email</label>
+  <!-- Email -->
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Correo Electrónico</mat-label>
     <input
-      id="email"
+      matInput
       type="email"
       formControlName="email"
-      [class.error]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
       placeholder="tu@email.com"
+      autocomplete="email"
     >
+    <mat-icon matSuffix>email</mat-icon>
     @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
-      <div class="error-message">
+      <mat-error>
         @if (registerForm.get('email')?.errors?.['required']) {
           El email es requerido
         }
         @if (registerForm.get('email')?.errors?.['email']) {
           Ingresa un email válido
         }
-      </div>
+      </mat-error>
     }
-  </div>
+  </mat-form-field>
 
-  <div class="form-group">
-    <label for="role">Tipo de Usuario</label>
-    <select
-      id="role"
-      formControlName="role"
-      [class.error]="registerForm.get('role')?.invalid && registerForm.get('role')?.touched"
-    >
-      <option value="">Selecciona tu rol</option>
-      <option value="teacher">Profesor</option>
-      <option value="student">Estudiante</option>
-    </select>
+  <!-- Tipo de Usuario -->
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Tipo de Usuario</mat-label>
+    <mat-select formControlName="role">
+      <mat-option value="teacher">
+        <mat-icon>school</mat-icon>
+        Profesor
+      </mat-option>
+      <mat-option value="student">
+        <mat-icon>menu_book</mat-icon>
+        Estudiante
+      </mat-option>
+    </mat-select>
+    <mat-icon matSuffix>badge</mat-icon>
     @if (registerForm.get('role')?.invalid && registerForm.get('role')?.touched) {
-      <div class="error-message">
-        Selecciona tu tipo de usuario
-      </div>
+      <mat-error>Selecciona tu tipo de usuario</mat-error>
     }
-  </div>
+  </mat-form-field>
 
-  <div class="form-group">
-    <label for="password">Contraseña</label>
+  <!-- Contraseña -->
+  <mat-form-field appearance="fill" class="full-width password-field">
+    <mat-label>Contraseña</mat-label>
     <input
-      id="password"
-      type="password"
+      matInput
+      [type]="showPassword() ? 'text' : 'password'"
       formControlName="password"
-      [class.error]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
       placeholder="Mínimo 6 caracteres"
+      autocomplete="new-password"
     >
+    <button
+      mat-icon-button
+      matSuffix
+      type="button"
+      (click)="togglePasswordVisibility()"
+      [attr.aria-label]="'Mostrar contraseña'"
+      [attr.aria-pressed]="showPassword()"
+      class="password-toggle"
+    >
+      <mat-icon>{{showPassword() ? 'visibility' : 'visibility_off'}}</mat-icon>
+    </button>
     @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
-      <div class="error-message">
+      <mat-error>
         @if (registerForm.get('password')?.errors?.['required']) {
           La contraseña es requerida
         }
         @if (registerForm.get('password')?.errors?.['minlength']) {
           La contraseña debe tener al menos 6 caracteres
         }
-      </div>
+      </mat-error>
     }
-  </div>
+  </mat-form-field>
 
-  <div class="form-group">
-    <label for="confirmPassword">Confirmar Contraseña</label>
+  <!-- Confirmar Contraseña -->
+  <mat-form-field appearance="fill" class="full-width password-field">
+    <mat-label>Confirmar Contraseña</mat-label>
     <input
-      id="confirmPassword"
-      type="password"
+      matInput
+      [type]="showConfirmPassword() ? 'text' : 'password'"
       formControlName="confirmPassword"
-      [class.error]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched"
       placeholder="Repite tu contraseña"
+      autocomplete="new-password"
     >
+    <button
+      mat-icon-button
+      matSuffix
+      type="button"
+      (click)="toggleConfirmPasswordVisibility()"
+      [attr.aria-label]="'Mostrar contraseña'"
+      [attr.aria-pressed]="showConfirmPassword()"
+      class="password-toggle"
+    >
+      <mat-icon>{{showConfirmPassword() ? 'visibility' : 'visibility_off'}}</mat-icon>
+    </button>
     @if (registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched) {
-      <div class="error-message">
+      <mat-error>
         @if (registerForm.get('confirmPassword')?.errors?.['required']) {
           Confirma tu contraseña
         }
-        @if (registerForm.hasError('passwordMismatch')) {
-          Las contraseñas no coinciden
-        }
-      </div>
+      </mat-error>
     }
-  </div>
+    @if (registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched) {
+      <mat-error>Las contraseñas no coinciden</mat-error>
+    }
+  </mat-form-field>
 
+  <!-- Botón de Registro -->
   <button
+    mat-raised-button
+    color="primary"
     type="submit"
-    class="btn-primary"
+    class="submit-button full-width"
     [disabled]="registerForm.invalid || loading()"
   >
     @if (loading()) {
+      <mat-spinner diameter="20" class="inline-spinner"></mat-spinner>
       Creando cuenta...
     } @else {
-      Crear Cuenta
+      <ng-container>
+        <mat-icon>person_add</mat-icon>
+        Crear Cuenta
+      </ng-container>
     }
   </button>
 </form>

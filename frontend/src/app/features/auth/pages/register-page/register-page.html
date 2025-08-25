@@ -1,29 +1,27 @@
 <div class="register-page">
   <div class="register-container">
-    <div class="header">
-      <h1>Crear Cuenta</h1>
-      <p>Únete a ExamScan</p>
-    </div>
+    <mat-card class="register-card">
+      <mat-card-header>
+        <div mat-card-avatar>
+          <mat-icon class="register-icon">person_add</mat-icon>
+        </div>
+        <mat-card-title>Crear Cuenta</mat-card-title>
+        <mat-card-subtitle>Únete a ExamScan</mat-card-subtitle>
+      </mat-card-header>
 
-    @if (errorMessage()) {
-      <div class="error-alert">
-        {{ errorMessage() }}
-      </div>
-    }
+      <mat-card-content>
+        <app-register-form
+          [loading]="loading()"
+          (submitRegister)="handleRegister($event)"
+        />
+      </mat-card-content>
 
-    @if (successMessage()) {
-      <div class="success-alert">
-        {{ successMessage() }}
-      </div>
-    }
-
-    <app-register-form
-      [loading]="loading()"
-      (submitRegister)="handleRegister($event)"
-    />
-
-    <div class="footer">
-      <p>¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí</a></p>
-    </div>
+      <mat-card-actions class="center-actions">
+        <p class="login-link">
+          ¿Ya tienes cuenta?
+          <a routerLink="/login" mat-button color="primary">Inicia sesión aquí</a>
+        </p>
+      </mat-card-actions>
+    </mat-card>
   </div>
 </div>
