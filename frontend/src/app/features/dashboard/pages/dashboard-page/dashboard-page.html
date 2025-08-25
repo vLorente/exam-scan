@@ -1,0 +1,22 @@
+<div class="dashboard">
+  <app-dashboard-header
+    [user]="currentUser()"
+    (logout)="handleLogout()"
+  />
+
+  <main class="main-content">
+    <div class="dashboard-grid">
+      @for (card of dashboardCards(); track card.id) {
+        <app-dashboard-card
+          [title]="card.title"
+          [description]="card.description"
+          [buttonText]="card.buttonText"
+          [routerLink]="card.routerLink"
+          [disabled]="card.disabled"
+          [buttonClass]="card.buttonClass"
+          (buttonClick)="handleCardAction(card.id)"
+        />
+      }
+    </div>
+  </main>
+</div>

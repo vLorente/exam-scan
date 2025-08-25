@@ -1,0 +1,29 @@
+<div class="register-page">
+  <div class="register-container">
+    <div class="header">
+      <h1>Crear Cuenta</h1>
+      <p>Únete a ExamScan</p>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="error-alert">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (successMessage()) {
+      <div class="success-alert">
+        {{ successMessage() }}
+      </div>
+    }
+
+    <app-register-form
+      [loading]="loading()"
+      (submitRegister)="handleRegister($event)"
+    />
+
+    <div class="footer">
+      <p>¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí</a></p>
+    </div>
+  </div>
+</div>

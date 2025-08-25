@@ -1,0 +1,12 @@
+<header class="header">
+  <div class="header-content">
+    <h1>ExamScan Dashboard</h1>
+    <div class="user-info">
+      @if (user(); as currentUser) {
+        <span>Bienvenido, {{ currentUser.name }}</span>
+        <span class="badge" [class]="'badge-' + currentUser.role">{{ getRoleLabel(currentUser.role) }}</span>
+        <button class="btn-logout" (click)="onLogout()">Cerrar Sesión</button>
+      }
+    </div>
+  </div>
+</header>

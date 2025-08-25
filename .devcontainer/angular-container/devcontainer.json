@@ -21,7 +21,8 @@
         "pranaygp.vscode-css-peek",
         "GitHub.vscode-pull-request-github",
         "humao.rest-client",
-        "cyrilletuzi.angular-schematics"
+        "cyrilletuzi.angular-schematics",
+        "ecmel.vscode-html-css"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",

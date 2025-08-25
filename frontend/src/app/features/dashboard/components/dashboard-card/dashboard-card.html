@@ -1,0 +1,16 @@
+<div class="card">
+  <h2>{{ title() }}</h2>
+  <p>{{ description() }}</p>
+
+  @if (routerLink(); as link) {
+    <a [routerLink]="link" class="btn-primary">{{ buttonText() }}</a>
+  } @else {
+    <button
+      [class]="buttonClass()"
+      [disabled]="disabled()"
+      (click)="onButtonClick()"
+    >
+      {{ buttonText() }}
+    </button>
+  }
+</div>

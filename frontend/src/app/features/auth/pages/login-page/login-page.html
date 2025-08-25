@@ -1,0 +1,23 @@
+<div class="login-page">
+  <div class="login-container">
+    <div class="header">
+      <h1>Iniciar Sesión</h1>
+      <p>Accede a tu cuenta de ExamScan</p>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="error-alert">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    <app-login-form
+      [loading]="loading()"
+      (submitLogin)="handleLogin($event)"
+    />
+
+    <div class="footer">
+      <p>¿No tienes cuenta? <a href="/register">Regístrate aquí</a></p>
+    </div>
+  </div>
+</div>
