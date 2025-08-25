@@ -39,8 +39,12 @@ services:
     ports:
       - "4200:4200"
     volumes:
-      - ../frontend:/app
-      - /app/node_modules
+      # Mount the entire project to maintain global version control
+      - ..:/app
+      # Preserve node_modules in a named volume for better performance
+      - frontend_node_modules:/app/frontend/node_modules
+      # Preserve Angular cache
+      - angular_cache:/home/appuser/.angular
     depends_on:
       backend:
         condition: service_healthy
@@ -50,12 +54,27 @@ services:
       # Variables de entorno para desarrollo
       - NODE_ENV=development
       - NG_CLI_ANALYTICS=false
-    user: node
+      - NPM_CONFIG_UPDATE_NOTIFIER=false
+      - NPM_CONFIG_FUND=false
+      - NPM_CONFIG_AUDIT=false
     develop:
       watch:
         - action: sync
-          path: .
+          path: ../frontend
+          target: /app/frontend
+          ignore:
+            - node_modules/
+            - dist/
+            - .angular/
+        - action: sync
+          path: ../
           target: /app
+          ignore:
+            - "**/node_modules/"
+            - "**/dist/"
+            - "**/.angular/"
+            - backend/__pycache__/
+            - backend/.venv/
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4200"]
       interval: 30s
@@ -169,6 +188,8 @@ volumes:
   redis_data:
   grafana_data:
   pgadmin_data:
+  frontend_node_modules:
+  angular_cache:
 
 # Redes
 networks:

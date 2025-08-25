@@ -4,7 +4,7 @@
     "../docker-compose.devcontainer.yml"
   ],
   "service": "frontend",
-  "workspaceFolder": "/app",
+  "workspaceFolder": "/app/frontend",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -24,13 +24,11 @@
         "cyrilletuzi.angular-schematics"
       ],
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash"
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.cwd": "/app/frontend"
       }
     }
   },
-
-//   "postCreateCommand": "npm start",
-  
   "forwardPorts": [4200],
   
   "portsAttributes": {
