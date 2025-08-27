@@ -66,6 +66,13 @@
   flex-wrap: wrap;
 }
 
+.hero-buttons .btn {
+  flex: 1;
+  min-width: 160px;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-xl);
+}
+
 .hero-visual {
   position: relative;
   display: flex;
@@ -305,6 +312,16 @@
 
   .hero-title {
     font-size: var(--font-size-4xl);
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-buttons .btn {
+    width: 100%;
+    max-width: 280px;
   }
 
   .hero-visual {
