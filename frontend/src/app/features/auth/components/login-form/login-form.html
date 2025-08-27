@@ -1,65 +1,97 @@
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Email</mat-label>
-    <input
-      matInput
-      type="email"
-      formControlName="email"
-      placeholder="tu@email.com"
-    >
-    <mat-icon matSuffix>email</mat-icon>
-    @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
-      <mat-error>
-        @if (loginForm.get('email')?.errors?.['required']) {
-          El email es requerido
-        }
-        @if (loginForm.get('email')?.errors?.['email']) {
-          Ingresa un email válido
-        }
-      </mat-error>
-    }
-  </mat-form-field>
+<form [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+      class="login-form"
+      role="form"
+      aria-labelledby="login-form-title"
+      novalidate>
 
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Contraseña</mat-label>
-    <input
-      matInput
-      [type]="hidePassword ? 'password' : 'text'"
-      formControlName="password"
-      placeholder="Tu contraseña"
-    >
+  <h2 id="login-form-title" class="sr-only">Formulario de inicio de sesión</h2>
+
+  <!-- Email Field -->
+  <div class="form-field">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        type="email"
+        formControlName="email"
+        placeholder="tu@email.com"
+        autocomplete="email"
+        aria-describedby="email-error"
+        [attr.aria-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+      >
+      <mat-icon matSuffix aria-hidden="true">email</mat-icon>
+      @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+        <mat-error id="email-error" role="alert">
+          @if (loginForm.get('email')?.errors?.['required']) {
+            El email es requerido
+          }
+          @if (loginForm.get('email')?.errors?.['email']) {
+            Ingresa un email válido
+          }
+        </mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <!-- Password Field -->
+  <div class="form-field">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Contraseña</mat-label>
+      <input
+        matInput
+        [type]="hidePassword ? 'password' : 'text'"
+        formControlName="password"
+        placeholder="Tu contraseña"
+        autocomplete="current-password"
+        aria-describedby="password-error password-toggle-desc"
+        [attr.aria-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+      >
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        (click)="togglePasswordVisibility()"
+        [attr.aria-label]="hidePassword ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+        [attr.aria-pressed]="!hidePassword"
+        aria-describedby="password-toggle-desc"
+        class="password-toggle"
+      >
+        <mat-icon aria-hidden="true">{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+      </button>
+      <span id="password-toggle-desc" class="sr-only">
+        {{ hidePassword ? 'La contraseña está oculta' : 'La contraseña es visible' }}
+      </span>
+      @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+        <mat-error id="password-error" role="alert">
+          La contraseña es requerida
+        </mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <!-- Submit Button -->
+  <div class="form-actions">
     <button
-      mat-icon-button
-      matSuffix
-      type="button"
-      (click)="togglePasswordVisibility()"
-      [attr.aria-label]="'Hide password'"
-      [attr.aria-pressed]="hidePassword"
+      mat-raised-button
+      type="submit"
+      class="submit-button"
+      [disabled]="loginForm.invalid || loading()"
+      [attr.aria-describedby]="loading() ? 'loading-desc' : 'submit-desc'"
     >
-      <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+      @if (loading()) {
+        <ng-container>
+          <mat-spinner diameter="20" class="inline-spinner" aria-hidden="true"></mat-spinner>
+          Iniciando sesión...
+          <span id="loading-desc" class="sr-only">Procesando inicio de sesión, por favor espera</span>
+        </ng-container>
+      } @else {
+        <ng-container>
+          <mat-icon aria-hidden="true">login</mat-icon>
+          Iniciar Sesión
+          <span id="submit-desc" class="sr-only">Acceder a tu cuenta de ExamScan</span>
+        </ng-container>
+      }
     </button>
-    @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
-      <mat-error>
-        La contraseña es requerida
-      </mat-error>
-    }
-  </mat-form-field>
-
-  <button
-    mat-raised-button
-    color="primary"
-    type="submit"
-    class="full-width submit-button"
-    [disabled]="loginForm.invalid || loading()"
-  >
-    @if (loading()) {
-      <mat-spinner diameter="20" class="inline-spinner"></mat-spinner>
-      Iniciando sesión...
-    } @else {
-      <ng-container>
-        <mat-icon>login</mat-icon>
-        Iniciar Sesión
-      </ng-container>
-    }
-  </button>
+  </div>
 </form>

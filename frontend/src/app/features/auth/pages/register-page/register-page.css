@@ -1,54 +1,168 @@
+/* Register Page Styles - Following Design Token Standards */
 .register-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 1rem;
+  background: var(--primary-gradient);
+  padding: var(--spacing-lg);
 }
 
 .register-container {
   width: 100%;
-  max-width: 450px;
+  max-width: 480px;
 }
 
 .register-card {
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  width: 100%;
+  padding: var(--spacing-xl);
+}
+
+/* Header Section */
+.register-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.register-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-md);
 }
 
 .register-icon {
-  font-size: 2rem;
-  width: 2rem;
-  height: 2rem;
-  color: #1976d2;
+  font-size: var(--font-size-6xl);
+  width: var(--font-size-6xl);
+  height: var(--font-size-6xl);
+  color: #667eea;
 }
 
-.center-actions {
-  justify-content: center;
-  padding: 0 16px 16px;
+.register-title {
+  margin: 0 0 var(--spacing-sm) 0;
+  font-size: var(--font-size-4xl);
+  font-weight: 700;
+  color: #333333;
+  line-height: 1.2;
+}
+
+.register-subtitle {
+  margin: 0;
+  color: #666666;
+  font-size: var(--font-size-lg);
+  font-weight: 400;
+}
+
+/* Content Section */
+.register-content {
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Footer Section */
+.register-actions {
+  text-align: center;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .login-link {
-  text-align: center;
   margin: 0;
-  color: rgba(0, 0, 0, 0.6);
+  color: #666666;
+  font-size: var(--font-size-base);
 }
 
-.login-link a {
-  margin-left: 4px;
+.login-button {
+  margin-left: var(--spacing-xs);
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
 }
 
+.login-button:hover {
+  color: #5a67d8;
+  text-decoration: none;
+}
+
+.login-button:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Accessibility Utilities */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
   .register-page {
-    padding: 0.5rem;
+    padding: var(--spacing-md);
   }
 
   .register-card {
-    border-radius: 8px;
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
   }
 
-  .register-container {
-    max-width: 100%;
+  .register-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .register-subtitle {
+    font-size: var(--font-size-base);
+  }
+}
+
+@media (max-width: 480px) {
+  .register-page {
+    padding: var(--spacing-sm);
+  }
+
+  .register-card {
+    padding: var(--spacing-md);
+  }
+
+  .register-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .register-icon {
+    font-size: var(--font-size-5xl);
+    width: var(--font-size-5xl);
+    height: var(--font-size-5xl);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  /* No animations needed for static design */
+}
+
+/* High Contrast Support */
+@media (prefers-contrast: high) {
+  .register-card {
+    border: 2px solid #000;
+    background: #fff;
+  }
+
+  .register-title {
+    color: #000;
+  }
+
+  .login-button:focus {
+    outline: 3px solid #000;
   }
 }

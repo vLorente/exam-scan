@@ -17,6 +17,15 @@
   --cta-red: #FF6B6B;
   --cta-orange: #FF8E53;
 
+  /* Button Colors */
+  --button-submit-bg: #e2e8f0;
+  --button-submit-text: #475569;
+  --button-submit-hover: #cbd5e1;
+  --button-submit-focus: #94a3b8;
+  --button-submit-focus-text: #1e293b;
+  --button-submit-disabled: #f1f5f9;
+  --button-submit-disabled-text: #94a3b8;
+
   /* Success/Error Colors */
   --success-color: #10b981;
   --error-color: #f44336;
