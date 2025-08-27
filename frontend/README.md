@@ -2,9 +2,29 @@
 
 Aplicación frontend desarrollada en Angular 20.1 para la gestión de exámenes tipo test con procesamiento automático mediante IA.
 
-## 🚀 Desarrollo Completado
+## � Documentación
+
+### Estructura de Documentación
+- [**Shared Components**](./docs/SHARED_COMPONENTS.md) - Sistema de componentes reutilizables
+- [**Shared Directory**](./src/app/shared/README.md) - Guía del directorio shared
+- [**Submit Button Component**](./src/app/shared/components/submit-button/README.md) - Documentación específica del componente
+
+### Estándares
+- Cada componente compartido incluye su propia documentación
+- READMEs co-ubicados con el código
+- Ejemplos de uso y guías de migración
+- Documentación de accesibilidad y testing
+
+## �🚀 Desarrollo Completado
 
 ### Funcionalidades Implementadas
+
+#### ✅ Sistema de Componentes Compartidos
+- **SubmitButtonComponent** reutilizable con estilos encapsulados
+- **Documentación completa** por componente con APIs y ejemplos
+- **Testing integrado** con cobertura de accesibilidad
+- **Design system** con variables CSS centralizadas
+- **Arquitectura escalable** para nuevos componentes
 
 #### ✅ Sistema de Autenticación
 - **Páginas de Login y Registro** con formularios reactivos

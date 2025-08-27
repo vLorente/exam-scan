@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { SubmitButtonComponent } from '../../../../shared/components/submit-button';
 import { RegisterRequest } from '../../../../core/models/user.model';
 
 @Component({
@@ -20,7 +20,7 @@ import { RegisterRequest } from '../../../../core/models/user.model';
     MatButtonModule,
     MatIconModule,
     MatSelectModule,
-    MatProgressSpinnerModule
+    SubmitButtonComponent
   ],
   templateUrl: './register-form.html',
   styleUrl: './register-form.css'

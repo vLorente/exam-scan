@@ -72,26 +72,17 @@
 
   <!-- Submit Button -->
   <div class="form-actions">
-    <button
-      mat-raised-button
-      type="submit"
-      class="submit-button"
-      [disabled]="loginForm.invalid || loading()"
-      [attr.aria-describedby]="loading() ? 'loading-desc' : 'submit-desc'"
-    >
-      @if (loading()) {
-        <ng-container>
-          <mat-spinner diameter="20" class="inline-spinner" aria-hidden="true"></mat-spinner>
-          Iniciando sesión...
-          <span id="loading-desc" class="sr-only">Procesando inicio de sesión, por favor espera</span>
-        </ng-container>
-      } @else {
-        <ng-container>
-          <mat-icon aria-hidden="true">login</mat-icon>
-          Iniciar Sesión
-          <span id="submit-desc" class="sr-only">Acceder a tu cuenta de ExamScan</span>
-        </ng-container>
-      }
-    </button>
+    <app-submit-button
+      text="Iniciar Sesión"
+      icon="login"
+      [disabled]="loginForm.invalid"
+      [loading]="loading()"
+      loadingText="Iniciando sesión..."
+      description="Acceder a tu cuenta de ExamScan"
+      descriptionId="submit-desc"
+      loadingDescription="Procesando inicio de sesión, por favor espera"
+      loadingDescriptionId="loading-desc"
+      (onClick)="onSubmit()">
+    </app-submit-button>
   </div>
 </form>

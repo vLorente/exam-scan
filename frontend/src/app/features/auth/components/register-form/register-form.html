@@ -188,26 +188,17 @@
 
   <!-- Submit Button -->
   <div class="form-actions">
-    <button
-      mat-raised-button
-      type="submit"
-      class="submit-button"
-      [disabled]="registerForm.invalid || loading()"
-      [attr.aria-describedby]="loading() ? 'loading-desc' : 'submit-desc'"
-    >
-      @if (loading()) {
-        <ng-container>
-          <mat-spinner diameter="20" class="inline-spinner" aria-hidden="true"></mat-spinner>
-          Creando cuenta...
-          <span id="loading-desc" class="sr-only">Procesando registro, por favor espera</span>
-        </ng-container>
-      } @else {
-        <ng-container>
-          <mat-icon aria-hidden="true">person_add</mat-icon>
-          Crear Cuenta
-          <span id="submit-desc" class="sr-only">Registrarse en ExamScan</span>
-        </ng-container>
-      }
-    </button>
+    <app-submit-button
+      text="Crear Cuenta"
+      icon="person_add"
+      [disabled]="registerForm.invalid"
+      [loading]="loading()"
+      loadingText="Creando cuenta..."
+      description="Registrarse en ExamScan"
+      descriptionId="submit-desc"
+      loadingDescription="Procesando registro, por favor espera"
+      loadingDescriptionId="loading-desc"
+      (onClick)="onSubmit()">
+    </app-submit-button>
   </div>
 </form>

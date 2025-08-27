@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { SubmitButtonComponent } from '../../../../shared/components/submit-button';
 import { LoginRequest } from '../../../../core/models/user.model';
 
 @Component({
@@ -18,7 +18,7 @@ import { LoginRequest } from '../../../../core/models/user.model';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    SubmitButtonComponent
   ],
   templateUrl: './login-form.html',
   styleUrl: './login-form.css'
