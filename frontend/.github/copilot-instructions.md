@@ -63,3 +63,145 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Use Angular Material for UI components.
 - Follow the BEM (Block Element Modifier) naming convention for CSS.
 - Ensure responsive design using Flexbox and Grid.
+
+## CSS & Styling Standards
+### Design Token System
+- ALWAYS use CSS custom properties defined in `src/styles.css` instead of hardcoded values
+- Use semantic naming: `--primary-gradient`, `--spacing-xl`, `--font-size-2xl`
+- Never duplicate color values, spacing, or font sizes across components
+
+### Required CSS Variables Usage
+- **Colors**: Use `--primary-gradient`, `--accent-gradient`, `--cta-gradient`, `--accent-gold`, etc.
+- **Spacing**: Use `--spacing-xs` to `--spacing-4xl`, `--section-padding` for consistent spacing
+- **Typography**: Use `--font-size-xs` to `--font-size-6xl` for font sizes
+- **Border Radius**: Use `--radius-sm` to `--radius-2xl`, `--radius-full`
+- **Shadows**: Use `--shadow-sm`, `--shadow-md`, `--shadow-lg`, `--shadow-cta`
+- **Glass Effects**: Use `--glass-bg`, `--glass-border`, `--glass-blur`
+- **Transitions**: Use `--transition-fast`, `--transition-normal`, `--transition-slow`
+
+### CSS Architecture Rules
+- Components should NOT have hardcoded spacing, colors, or font sizes
+- Use utility classes: `.primary-gradient-bg`, `.accent-gradient-text`, `.animate-fade-in-up`
+- Maintain consistent spacing between sections (no margin gaps showing background)
+- All interactive elements must be keyboard accessible and have proper focus styles
+
+### Responsive Design Requirements
+- Mobile-first approach using CSS variables
+- Use CSS Grid and Flexbox for layouts
+- Ensure proper responsive breakpoints: `@media (max-width: 768px)`
+- Buttons should stack vertically on mobile and maintain consistent sizing
+
+## Accessibility Standards (WCAG 2.1 AA Compliance)
+### Semantic HTML Requirements
+- Use proper semantic elements: `<section>`, `<header>`, `<nav>`, `<main>`, `<article>`
+- Implement correct heading hierarchy (h1 → h2 → h3)
+- Use `<button>` for interactive elements, not `<div>`
+
+### ARIA Attributes (Required)
+- Add `aria-label` or `aria-labelledby` to all sections
+- Use `aria-describedby` for additional context
+- Add `aria-hidden="true"` to decorative elements (icons, background graphics)
+- Implement `role` attributes: `role="button"`, `role="list"`, `role="img"`, `role="banner"`
+- Use `aria-pressed` for toggle buttons, `aria-expanded` for collapsible content
+
+### Keyboard Navigation
+- All interactive elements must be focusable with Tab key
+- Implement clear focus indicators with `outline: 2px solid var(--accent-gold)`
+- Add focus styles with `box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.3)`
+- Provide skip navigation links: `<a href="#main-content" class="skip-link sr-only-focusable">`
+
+### Screen Reader Support
+- Use `.sr-only` class for screen reader only content
+- Provide descriptive text for buttons: `aria-describedby="button-description"`
+- Add unique IDs for form labels and descriptions
+- Include context descriptions for visual elements
+
+### Required Accessibility Classes
+```css
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+```
+
+### User Preferences Support
+- Implement `@media (prefers-reduced-motion: reduce)` for animations
+- Support `@media (prefers-contrast: high)` for high contrast mode
+- Ensure sufficient color contrast ratios (4.5:1 for normal text)
+
+## Button Styling Standards
+- All buttons in the same group must have consistent sizing
+- Use `flex: 1` and `min-width` for equal-sized buttons
+- Implement proper hover and focus states
+- Maintain visual hierarchy (primary vs secondary styles)
+- Stack buttons vertically on mobile with full width
+
+## Implementation Best Practices
+### Component Development Workflow
+1. **Start with semantic HTML**: Use proper elements (`<section>`, `<button>`, `<nav>`)
+2. **Apply design tokens**: Use CSS custom properties for all styling values
+3. **Add ARIA attributes**: Ensure accessibility from the beginning
+4. **Test keyboard navigation**: Tab through all interactive elements
+5. **Verify screen reader compatibility**: Test with descriptive labels
+
+### Code Quality Standards
+- Never use hardcoded values: `padding: 16px` ❌ → `padding: var(--spacing-sm)` ✅
+- Always include focus styles: `button:focus { outline: 2px solid var(--accent-gold); }`
+- Use semantic markup: `<div onclick="">` ❌ → `<button>` ✅
+- Provide context: `<button>Save</button>` ❌ → `<button aria-describedby="save-desc">Save</button>` ✅
+
+### CSS Variable Reference
+```css
+/* Colors */
+--primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+--accent-gradient: linear-gradient(45deg, #FFD700, #FFA500);
+--cta-gradient: linear-gradient(45deg, #FF6B6B, #FF8E53);
+
+/* Spacing */
+--spacing-xs: 0.5rem; --spacing-sm: 1rem; --spacing-md: 1.5rem;
+--spacing-lg: 2rem; --spacing-xl: 3rem; --spacing-2xl: 4rem;
+--spacing-3xl: 6rem; --spacing-4xl: 8rem;
+
+/* Typography */
+--font-size-xs: 0.75rem; --font-size-sm: 0.875rem; --font-size-base: 1rem;
+--font-size-lg: 1.125rem; --font-size-xl: 1.25rem; --font-size-2xl: 1.5rem;
+--font-size-3xl: 2rem; --font-size-4xl: 2.25rem; --font-size-5xl: 3rem;
+--font-size-6xl: 3.5rem;
+```
+
+### Accessibility Implementation Examples
+```html
+<!-- Section with proper ARIA -->
+<section aria-labelledby="features-title">
+  <h2 id="features-title">Platform Features</h2>
+</section>
+
+<!-- Button with description -->
+<button aria-describedby="btn-desc">Start Free Trial</button>
+<span id="btn-desc" class="sr-only">Begin your free 30-day trial</span>
+
+<!-- Interactive list -->
+<nav aria-label="Process steps">
+  <ol role="list">
+    <li><button aria-pressed="true">Step 1</button></li>
+  </ol>
+</nav>
+```
