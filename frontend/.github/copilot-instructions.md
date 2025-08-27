@@ -38,6 +38,11 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - `src/app`: Contiene el módulo principal de la aplicación (AppModule) y el componente raíz (AppComponent).
 - `src/app/core`: Aloja servicios singleton y módulos que solo se importan una vez en el AppModule.
 - `src/app/shared`: Incluye componentes, directivas, pipes y módulos que se reutilizan en toda la aplicación.
+  - `src/app/shared/components`: Contiene los componentes de presentación (sin lógica de negocio) específicos de la funcionalidad de exámenes.
+      - `src/app/shared/components/shared-component/shared-component.ts`: Componente compartido.
+      - `src/app/shared/components/shared-component/shared-component.html`: Plantilla del componente compartido.
+      - `src/app/shared/components/shared-component/shared-component.css`: Estilos del componente compartido.
+      - `src/app/shared/components/shared-component/shared-component.spec.ts`: Pruebas del componente compartido.
 - `src/app/features`: Directorio principal para los módulos de característica. Cada subcarpeta representa una funcionalidad principal de la aplicación.
   - `src/app/features/auth`: Contiene todos los archivos del módulo de característica de autenticación.
   - `src/app/features/users`: Contiene todos los archivos del módulo de característica de usuarios.

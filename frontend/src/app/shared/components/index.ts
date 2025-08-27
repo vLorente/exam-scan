@@ -1,1 +1,1 @@
-export * from './submit-button';
+export { SubmitButtonComponent } from './submit-button/submit-button';

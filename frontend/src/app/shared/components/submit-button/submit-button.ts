@@ -7,42 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   selector: 'app-submit-button',
   imports: [MatButtonModule, MatIconModule, MatProgressSpinnerModule],
   styleUrl: './submit-button.css',
-  template: `
-    <button
-      mat-raised-button
-      type="submit"
-      class="submit-button"
-      [disabled]="disabled() || loading()"
-      [attr.aria-describedby]="loading() ? loadingDescriptionId() : descriptionId()"
-      (click)="onClick.emit()"
-    >
-      @if (loading()) {
-        <mat-progress-spinner
-          diameter="20"
-          class="inline-spinner"
-          mode="indeterminate"
-          aria-hidden="true">
-        </mat-progress-spinner>
-        <span>{{ loadingText() }}</span>
-        @if (loadingDescriptionId()) {
-          <span [id]="loadingDescriptionId()" class="sr-only">
-            {{ loadingDescription() }}
-          </span>
-        }
-      } @else {
-        @if (icon()) {
-          <mat-icon aria-hidden="true">{{ icon() }}</mat-icon>
-        }
-        <span>{{ text() }}</span>
-        @if (descriptionId()) {
-          <span [id]="descriptionId()" class="sr-only">
-            {{ description() }}
-          </span>
-        }
-      }
-    </button>
-  `,
-  styles: []
+  templateUrl: './submit-button.html',
 })
 export class SubmitButtonComponent {
   // Required inputs
