@@ -4,7 +4,6 @@
   color: white;
   position: relative;
   overflow: hidden;
-  margin-bottom: var(--spacing-2xl);
 }
 
 .demo-section::before {
@@ -554,10 +553,6 @@
 
 /* Responsive design */
 @media (max-width: 768px) {
-  .demo-section {
-    margin-bottom: var(--spacing-xl);
-  }
-
   .demo-content {
     grid-template-columns: 1fr;
     gap: var(--spacing-xl);

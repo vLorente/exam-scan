@@ -2,7 +2,6 @@
   padding: var(--section-padding) 0;
   background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg-gray) 100%);
   position: relative;
-  margin-bottom: var(--spacing-2xl);
 }
 
 .features-section::before {
@@ -232,7 +231,6 @@
 @media (max-width: 768px) {
   .features-section {
     padding: var(--spacing-3xl) 0;
-    margin-bottom: var(--spacing-xl);
   }
 
   .features-title {
