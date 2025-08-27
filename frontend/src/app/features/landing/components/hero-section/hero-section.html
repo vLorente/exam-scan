@@ -1,0 +1,113 @@
+<section class="hero-section">
+  <div class="hero-container">
+    <div class="hero-content">
+      <div class="hero-text animate-fade-in-up">
+        <h1 class="hero-title">
+          Transforma tus exámenes PDF en
+          <span class="gradient-text">experiencias interactivas</span>
+        </h1>
+        <p class="hero-description">
+          Utiliza inteligencia artificial para extraer preguntas de tus PDFs,
+          crea exámenes colaborativos y evalúa a tus estudiantes de forma eficiente.
+        </p>
+        <div class="hero-buttons">
+          <button
+            class="btn btn-primary animate-pulse"
+            (click)="navigateToRegister()">
+            Comienza gratis
+          </button>
+          <button
+            class="btn btn-secondary"
+            (click)="navigateToLogin()">
+            Iniciar sesión
+          </button>
+        </div>
+      </div>
+
+      <div class="hero-visual animate-fade-in-right">
+        <div class="pdf-mockup animate-float">
+          <div class="pdf-header">
+            <div class="pdf-buttons">
+              <span class="pdf-button red"></span>
+              <span class="pdf-button yellow"></span>
+              <span class="pdf-button green"></span>
+            </div>
+            <span class="pdf-title">examen_matematicas.pdf</span>
+          </div>
+          <div class="pdf-content">
+            <div class="pdf-line long"></div>
+            <div class="pdf-line medium"></div>
+            <div class="pdf-line short"></div>
+            <div class="pdf-question">
+              <div class="question-number">1.</div>
+              <div class="question-text">
+                <div class="pdf-line long"></div>
+                <div class="pdf-options">
+                  <div class="option">a) Opción A</div>
+                  <div class="option">b) Opción B</div>
+                  <div class="option selected">c) Opción C</div>
+                  <div class="option">d) Opción D</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-process">
+          <div class="process-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </div>
+          <div class="ai-badge">
+            <span class="ai-icon">🤖</span>
+            <span>IA Processing</span>
+          </div>
+        </div>
+
+        <div class="interactive-exam animate-float" style="animation-delay: 1s;">
+          <div class="exam-header">
+            <h3>Examen Interactivo</h3>
+            <span class="timer">⏱️ 45:30</span>
+          </div>
+          <div class="exam-question">
+            <p>¿Cuál es la derivada de x²?</p>
+            <div class="exam-options">
+              <label class="exam-option">
+                <input type="radio" name="q1">
+                <span>2x</span>
+              </label>
+              <label class="exam-option">
+                <input type="radio" name="q1" checked>
+                <span>x²</span>
+              </label>
+              <label class="exam-option">
+                <input type="radio" name="q1">
+                <span>2x²</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-item animate-fade-in-up" style="animation-delay: 0.2s;">
+        <div class="stat-number">1000+</div>
+        <div class="stat-label">Exámenes procesados</div>
+      </div>
+      <div class="stat-item animate-fade-in-up" style="animation-delay: 0.4s;">
+        <div class="stat-number">50k+</div>
+        <div class="stat-label">Preguntas extraídas</div>
+      </div>
+      <div class="stat-item animate-fade-in-up" style="animation-delay: 0.6s;">
+        <div class="stat-number">95%</div>
+        <div class="stat-label">Precisión de IA</div>
+      </div>
+      <div class="stat-item animate-fade-in-up" style="animation-delay: 0.8s;">
+        <div class="stat-number">24/7</div>
+        <div class="stat-label">Disponibilidad</div>
+      </div>
+    </div>
+  </div>
+</section>
