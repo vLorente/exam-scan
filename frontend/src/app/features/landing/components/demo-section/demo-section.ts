@@ -49,4 +49,20 @@ export class DemoSectionComponent {
   selectStep(stepId: number): void {
     this.activeStep.set(stepId);
   }
+
+  getVisualDescription(): string {
+    const step = this.steps.find(s => s.id === this.activeStep());
+    switch (step?.visual) {
+      case 'upload':
+        return 'Demostración visual del proceso de subida de archivo PDF con barra de progreso';
+      case 'processing':
+        return 'Animación del cerebro artificial procesando el documento con ondas de actividad';
+      case 'editing':
+        return 'Interfaz de edición mostrando preguntas extraídas con opciones de respuesta';
+      case 'sharing':
+        return 'Tarjeta de examen publicado con estadísticas y opciones de compartir';
+      default:
+        return 'Demostración visual del paso actual del proceso';
+    }
+  }
 }

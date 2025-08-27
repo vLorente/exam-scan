@@ -1,8 +1,8 @@
-<section class="hero-section">
+<section class="hero-section" aria-labelledby="hero-title" role="banner">
   <div class="hero-container">
     <div class="hero-content">
       <div class="hero-text animate-fade-in-up">
-        <h1 class="hero-title">
+        <h1 id="hero-title" class="hero-title">
           Transforma tus exámenes PDF en
           <span class="gradient-text">experiencias interactivas</span>
         </h1>
@@ -10,24 +10,28 @@
           Utiliza inteligencia artificial para extraer preguntas de tus PDFs,
           crea exámenes colaborativos y evalúa a tus estudiantes de forma eficiente.
         </p>
-        <div class="hero-buttons">
+        <div class="hero-buttons" role="group" aria-label="Acciones principales">
           <button
             class="btn btn-primary animate-pulse"
-            (click)="navigateToRegister()">
+            (click)="navigateToRegister()"
+            aria-describedby="register-description">
             Comienza gratis
           </button>
+          <span id="register-description" class="sr-only">Crea tu cuenta gratuita para empezar a transformar tus exámenes PDF</span>
           <button
             class="btn btn-secondary"
-            (click)="navigateToLogin()">
+            (click)="navigateToLogin()"
+            aria-describedby="login-description">
             Iniciar sesión
           </button>
+          <span id="login-description" class="sr-only">Accede a tu cuenta existente</span>
         </div>
       </div>
 
-      <div class="hero-visual animate-fade-in-right">
-        <div class="pdf-mockup animate-float">
+      <div class="hero-visual animate-fade-in-right" aria-label="Demostración visual del proceso de conversión de PDF a examen interactivo">
+        <div class="pdf-mockup animate-float" role="img" aria-label="Ejemplo de documento PDF de examen">
           <div class="pdf-header">
-            <div class="pdf-buttons">
+            <div class="pdf-buttons" aria-hidden="true">
               <span class="pdf-button red"></span>
               <span class="pdf-button yellow"></span>
               <span class="pdf-button green"></span>
@@ -74,15 +78,15 @@
             <p>¿Cuál es la derivada de x²?</p>
             <div class="exam-options">
               <label class="exam-option">
-                <input type="radio" name="q1">
+                <input type="radio" name="q1" aria-label="Opción de respuesta: 2x">
                 <span>2x</span>
               </label>
               <label class="exam-option">
-                <input type="radio" name="q1" checked>
+                <input type="radio" name="q1" checked aria-label="Opción de respuesta correcta: x²">
                 <span>x²</span>
               </label>
               <label class="exam-option">
-                <input type="radio" name="q1">
+                <input type="radio" name="q1" aria-label="Opción de respuesta: 2x²">
                 <span>2x²</span>
               </label>
             </div>
@@ -91,23 +95,24 @@
       </div>
     </div>
 
-    <div class="hero-stats">
+    <section class="hero-stats" aria-labelledby="stats-title">
+      <h2 id="stats-title" class="sr-only">Estadísticas de la plataforma</h2>
       <div class="stat-item animate-fade-in-up" style="animation-delay: 0.2s;">
-        <div class="stat-number">1000+</div>
+        <div class="stat-number" aria-label="Mil exámenes procesados">1000+</div>
         <div class="stat-label">Exámenes procesados</div>
       </div>
       <div class="stat-item animate-fade-in-up" style="animation-delay: 0.4s;">
-        <div class="stat-number">50k+</div>
+        <div class="stat-number" aria-label="Cincuenta mil preguntas extraídas">50k+</div>
         <div class="stat-label">Preguntas extraídas</div>
       </div>
       <div class="stat-item animate-fade-in-up" style="animation-delay: 0.6s;">
-        <div class="stat-number">95%</div>
+        <div class="stat-number" aria-label="Noventa y cinco por ciento de precisión">95%</div>
         <div class="stat-label">Precisión de IA</div>
       </div>
       <div class="stat-item animate-fade-in-up" style="animation-delay: 0.8s;">
-        <div class="stat-number">24/7</div>
+        <div class="stat-number" aria-label="Disponible veinticuatro horas al día, siete días a la semana">24/7</div>
         <div class="stat-label">Disponibilidad</div>
       </div>
-    </div>
+    </section>
   </div>
 </section>

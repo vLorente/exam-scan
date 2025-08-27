@@ -1,6 +1,6 @@
-<section class="cta-section">
+<section class="cta-section" aria-labelledby="cta-main-title">
   <div class="cta-container">
-    <div class="cta-background">
+    <div class="cta-background" aria-hidden="true">
       <div class="bg-circle circle-1"></div>
       <div class="bg-circle circle-2"></div>
       <div class="bg-circle circle-3"></div>
@@ -8,7 +8,7 @@
 
     <div class="cta-content animate-fade-in-up">
       <div class="cta-main">
-        <h2 class="cta-title">
+        <h2 id="cta-main-title" class="cta-title">
           ¿Listo para revolucionar tus
           <span class="gradient-text">exámenes?</span>
         </h2>
@@ -17,18 +17,21 @@
           Comienza gratis y descubre todo lo que puedes lograr.
         </p>
 
-        <div class="cta-buttons">
+        <div class="cta-buttons" role="group" aria-label="Acciones para comenzar">
           <button
             class="btn btn-primary animate-pulse"
-            (click)="navigateToRegister()">
+            (click)="navigateToRegister()"
+            aria-describedby="start-free-desc">
             Comenzar gratis
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
           </button>
+          <span id="start-free-desc" class="sr-only">Crea tu cuenta gratuita para empezar a usar la plataforma</span>
           <button
             class="btn btn-secondary"
-            (click)="navigateToLogin()">
+            (click)="navigateToLogin()"
+            aria-describedby="login-existing-desc">
             Ya tengo cuenta
           </button>
         </div>
