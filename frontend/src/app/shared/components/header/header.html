@@ -1,4 +1,4 @@
-<header class="dashboard-header" role="banner" aria-label="Encabezado del dashboard">
+<header class="header" role="banner" [attr.aria-label]="'Encabezado de ' + subtitle()">
   <div class="header-container">
     <div class="header-brand">
       <div class="brand-icon" aria-hidden="true">
@@ -9,8 +9,8 @@
         </svg>
       </div>
       <div class="brand-text">
-        <h1 class="brand-title">ExamScan</h1>
-        <span class="brand-subtitle">Dashboard</span>
+        <h1 class="brand-title">{{ title() }}</h1>
+        <span class="brand-subtitle">{{ subtitle() }}</span>
       </div>
     </div>
 
@@ -18,7 +18,7 @@
       <div class="header-user">
         <div class="user-welcome">
           <span class="welcome-message">Bienvenido,</span>
-          <span class="user-name">{{ currentUser.full_name }}</span>
+          <span class="user-name">{{ currentUser.fullName }}</span>
           <div class="user-role">
             <span class="role-badge" [class]="'role-' + currentUser.role"
                   [attr.aria-label]="'Rol: ' + getRoleLabel(currentUser.role)">

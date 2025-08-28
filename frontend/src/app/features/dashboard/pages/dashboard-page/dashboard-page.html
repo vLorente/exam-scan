@@ -1,6 +1,8 @@
 <div class="dashboard">
-  <app-dashboard-header
+  <app-header
     [user]="currentUser()"
+    [title]="'ExamScan'"
+    [subtitle]="'Dashboard'"
     (logout)="handleLogout()"
   />
 

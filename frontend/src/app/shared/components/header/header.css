@@ -1,5 +1,5 @@
-/* Dashboard Header - Modern Design with Design Tokens */
-.dashboard-header {
+/* Header - Modern Design with Design Tokens */
+.header {
   background: white;
   border-bottom: 1px solid var(--border-light);
   box-shadow: var(--shadow-sm);

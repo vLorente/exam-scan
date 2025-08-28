@@ -3,14 +3,16 @@ import { CommonModule } from '@angular/common';
 import { User } from '@core/models/user.model';
 
 @Component({
-  selector: 'app-dashboard-header',
+  selector: 'app-header',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
-  templateUrl: './dashboard-header.html',
-  styleUrl: './dashboard-header.css'
+  templateUrl: './header.html',
+  styleUrl: './header.css'
 })
-export class DashboardHeaderComponent {
+export class HeaderComponent {
   user = input.required<User | null>();
+  title = input<string>('ExamScan');
+  subtitle = input<string>('Dashboard');
   logout = output<void>();
 
   getRoleLabel(role: string): string {
