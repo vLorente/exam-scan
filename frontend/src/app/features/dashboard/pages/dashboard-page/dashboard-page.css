@@ -1,27 +1,114 @@
+/* Dashboard Page - Modern Design with Design Tokens */
 .dashboard {
   min-height: 100vh;
-  background-color: #fafafa;
+  background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg-gray) 100%);
+  position: relative;
+}
+
+.dashboard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(180deg, rgba(102, 126, 234, 0.05) 0%, transparent 100%);
+  pointer-events: none;
 }
 
 .main-content {
-  max-width: 1200px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: var(--spacing-xl) var(--container-padding);
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-welcome {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.dashboard-title {
+  font-size: var(--font-size-4xl);
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: var(--spacing-sm);
+}
+
+.dashboard-subtitle {
+  font-size: var(--font-size-xl);
+  color: var(--text-medium);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
 }
 
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.5rem;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
 }
 
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-2xl);
+}
+
+.stat-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  text-align: center;
+  transition: all var(--transition-normal);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-number {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--spacing-xs);
+}
+
+.stat-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-medium);
+  font-weight: 500;
+}
+
+/* Responsive design */
 @media (max-width: 768px) {
   .main-content {
-    padding: 1rem;
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .dashboard-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .dashboard-subtitle {
+    font-size: var(--font-size-lg);
   }
 
   .dashboard-grid {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: var(--spacing-md);
+  }
+
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

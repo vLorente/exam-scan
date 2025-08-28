@@ -1,54 +1,208 @@
-.header {
+/* Dashboard Header - Modern Design with Design Tokens */
+.dashboard-header {
+  background: white;
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-.header-title {
+.header-container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1.25rem;
-  font-weight: 500;
+  justify-content: space-between;
+  min-height: 80px;
 }
 
-.spacer {
-  flex: 1 1 auto;
-}
-
-.user-info {
+.header-brand {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--spacing-sm);
 }
 
-.welcome-text {
+.brand-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--primary-gradient);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
+}
+
+.brand-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+  line-height: 1;
+}
+
+.brand-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-medium);
   font-weight: 500;
 }
 
-.role-chip-admin {
-  --mdc-chip-elevated-container-color: #f44336;
-  --mdc-chip-label-text-color: white;
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
 }
 
-.role-chip-teacher {
-  --mdc-chip-elevated-container-color: #2196f3;
-  --mdc-chip-label-text-color: white;
+.user-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-xs);
 }
 
-.role-chip-student {
-  --mdc-chip-elevated-container-color: #4caf50;
-  --mdc-chip-label-text-color: white;
+.welcome-message {
+  font-size: var(--font-size-sm);
+  color: var(--text-medium);
 }
 
+.user-name {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.user-role {
+  display: flex;
+  align-items: center;
+}
+
+.role-badge {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.role-badge.role-admin {
+  background: linear-gradient(45deg, #ef4444, #dc2626);
+  color: white;
+}
+
+.role-badge.role-teacher {
+  background: linear-gradient(45deg, #3b82f6, #2563eb);
+  color: white;
+}
+
+.role-badge.role-student {
+  background: linear-gradient(45deg, #10b981, #059669);
+  color: white;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--glass-bg);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  color: var(--text-dark);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.logout-button:hover {
+  background: var(--bg-gray);
+  border-color: var(--border-medium);
+  transform: translateY(-1px);
+}
+
+.logout-button:focus {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.3);
+}
+
+.logout-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+.logout-text {
+  display: block;
+}
+
+/* Responsive design */
 @media (max-width: 768px) {
-  .user-info {
-    flex-direction: column;
-    gap: 0.5rem;
+  .header-container {
+    padding: 0 var(--spacing-md);
+    min-height: 70px;
   }
 
-  .welcome-text {
-    font-size: 0.875rem;
+  .header-brand {
+    gap: var(--spacing-xs);
+  }
+
+  .brand-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .brand-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .brand-subtitle {
+    font-size: var(--font-size-xs);
+  }
+
+  .header-user {
+    gap: var(--spacing-sm);
+  }
+
+  .user-welcome {
+    display: none;
+  }
+
+  .logout-button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .logout-text {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-text {
+    display: none;
+  }
+
+  .role-badge {
+    position: fixed;
+    top: var(--spacing-xs);
+    right: var(--spacing-xs);
+    z-index: 101;
   }
 }

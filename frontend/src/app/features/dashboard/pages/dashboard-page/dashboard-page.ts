@@ -17,6 +17,12 @@ interface DashboardCard {
   requiresRole?: string[];
 }
 
+interface DashboardStat {
+  value: string;
+  label: string;
+  ariaLabel: string;
+}
+
 @Component({
   selector: 'app-dashboard-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -76,6 +82,44 @@ export class DashboardPageComponent {
       if (!card.requiresRole) return true;
       return card.requiresRole.includes(user.role);
     });
+  });
+
+  dashboardStats = computed((): DashboardStat[] => {
+    const user = this.currentUser();
+    if (!user) return [];
+
+    // Base stats for all users
+    const baseStats: DashboardStat[] = [
+      {
+        value: '12',
+        label: 'Exámenes Creados',
+        ariaLabel: 'Doce exámenes creados'
+      },
+      {
+        value: '89%',
+        label: 'Tasa de Éxito',
+        ariaLabel: 'Ochenta y nueve por ciento de tasa de éxito'
+      },
+      {
+        value: '247',
+        label: 'Estudiantes',
+        ariaLabel: 'Doscientos cuarenta y siete estudiantes'
+      }
+    ];
+
+    // Admin-specific stats
+    if (user.role === 'admin') {
+      return [
+        ...baseStats,
+        {
+          value: '24/7',
+          label: 'Disponibilidad',
+          ariaLabel: 'Veinticuatro horas al día, siete días a la semana de disponibilidad'
+        }
+      ];
+    }
+
+    return baseStats;
   });
 
   handleLogout(): void {
