@@ -77,7 +77,7 @@ graph TD
     B -->|SÍ| C[core/services/]
     B -->|NO| D{¿Funcionalidad transversal?}
     D -->|SÍ| C
-    D -->|NO| E[features/[feature]/services/]
+    D -->|NO| E[features/feature/services/]
     
     C --> F[Organizar por dominio]
     F --> G[core/services/auth/]
