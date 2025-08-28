@@ -7,8 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { LoginFormComponent } from '../../components/login-form/login-form';
-import { AuthService } from '../../../../core/services/auth';
-import { LoginRequest } from '../../../../core/models/user.model';
+import { AuthService } from '@core/services/auth';
+import { LoginRequest } from '@core/models/user.model';
 
 @Component({
   selector: 'app-login-page',

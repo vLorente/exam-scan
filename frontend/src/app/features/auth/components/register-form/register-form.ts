@@ -6,8 +6,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-import { RegisterRequest } from '../../../../core/models/user.model';
-import { SubmitButtonComponent } from '../../../../shared/components';
+import { RegisterRequest } from '@core/models/user.model';
+import { SubmitButtonComponent } from '@shared/components';
 
 @Component({
   selector: 'app-register-form',
