@@ -1,10 +1,15 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError, catchError } from 'rxjs';
-import { User, LoginRequest, LoginResponse, RegisterRequest } from '../../models/user.model';
-import { environment } from '../../../../environments/environment';
-
-@Injectable({
+import { Observable, throwError, catchError, map } from 'rxjs';
+import { User } from '../../models/user.model';
+import {
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+  LoginApiResponse,
+  AuthMapper
+} from '@core/models/auth.model';
+import { environment } from '@environments/environment';@Injectable({
   providedIn: 'root'
 })
 export class AuthService {
@@ -16,11 +21,11 @@ export class AuthService {
 
   constructor() {
     // Check for existing session
-    const token = localStorage.getItem('auth_token');
+    const token = localStorage.getItem('access_token');
     const userStr = localStorage.getItem('current_user');
     if (token && userStr) {
       try {
-        const user = JSON.parse(userStr);
+        const user = JSON.parse(userStr) as User;
         this.currentUser.set(user);
         this.isAuthenticated.set(true);
       } catch {
@@ -37,26 +42,34 @@ export class AuthService {
     return this.isAuthenticated.asReadonly();
   }
 
+  get accessToken(): string | null {
+    return localStorage.getItem('access_token');
+  }
+
+  get tokenType(): string | null {
+    return localStorage.getItem('token_type');
+  }
+
+  get authorizationHeader(): string | null {
+    const token = this.accessToken;
+    const type = this.tokenType;
+    return token && type ? `${type} ${token}` : null;
+  }
+
   login(credentials: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.API_URL}/v1/auth/login`, credentials)
+    return this.http.post<LoginApiResponse>(`${this.API_URL}/v1/auth/login`, credentials)
       .pipe(
+        map(apiResponse => AuthMapper.loginResponseFromApi(apiResponse)),
         catchError(this.handleError)
       );
   }
 
   register(userData: RegisterRequest): Observable<LoginResponse> {
-    // Mapear los datos del frontend al formato esperado por el backend
-    const backendData = {
-      email: userData.email,
-      username: userData.username,
-      full_name: userData.full_name,
-      role: userData.role || 'student',
-      is_active: true,
-      password: userData.password
-    };
+    const apiRequest = AuthMapper.registerRequestToApi(userData);
 
-    return this.http.post<LoginResponse>(`${this.API_URL}/v1/auth/register`, backendData)
+    return this.http.post<LoginApiResponse>(`${this.API_URL}/v1/auth/register`, apiRequest)
       .pipe(
+        map(apiResponse => AuthMapper.loginResponseFromApi(apiResponse)),
         catchError(this.handleError)
       );
   }
@@ -64,14 +77,16 @@ export class AuthService {
   logout(): void {
     this.currentUser.set(null);
     this.isAuthenticated.set(false);
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('token_type');
     localStorage.removeItem('current_user');
   }
 
   setSession(response: LoginResponse): void {
-    localStorage.setItem('auth_token', response.token);
-    localStorage.setItem('current_user', JSON.stringify(response.user));
-    this.currentUser.set(response.user);
+    localStorage.setItem('access_token', response.accessToken);
+    localStorage.setItem('token_type', response.tokenType);
+    localStorage.setItem('current_user', JSON.stringify(response.currentUser));
+    this.currentUser.set(response.currentUser);
     this.isAuthenticated.set(true);
   }
 

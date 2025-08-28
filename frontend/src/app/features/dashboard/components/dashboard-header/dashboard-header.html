@@ -18,7 +18,7 @@
       <div class="header-user">
         <div class="user-welcome">
           <span class="welcome-message">Bienvenido,</span>
-          <span class="user-name">{{ currentUser.name }}</span>
+          <span class="user-name">{{ currentUser.full_name }}</span>
           <div class="user-role">
             <span class="role-badge" [class]="'role-' + currentUser.role"
                   [attr.aria-label]="'Rol: ' + getRoleLabel(currentUser.role)">

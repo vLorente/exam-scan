@@ -1,23 +1,29 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { AuthService } from './auth.service';
-import { User, LoginRequest, LoginResponse, RegisterRequest } from '../../models/user.model';
-import { environment } from '../../../../environments/environment';
+import { User } from '@core/models/user.model';
+import { LoginRequest, LoginResponse, RegisterRequest } from '@core/models/auth.model';
+import { environment } from '@environments/environment';
 
 describe('AuthService', () => {
   let service: AuthService;
   let httpMock: HttpTestingController;
 
   const mockUser: User = {
-    id: '1',
-    name: 'Test User',
+    id: 1,
     email: 'test@example.com',
-    role: 'student'
+    username: 'testuser',
+    full_name: 'Test User',
+    role: 'student',
+    is_active: true,
+    created_at: '2025-08-28T09:12:08.129Z',
+    updated_at: '2025-08-28T09:12:08.129Z'
   };
 
   const mockLoginResponse: LoginResponse = {
-    token: 'mock-jwt-token',
-    user: mockUser
+    access_token: 'mock-jwt-token',
+    token_type: 'bearer',
+    current_user: mockUser
   };
 
   beforeEach(() => {
@@ -50,7 +56,7 @@ describe('AuthService', () => {
 
     it('should restore session from localStorage', () => {
       // Setup localStorage
-      localStorage.setItem('auth_token', 'test-token');
+      localStorage.setItem('access_token', 'test-token');
       localStorage.setItem('current_user', JSON.stringify(mockUser));
 
       // Create new service instance to trigger constructor
@@ -61,7 +67,7 @@ describe('AuthService', () => {
     });
 
     it('should logout if localStorage contains invalid JSON', () => {
-      localStorage.setItem('auth_token', 'test-token');
+      localStorage.setItem('access_token', 'test-token');
       localStorage.setItem('current_user', 'invalid-json');
 
       spyOn(service, 'logout');
@@ -184,7 +190,7 @@ describe('AuthService', () => {
 
       expect(service.user()).toBeNull();
       expect(service.authenticated()).toBeFalse();
-      expect(localStorage.getItem('auth_token')).toBeNull();
+      expect(localStorage.getItem('access_token')).toBeNull();
       expect(localStorage.getItem('current_user')).toBeNull();
     });
   });
@@ -195,7 +201,7 @@ describe('AuthService', () => {
 
       expect(service.user()).toEqual(mockUser);
       expect(service.authenticated()).toBeTrue();
-      expect(localStorage.getItem('auth_token')).toBe('mock-jwt-token');
+      expect(localStorage.getItem('access_token')).toBe('mock-jwt-token');
       expect(localStorage.getItem('current_user')).toBe(JSON.stringify(mockUser));
     });
   });

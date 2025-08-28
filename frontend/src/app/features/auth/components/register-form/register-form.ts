@@ -6,8 +6,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-import { RegisterRequest } from '@core/models/user.model';
-import { SubmitButtonComponent } from '@shared/components';
+import { RegisterRequest } from '@core/models/auth.model';
+import { SubmitButtonComponent } from '@shared/components/submit-button/submit-button';
 
 @Component({
   selector: 'app-register-form',
@@ -35,7 +35,7 @@ export class RegisterFormComponent {
   showConfirmPassword = signal(false);
 
   registerForm: FormGroup = this.fb.group({
-    full_name: ['', [Validators.required]],
+    fullName: ['', [Validators.required]],
     username: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
     role: ['', [Validators.required]],

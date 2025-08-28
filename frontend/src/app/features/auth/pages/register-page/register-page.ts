@@ -6,9 +6,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-import { RegisterFormComponent } from '../../components/register-form/register-form';
+import { RegisterFormComponent } from '@features/auth/components/register-form/register-form';
 import { AuthService } from '@core/services/auth';
-import { RegisterRequest } from '@core/models/user.model';
+import { RegisterRequest } from '@core/models/auth.model';
 
 @Component({
   selector: 'app-register-page',
