@@ -1,86 +1,137 @@
-/* Header - Modern Design with Design Tokens */
+/* Header - Modern Educational Design */
 .header {
-  background: white;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
   border-bottom: 1px solid var(--border-light);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 10px rgba(30, 41, 59, 0.08);
   position: sticky;
   top: 0;
   z-index: 100;
+  backdrop-filter: blur(8px);
 }
 
 .header-container {
   max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 0 var(--container-padding);
+  padding: 0 var(--spacing-lg);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 80px;
+  min-height: 72px;
+  position: relative;
 }
 
 .header-brand {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-md);
+  transition: transform var(--transition-fast);
+}
+
+.header-brand:hover {
+  transform: translateY(-1px);
 }
 
 .brand-icon {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   background: var(--primary-gradient);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+}
+
+.brand-icon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.brand-icon:hover::before {
+  left: 100%;
+}
+
+.brand-icon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
 .brand-icon svg {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
+  z-index: 1;
 }
 
 .brand-text {
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
 
 .brand-title {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-2xl);
   font-weight: 700;
   color: var(--text-dark);
   margin: 0;
-  line-height: 1;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
 }
 
 .brand-subtitle {
   font-size: var(--font-size-sm);
   color: var(--text-medium);
   font-weight: 500;
+  opacity: 0.8;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .header-user {
   display: flex;
   align-items: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
 }
 
 .user-welcome {
   display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.user-info {
+  display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: var(--spacing-xs);
+  gap: 2px;
 }
 
 .welcome-message {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   color: var(--text-medium);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .user-name {
   font-size: var(--font-size-lg);
   font-weight: 600;
   color: var(--text-dark);
+  line-height: 1.2;
 }
 
 .user-role {
@@ -89,27 +140,29 @@
 }
 
 .role-badge {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-full);
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: white;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .role-badge.role-admin {
-  background: linear-gradient(45deg, #ef4444, #dc2626);
-  color: white;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
 }
 
 .role-badge.role-teacher {
-  background: linear-gradient(45deg, #3b82f6, #2563eb);
-  color: white;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
 }
 
 .role-badge.role-student {
-  background: linear-gradient(45deg, #10b981, #059669);
-  color: white;
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
 }
 
 .logout-button {
@@ -117,20 +170,44 @@
   align-items: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--glass-bg);
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   border: 1px solid var(--border-medium);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   color: var(--text-dark);
   font-size: var(--font-size-sm);
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.logout-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: left 0.5s ease;
+}
+
+.logout-button:hover::before {
+  left: 100%;
 }
 
 .logout-button:hover {
-  background: var(--bg-gray);
-  border-color: var(--border-medium);
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+  border-color: var(--primary-blue);
+  box-shadow: 0 4px 12px rgba(30, 41, 59, 0.15);
+  color: var(--primary-blue);
+}
+
+.logout-button:active {
+  box-shadow: 0 2px 6px rgba(30, 41, 59, 0.1);
 }
 
 .logout-button:focus {
@@ -146,35 +223,94 @@
 
 .logout-text {
   display: block;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* Additional Modern Enhancements */
+.header-container::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--primary-gradient);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+/* Scroll shadow effect */
+.header.scrolled {
+  box-shadow: 0 4px 20px rgba(30, 41, 59, 0.15);
+}
+
+.header.scrolled .header-container::before {
+  opacity: 0.7;
+}
+
+/* Educational theme refinements */
+.brand-title::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent-gradient);
+  transition: width var(--transition-normal);
+}
+
+.header-brand:hover .brand-title::after {
+  width: 100%;
+}
+
+/* Improved accessibility for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .brand-icon::before,
+  .logout-button::before,
+  .brand-title::after {
+    display: none;
+  }
+
+  .brand-icon:hover,
+  .header-brand:hover,
+  .logout-button:hover {
+    transform: none;
+  }
+
+  .header-user:hover {
+    transform: none;
+  }
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
   .header-container {
     padding: 0 var(--spacing-md);
-    min-height: 70px;
+    min-height: 64px;
   }
 
   .header-brand {
-    gap: var(--spacing-xs);
+    gap: var(--spacing-sm);
   }
 
   .brand-icon {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
   }
 
   .brand-icon svg {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
   }
 
   .brand-title {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-xl);
   }
 
   .brand-subtitle {
-    font-size: var(--font-size-xs);
+    font-size: 10px;
   }
 
   .header-user {
@@ -182,11 +318,16 @@
   }
 
   .user-welcome {
+    gap: var(--spacing-xs);
+  }
+
+  .user-info {
     display: none;
   }
 
   .logout-button {
     padding: var(--spacing-xs) var(--spacing-sm);
+    min-width: auto;
   }
 
   .logout-text {
@@ -195,8 +336,32 @@
 }
 
 @media (max-width: 480px) {
+  .header {
+    padding: 0;
+  }
+
+  .header-container {
+    padding: 0 var(--spacing-sm);
+    min-height: 56px;
+  }
+
   .brand-text {
     display: none;
+  }
+
+  .brand-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .brand-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .header-user {
+    padding: 0 var(--spacing-sm);
+    border-radius: var(--radius-lg);
   }
 
   .role-badge {
@@ -204,5 +369,13 @@
     top: var(--spacing-xs);
     right: var(--spacing-xs);
     z-index: 101;
+    width: 28px;
+    height: 28px;
+    font-size: var(--font-size-xs);
+  }
+
+  .logout-button {
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-md);
   }
 }

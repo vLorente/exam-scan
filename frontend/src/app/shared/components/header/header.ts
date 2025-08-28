@@ -24,6 +24,15 @@ export class HeaderComponent {
     return labels[role as keyof typeof labels] || role;
   }
 
+  getRoleLetter(role: string): string {
+    const letters = {
+      'admin': 'A',
+      'teacher': 'P',
+      'student': 'E'
+    };
+    return letters[role as keyof typeof letters] || role.charAt(0).toUpperCase();
+  }
+
   onLogout(): void {
     this.logout.emit();
   }

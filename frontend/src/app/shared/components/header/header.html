@@ -17,13 +17,16 @@
     @if (user(); as currentUser) {
       <div class="header-user">
         <div class="user-welcome">
-          <span class="welcome-message">Bienvenido,</span>
-          <span class="user-name">{{ currentUser.fullName }}</span>
           <div class="user-role">
-            <span class="role-badge" [class]="'role-' + currentUser.role"
-                  [attr.aria-label]="'Rol: ' + getRoleLabel(currentUser.role)">
-              {{ getRoleLabel(currentUser.role) }}
-            </span>
+            <div class="role-badge" [class]="'role-' + currentUser.role"
+                 [attr.aria-label]="'Rol: ' + getRoleLabel(currentUser.role)"
+                 [attr.title]="getRoleLabel(currentUser.role)">
+              {{ getRoleLetter(currentUser.role) }}
+            </div>
+          </div>
+          <div class="user-info">
+            <span class="welcome-message">Bienvenido,</span>
+            <span class="user-name">{{ currentUser.fullName }}</span>
           </div>
         </div>
         <button
