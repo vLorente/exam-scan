@@ -1,15 +1,15 @@
 <app-layout
-  [title]="'ExamScan'"
-  [subtitle]="'Dashboard'"
+  title="ExamScan"
+  subtitle="Dashboard"
 >
-  <div class="dashboard-welcome" animate.enter="animate-fade-in-up">
+  <section class="dashboard-welcome" animate.enter="animate-fade-in-up">
     <h1 class="dashboard-title">
       Panel de Control
     </h1>
     <p class="dashboard-subtitle">
       Gestiona tus exámenes, revisa estadísticas y administra tu plataforma educativa
     </p>
-  </div>
+  </section>
 
   <section class="dashboard-grid" animate.enter="animate-fade-in-up" style="animation-delay: 0.2s;" aria-label="Funciones principales">
     @for (card of dashboardCards(); track card.id) {

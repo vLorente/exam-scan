@@ -44,7 +44,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private handleScroll = (): void => {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    this.isScrolled.set(scrollTop > 10);
+    this.isScrolled.set(scrollTop > 20);
   };
 
   getRoleLabel(role: string): string {
