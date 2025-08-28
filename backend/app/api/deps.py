@@ -17,13 +17,13 @@ DatabaseSession = Annotated[Session, Depends(get_session)]
 def get_current_user_id(
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ) -> str:
-    """Get current user from JWT token"""
+    """Get current user ID from JWT token"""
     token_data = verify_token(credentials.credentials)
     if token_data is None:
         raise authentication_error("Could not validate credentials")
     return token_data
 
-# Current user dependency
+# Current user ID dependency
 CurrentUserId = Annotated[str, Depends(get_current_user_id)]
 
 def get_current_user(

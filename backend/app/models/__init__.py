@@ -3,6 +3,7 @@
 # Importar todos los modelos para que SQLModel los registre
 from .base import BaseModel, TimestampMixin
 from .user import User, UserCreate, UserRead, UserUpdate, UserRole
+from .auth import LoginResponse
 from .exam import Exam, ExamCreate, ExamRead, ExamReadWithCreator, ExamReadWithQuestions, ExamUpdate, ExamStatus, ExamType
 from .question import Question, QuestionCreate, QuestionRead, QuestionReadWithOptions, QuestionUpdate, QuestionType, QuestionDifficulty
 from .question import Option, OptionCreate, OptionRead, OptionUpdate
@@ -16,6 +17,8 @@ __all__ = [
     "BaseModel", "TimestampMixin",
     # User
     "User", "UserCreate", "UserRead", "UserUpdate", "UserRole",
+    # Auth
+    "LoginResponse",
     # Exam  
     "Exam", "ExamCreate", "ExamRead", "ExamReadWithCreator", "ExamReadWithQuestions", "ExamUpdate", "ExamStatus", "ExamType",
     # Question & Option
