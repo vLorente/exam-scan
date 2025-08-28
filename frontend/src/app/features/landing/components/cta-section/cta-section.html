@@ -6,7 +6,7 @@
       <div class="bg-circle circle-3"></div>
     </div>
 
-    <div class="cta-content animate-fade-in-up">
+    <div class="cta-content" animate.enter="animate-fade-in-up">
       <div class="cta-main">
         <h2 id="cta-main-title" class="cta-title">
           ¿Listo para revolucionar tus
@@ -19,7 +19,8 @@
 
         <div class="cta-buttons" role="group" aria-label="Acciones para comenzar">
           <button
-            class="btn btn-primary animate-pulse"
+            class="btn btn-primary"
+            animate.enter="animate-pulse"
             (click)="navigateToRegister()"
             aria-describedby="start-free-desc">
             Comenzar gratis
@@ -52,7 +53,7 @@
         </div>
       </div>
 
-      <div class="cta-testimonial animate-fade-in-right" style="animation-delay: 0.3s;">
+      <div class="cta-testimonial" animate.enter="animate-fade-in-right" style="animation-delay: 0.3s;">
         <div class="testimonial-card">
           <div class="testimonial-content">
             <div class="quote-icon">"</div>
@@ -72,7 +73,7 @@
       </div>
     </div>
 
-    <div class="cta-stats animate-fade-in-up" style="animation-delay: 0.6s;">
+    <div class="cta-stats" animate.enter="animate-fade-in-up" style="animation-delay: 0.6s;">
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon">🎯</div>

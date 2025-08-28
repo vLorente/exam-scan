@@ -1,6 +1,6 @@
 <section class="features-section" aria-labelledby="features-title">
   <div class="features-container">
-    <header class="features-header animate-fade-in-up">
+    <header class="features-header" animate.enter="animate-fade-in-up">
       <h2 id="features-title" class="features-title">
         Potencia tu proceso de evaluación con
         <span class="gradient-text">tecnología avanzada</span>
@@ -14,7 +14,8 @@
     <div class="features-grid" role="list" aria-label="Lista de características principales">
       @for (feature of features; track feature.title; let i = $index) {
         <article
-          class="feature-card animate-fade-in-up"
+          class="feature-card"
+          animate.enter="animate-fade-in-up"
           [style.animation-delay]="(i * 0.1) + 's'"
           role="listitem"
           [attr.aria-labelledby]="'feature-title-' + i"
@@ -29,7 +30,7 @@
       }
     </div>
 
-    <section class="features-cta animate-fade-in-up" style="animation-delay: 0.8s;" aria-labelledby="cta-title">
+    <section class="features-cta" animate.enter="animate-fade-in-up" style="animation-delay: 0.8s;" aria-labelledby="cta-title">
       <div class="cta-content">
         <h3 id="cta-title">¿Listo para transformar tus exámenes?</h3>
         <p>Únete a más de 1,000 educadores que ya confían en nuestra plataforma</p>

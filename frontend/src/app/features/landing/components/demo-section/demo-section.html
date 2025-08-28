@@ -1,6 +1,6 @@
 <section class="demo-section" aria-labelledby="demo-title">
   <div class="demo-container">
-    <header class="demo-header animate-fade-in-up">
+    <header class="demo-header" animate.enter="animate-fade-in-up">
       <h2 id="demo-title" class="demo-title">
         Así de <span class="gradient-text">simple</span> es crear un examen
       </h2>
@@ -15,7 +15,8 @@
           @for (step of steps; track step.id; let i = $index) {
             <li class="step-item-wrapper">
               <button
-                class="step-item animate-fade-in-left"
+                class="step-item"
+                animate.enter="animate-fade-in-left"
                 [style.animation-delay]="(i * 0.2) + 's'"
                 [class.active]="activeStep() === step.id"
                 (click)="selectStep(step.id)"
@@ -35,7 +36,8 @@
         </ol>
       </nav>
 
-      <div class="demo-visual animate-fade-in-right"
+      <div class="demo-visual"
+           animate.enter="animate-fade-in-right"
            role="img"
            [attr.aria-label]="getVisualDescription()"
            [attr.aria-describedby]="'visual-desc-' + activeStep()">
@@ -150,7 +152,7 @@
       </div>
     </div>
 
-    <div class="demo-cta animate-fade-in-up" style="animation-delay: 1s;">
+    <div class="demo-cta" animate.enter="animate-fade-in-up" style="animation-delay: 1s;">
       <button class="demo-cta-button">
         Prueba el proceso completo
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">

@@ -210,3 +210,31 @@ You are an expert in TypeScript, Angular, and scalable web application developme
   </ol>
 </nav>
 ```
+
+## Animations in Angular
+- Define enter animations using CSS classes with either transforms or keyframe animations
+- Use animate.enter to animate elements as they enter the DOM
+- Use animate.leave to animate elements as they leave the DOM
+
+### Animation Examples
+``` html
+<h2><code>animate.enter</code> Example</h2>
+<div class="enter-container" animate.enter="enter-animation">
+  <p>The box is entering.</p>
+</div>
+```
+```css
+.enter-animation {
+  animation: slide-fade 1s;
+}
+@keyframes slide-fade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+```
