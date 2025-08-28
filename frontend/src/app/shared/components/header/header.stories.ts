@@ -1,6 +1,9 @@
-import { Meta, StoryObj } from '@storybook/angular';
+import { Meta, StoryObj, moduleMetadata } from '@storybook/angular';
+import { signal, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { HeaderComponent } from './header';
 import { User } from '@core/models/user.model';
+import { AuthService } from '@core/services/auth';
 
 // Mock users para los stories
 const mockStudentUser: User = {
@@ -36,24 +39,55 @@ const mockAdminUser: User = {
   updatedAt: new Date('2024-01-20')
 };
 
+// Mock AuthService para Storybook
+@Injectable()
+class MockAuthService {
+  user = signal<User | null>(mockStudentUser);
+
+  logout(): void {
+    this.user.set(null);
+  }
+
+  setMockUser(user: User | null): void {
+    this.user.set(user);
+  }
+}
+
+// Mock Router para Storybook
+@Injectable()
+class MockRouter {
+  navigate(commands: any[]): Promise<boolean> {
+    console.log('Navigate to:', commands);
+    return Promise.resolve(true);
+  }
+}
+
 const meta: Meta<HeaderComponent> = {
   title: 'Components/Layout/Header',
   component: HeaderComponent,
+  decorators: [
+    moduleMetadata({
+      providers: [
+        { provide: AuthService, useClass: MockAuthService },
+        { provide: Router, useClass: MockRouter }
+      ]
+    })
+  ],
   parameters: {
     docs: {
       description: {
         component: `
 # Header Component
 
-Componente de encabezado compartido que muestra información del usuario, navegación y funciones de autenticación.
+Componente de encabezado autónomo que maneja internamente la información del usuario y funciones de autenticación.
 
 ## Características
 
+- **Autónomo**: Obtiene automáticamente los datos del usuario del AuthService
 - **Responsive**: Se adapta automáticamente a diferentes tamaños de pantalla
 - **Accesible**: Implementa estándares WCAG 2.1 AA con ARIA labels
-- **Reutilizable**: Puede usarse en cualquier página de la aplicación
-- **Personalizable**: Permite cambiar título y subtítulo según la página
-- **Roles**: Soporte visual para diferentes tipos de usuario (admin, teacher, student)
+- **Scroll Transparency**: Se vuelve semitransparente al hacer scroll
+- **Roles Visuales**: Muestra badges para diferentes tipos de usuario (A/P/E)
 
 ## Uso en el Código
 
@@ -64,24 +98,24 @@ import { HeaderComponent } from '@shared/components';
   imports: [HeaderComponent],
   template: \`
     <app-header
-      [user]="currentUser()"
       [title]="'Mi App'"
       [subtitle]="'Mi Sección'"
-      (logout)="handleLogout()"
+      (logout)="onLogoutComplete()"
     />
   \`
 })
 \`\`\`
+
+## Manejo de Usuario
+
+El componente obtiene automáticamente la información del usuario del AuthService.
+No es necesario pasarle datos de usuario manualmente.
         `
       }
     },
     layout: 'fullscreen'
   },
   argTypes: {
-    user: {
-      description: 'Usuario actual de la sesión (null si no está autenticado)',
-      control: false
-    },
     title: {
       control: 'text',
       description: 'Título principal de la aplicación'
@@ -103,7 +137,6 @@ type Story = StoryObj<HeaderComponent>;
 
 export const Dashboard: Story = {
   args: {
-    user: mockStudentUser,
     title: 'ExamScan',
     subtitle: 'Dashboard'
   }
@@ -111,7 +144,6 @@ export const Dashboard: Story = {
 
 export const StudentView: Story = {
   args: {
-    user: mockStudentUser,
     title: 'ExamScan',
     subtitle: 'Mis Exámenes'
   }
@@ -119,7 +151,6 @@ export const StudentView: Story = {
 
 export const TeacherView: Story = {
   args: {
-    user: mockTeacherUser,
     title: 'ExamScan',
     subtitle: 'Gestión de Exámenes'
   }
@@ -127,7 +158,6 @@ export const TeacherView: Story = {
 
 export const AdminView: Story = {
   args: {
-    user: mockAdminUser,
     title: 'ExamScan',
     subtitle: 'Administración del Sistema'
   }
@@ -135,7 +165,6 @@ export const AdminView: Story = {
 
 export const CustomBranding: Story = {
   args: {
-    user: mockTeacherUser,
     title: 'Universidad ABC',
     subtitle: 'Portal Académico'
   }
@@ -143,7 +172,6 @@ export const CustomBranding: Story = {
 
 export const Statistics: Story = {
   args: {
-    user: mockAdminUser,
     title: 'ExamScan',
     subtitle: 'Estadísticas y Reportes'
   }
@@ -151,48 +179,13 @@ export const Statistics: Story = {
 
 export const UserManagement: Story = {
   args: {
-    user: mockAdminUser,
     title: 'ExamScan',
     subtitle: 'Gestión de Usuarios'
   }
 };
 
-export const NoUser: Story = {
-  args: {
-    user: null,
-    title: 'ExamScan',
-    subtitle: 'Sistema de Exámenes'
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Estado cuando no hay usuario autenticado (no debería ocurrir en uso normal, pero útil para testing).'
-      }
-    }
-  }
-};
-
-export const LongUserName: Story = {
-  args: {
-    user: {
-      ...mockStudentUser,
-      fullName: 'María Fernanda González de la Torre y Martínez'
-    },
-    title: 'ExamScan',
-    subtitle: 'Dashboard'
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Prueba con nombres de usuario muy largos para verificar el comportamiento responsive.'
-      }
-    }
-  }
-};
-
 export const MobileView: Story = {
   args: {
-    user: mockStudentUser,
     title: 'ExamScan',
     subtitle: 'Dashboard'
   },
@@ -210,7 +203,6 @@ export const MobileView: Story = {
 
 export const TabletView: Story = {
   args: {
-    user: mockTeacherUser,
     title: 'ExamScan',
     subtitle: 'Gestión de Exámenes'
   },
@@ -226,38 +218,8 @@ export const TabletView: Story = {
   }
 };
 
-export const AllRoles: Story = {
-  render: () => ({
-    template: `
-      <div style="display: flex; flex-direction: column; gap: 20px;">
-        <h3>Estudiante</h3>
-        <app-header [user]="studentUser" title="ExamScan" subtitle="Área de Estudiantes" />
-
-        <h3>Profesor</h3>
-        <app-header [user]="teacherUser" title="ExamScan" subtitle="Portal de Profesores" />
-
-        <h3>Administrador</h3>
-        <app-header [user]="adminUser" title="ExamScan" subtitle="Panel de Administración" />
-      </div>
-    `,
-    props: {
-      studentUser: mockStudentUser,
-      teacherUser: mockTeacherUser,
-      adminUser: mockAdminUser
-    }
-  }),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparación de cómo se ve el header con diferentes roles de usuario. Cada rol tiene un badge de color diferente.'
-      }
-    }
-  }
-};
-
 export const InteractiveDemo: Story = {
   args: {
-    user: mockAdminUser,
     title: 'ExamScan',
     subtitle: 'Demo Interactivo'
   },

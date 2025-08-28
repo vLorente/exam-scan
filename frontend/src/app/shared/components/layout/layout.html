@@ -1,0 +1,17 @@
+<div class="layout">
+  <app-header
+    [title]="title()"
+    [subtitle]="subtitle()"
+  />
+
+  <main class="main-content header-fixed-layout" id="main-content">
+    <ng-content />
+  </main>
+
+  <app-footer
+    [appName]="appName()"
+    [version]="version()"
+    [companyName]="companyName()"
+    [showLinks]="showFooterLinks()"
+  />
+</div>

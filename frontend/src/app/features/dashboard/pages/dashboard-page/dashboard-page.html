@@ -1,52 +1,39 @@
-<div class="dashboard">
-  <app-header
-    [user]="currentUser()"
-    [title]="'ExamScan'"
-    [subtitle]="'Dashboard'"
-    (logout)="handleLogout()"
-  />
+<app-layout
+  [title]="'ExamScan'"
+  [subtitle]="'Dashboard'"
+>
+  <div class="dashboard-welcome" animate.enter="animate-fade-in-up">
+    <h1 class="dashboard-title">
+      Panel de Control
+    </h1>
+    <p class="dashboard-subtitle">
+      Gestiona tus exámenes, revisa estadísticas y administra tu plataforma educativa
+    </p>
+  </div>
 
-  <main class="main-content" id="main-content">
-    <div class="dashboard-welcome" animate.enter="animate-fade-in-up">
-      <h1 class="dashboard-title">
-        Panel de Control
-      </h1>
-      <p class="dashboard-subtitle">
-        Gestiona tus exámenes, revisa estadísticas y administra tu plataforma educativa
-      </p>
-    </div>
+  <section class="dashboard-grid" animate.enter="animate-fade-in-up" style="animation-delay: 0.2s;" aria-label="Funciones principales">
+    @for (card of dashboardCards(); track card.id) {
+      <app-dashboard-card
+        [title]="card.title"
+        [description]="card.description"
+        [buttonText]="card.buttonText"
+        [icon]="card.icon"
+        [routerLink]="card.routerLink"
+        [disabled]="card.disabled ?? false"
+        [buttonClass]="card.buttonClass ?? 'btn-primary'"
+        (buttonClick)="handleCardAction(card.id)"
+      />
+    }
+  </section>
 
-    <section class="dashboard-grid" animate.enter="animate-fade-in-up" style="animation-delay: 0.2s;" aria-label="Funciones principales">
-      @for (card of dashboardCards(); track card.id) {
-        <app-dashboard-card
-          [title]="card.title"
-          [description]="card.description"
-          [buttonText]="card.buttonText"
-          [icon]="card.icon"
-          [routerLink]="card.routerLink"
-          [disabled]="card.disabled ?? false"
-          [buttonClass]="card.buttonClass ?? 'btn-primary'"
-          (buttonClick)="handleCardAction(card.id)"
-        />
+  @if (dashboardStats(); as stats) {
+    <section class="dashboard-stats" animate.enter="animate-fade-in-up" style="animation-delay: 0.4s;" aria-label="Estadísticas del dashboard">
+      @for (stat of stats; track $index) {
+        <div class="stat-card">
+          <div class="stat-number" [attr.aria-label]="stat.ariaLabel">{{ stat.value }}</div>
+          <div class="stat-label">{{ stat.label }}</div>
+        </div>
       }
     </section>
-
-    @if (dashboardStats(); as stats) {
-      <section class="dashboard-stats" animate.enter="animate-fade-in-up" style="animation-delay: 0.4s;" aria-label="Estadísticas del dashboard">
-        @for (stat of stats; track $index) {
-          <div class="stat-card">
-            <div class="stat-number" [attr.aria-label]="stat.ariaLabel">{{ stat.value }}</div>
-            <div class="stat-label">{{ stat.label }}</div>
-          </div>
-        }
-      </section>
-    }
-  </main>
-
-  <app-footer
-    [appName]="'ExamScan'"
-    [version]="'v1.0.0'"
-    [companyName]="'Tu Institución'"
-    [showLinks]="true"
-  />
-</div>
+  }
+</app-layout>

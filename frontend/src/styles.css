@@ -330,6 +330,23 @@ button:focus,
   }
 }
 
+/* Header Fixed Layout Utility */
+.header-fixed-layout {
+  padding-top: 72px;
+}
+
+@media (max-width: 768px) {
+  .header-fixed-layout {
+    padding-top: 64px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-fixed-layout {
+    padding-top: 56px;
+  }
+}
+
 /* Snackbar custom styles */
 .success-snackbar {
   --mdc-snackbar-container-color: #4caf50;

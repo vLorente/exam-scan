@@ -1,8 +1,7 @@
 import { Component, inject, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth';
-import { HeaderComponent, FooterComponent } from '@shared/components';
+import { LayoutComponent } from '@shared/components';
 import { DashboardCardComponent } from '../../components/dashboard-card/dashboard-card';
 
 interface DashboardCard {
@@ -26,15 +25,12 @@ interface DashboardStat {
 @Component({
   selector: 'app-dashboard-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, HeaderComponent, FooterComponent, DashboardCardComponent],
+  imports: [CommonModule, LayoutComponent, DashboardCardComponent],
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.css'
 })
 export class DashboardPageComponent {
   private authService = inject(AuthService);
-  private router = inject(Router);
-
-  currentUser = this.authService.user;
 
   private allCards = signal<DashboardCard[]>([
     {
@@ -75,7 +71,7 @@ export class DashboardPageComponent {
   ]);
 
   dashboardCards = computed(() => {
-    const user = this.currentUser();
+    const user = this.authService.user();
     if (!user) return [];
 
     return this.allCards().filter(card => {
@@ -85,7 +81,7 @@ export class DashboardPageComponent {
   });
 
   dashboardStats = computed((): DashboardStat[] => {
-    const user = this.currentUser();
+    const user = this.authService.user();
     if (!user) return [];
 
     // Base stats for all users
@@ -121,11 +117,6 @@ export class DashboardPageComponent {
 
     return baseStats;
   });
-
-  handleLogout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
 
   handleCardAction(cardId: string): void {
     // Handle custom card actions if needed

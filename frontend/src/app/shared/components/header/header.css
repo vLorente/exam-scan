@@ -3,10 +3,20 @@
   background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
   border-bottom: 1px solid var(--border-light);
   box-shadow: 0 2px 10px rgba(30, 41, 59, 0.08);
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
   backdrop-filter: blur(8px);
+  transition: all var(--transition-normal);
+}
+
+/* Scrolled state - semi-transparent */
+.header.scrolled {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(30, 41, 59, 0.15);
 }
 
 .header-container {
@@ -240,15 +250,6 @@
   transition: opacity var(--transition-normal);
 }
 
-/* Scroll shadow effect */
-.header.scrolled {
-  box-shadow: 0 4px 20px rgba(30, 41, 59, 0.15);
-}
-
-.header.scrolled .header-container::before {
-  opacity: 0.7;
-}
-
 /* Educational theme refinements */
 .brand-title::after {
   content: '';
@@ -289,6 +290,10 @@
   .header-container {
     padding: 0 var(--spacing-md);
     min-height: 64px;
+  }
+
+  .header.scrolled {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
   }
 
   .header-brand {
@@ -343,6 +348,10 @@
   .header-container {
     padding: 0 var(--spacing-sm);
     min-height: 56px;
+  }
+
+  .header.scrolled {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
   }
 
   .brand-text {
