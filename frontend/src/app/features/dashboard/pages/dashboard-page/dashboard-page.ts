@@ -2,7 +2,7 @@ import { Component, inject, computed, signal, ChangeDetectionStrategy } from '@a
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth';
-import { HeaderComponent } from '@shared/components';
+import { HeaderComponent, FooterComponent } from '@shared/components';
 import { DashboardCardComponent } from '../../components/dashboard-card/dashboard-card';
 
 interface DashboardCard {
@@ -26,7 +26,7 @@ interface DashboardStat {
 @Component({
   selector: 'app-dashboard-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, HeaderComponent, DashboardCardComponent],
+  imports: [CommonModule, HeaderComponent, FooterComponent, DashboardCardComponent],
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.css'
 })
