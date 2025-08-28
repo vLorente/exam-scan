@@ -1,8 +1,8 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, catchError } from 'rxjs';
-import { User, LoginRequest, LoginResponse, RegisterRequest } from '../../../core/models/user.model';
-import { environment } from '../../../../environments/environment';
+import { User, LoginRequest, LoginResponse, RegisterRequest } from '../models/user.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

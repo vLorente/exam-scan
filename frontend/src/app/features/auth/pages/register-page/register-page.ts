@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { RegisterFormComponent } from '../../components/register-form/register-form';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../../core/services/auth';
 import { RegisterRequest } from '../../../../core/models/user.model';
 
 @Component({

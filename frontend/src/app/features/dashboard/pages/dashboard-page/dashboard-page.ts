@@ -1,7 +1,7 @@
 import { Component, inject, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../auth/services/auth.service';
+import { AuthService } from '../../../../core/services/auth';
 import { DashboardHeaderComponent } from '../../components/dashboard-header/dashboard-header';
 import { DashboardCardComponent } from '../../components/dashboard-card/dashboard-card';
 
