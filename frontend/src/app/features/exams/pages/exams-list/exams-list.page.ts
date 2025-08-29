@@ -2,13 +2,16 @@ import { Component, inject, signal, computed, OnInit, ChangeDetectionStrategy } 
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { LayoutComponent } from '@shared/components';
-import { ExamsService } from '../../services';
+import { ExamsService } from '@features/exams/services/exams.service';
+import { ExamCardComponent, ExamListItemComponent } from '@features/exams/components';
 import { Exam } from '@core/models';
+
+type ViewMode = 'grid' | 'list';
 
 @Component({
   selector: 'app-exams-list-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, LayoutComponent],
+  imports: [CommonModule, LayoutComponent, ExamCardComponent, ExamListItemComponent],
   templateUrl: './exams-list.page.html',
   styleUrl: './exams-list.page.css'
 })
@@ -19,6 +22,7 @@ export class ExamsListPageComponent implements OnInit {
   exams = signal<Exam[]>([]);
   loading = signal<boolean>(true);
   error = signal<string | null>(null);
+  viewMode = signal<ViewMode>('grid'); // Default to grid view
 
   // Computed properties for template calculations
   activeExamsCount = computed(() => this.exams().filter(e => e.isActive).length);
@@ -55,28 +59,15 @@ export class ExamsListPageComponent implements OnInit {
     this.loadExams();
   }
 
-  getExamStatusClass(exam: Exam): string {
-    return exam.isActive ? 'status-active' : 'status-inactive';
+  onToggleViewMode(): void {
+    this.viewMode.set(this.viewMode() === 'grid' ? 'list' : 'grid');
   }
 
-  getExamStatusText(exam: Exam): string {
-    return exam.isActive ? 'Disponible' : 'No disponible';
+  getViewModeIcon(): string {
+    return this.viewMode() === 'grid' ? 'M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z' : 'M3 3h7v7H3zm11 0h7v7h-7zm0 11h7v7h-7zM3 14h7v7H3z';
   }
 
-  formatDuration(minutes?: number): string {
-    if (!minutes) return 'Sin límite';
-
-    if (minutes < 60) {
-      return `${minutes} min`;
-    }
-
-    const hours = Math.floor(minutes / 60);
-    const remainingMinutes = minutes % 60;
-
-    if (remainingMinutes === 0) {
-      return `${hours}h`;
-    }
-
-    return `${hours}h ${remainingMinutes}min`;
+  getViewModeLabel(): string {
+    return this.viewMode() === 'grid' ? 'Vista de Lista' : 'Vista de Cuadrícula';
   }
 }

@@ -4,12 +4,33 @@
 >
   <section class="exams-page" animate.enter="animate-fade-in-up">
     <header class="page-header">
-      <h1 class="page-title">
-        Mis Exámenes
-      </h1>
-      <p class="page-subtitle">
-        Accede a tus exámenes asignados y comienza a evaluarte
-      </p>
+      <div class="header-content">
+        <div class="header-text">
+          <h1 class="page-title">
+            Mis Exámenes
+          </h1>
+          <p class="page-subtitle">
+            Accede a tus exámenes asignados y comienza a evaluarte
+          </p>
+        </div>
+
+        <!-- View Toggle -->
+        @if (!loading() && !error() && exams().length > 0) {
+          <div class="view-toggle desktop-only">
+            <button
+              class="toggle-button"
+              (click)="onToggleViewMode()"
+              [attr.aria-label]="getViewModeLabel()"
+              [attr.aria-pressed]="viewMode() === 'list'"
+              type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path [attr.d]="getViewModeIcon()"/>
+              </svg>
+              <span class="toggle-text">{{ getViewModeLabel() }}</span>
+            </button>
+          </div>
+        }
+      </div>
     </header>
 
     <!-- Loading State -->
@@ -58,91 +79,50 @@
       </div>
     }
 
-    <!-- Exams Grid -->
+    <!-- Exams Grid or List -->
     @if (!loading() && !error() && exams().length > 0) {
-      <div class="exams-grid" animate.enter="animate-fade-in-up" style="animation-delay: 0.2s;">
-        @for (exam of exams(); track exam.id) {
-          <article
-            class="exam-card"
-            [class]="getExamStatusClass(exam)"
-            (click)="onExamClick(exam)"
-            [attr.aria-labelledby]="'exam-title-' + exam.id"
-            [attr.aria-describedby]="'exam-desc-' + exam.id"
-            role="button"
-            tabindex="0"
-            (keydown.enter)="onExamClick(exam)"
-            (keydown.space)="onExamClick(exam)">
-
-            <header class="exam-header">
-              <div class="exam-status">
-                <span
-                  class="status-badge"
-                  [class]="getExamStatusClass(exam)"
-                  [attr.aria-label]="'Estado: ' + getExamStatusText(exam)">
-                  {{ getExamStatusText(exam) }}
-                </span>
-              </div>
-              <h3 [id]="'exam-title-' + exam.id" class="exam-title">
-                {{ exam.title }}
-              </h3>
-            </header>
-
-            <div class="exam-body">
-              @if (exam.description) {
-                <p [id]="'exam-desc-' + exam.id" class="exam-description">
-                  {{ exam.description }}
-                </p>
-              }
-
-              <div class="exam-meta" aria-label="Información del examen">
-                <div class="meta-item">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polyline points="12,6 12,12 16,14"/>
-                  </svg>
-                  <span>{{ formatDuration(exam.timeLimit) }}</span>
-                </div>
-                <div class="meta-item">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-                    <path d="M9 12l2 2 4-4"/>
-                    <circle cx="12" cy="12" r="10"/>
-                  </svg>
-                  <span>{{ exam.totalQuestions }} preguntas</span>
-                </div>
-                <div class="meta-item">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
-                  </svg>
-                  <span>{{ exam.passingScore }}% para aprobar</span>
-                </div>
-              </div>
-            </div>
-
-            <footer class="exam-footer">
-              @if (exam.isActive) {
-                <button
-                  class="exam-button btn-primary"
-                  (click)="onExamClick(exam)"
-                  [attr.aria-label]="'Comenzar examen: ' + exam.title">
-                  Comenzar Examen
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-                    <polygon points="5,3 19,12 5,21"/>
-                  </svg>
-                </button>
-              } @else {
-                <button
-                  class="exam-button btn-disabled"
-                  disabled
-                  [attr.aria-label]="'Examen no disponible: ' + exam.title">
-                  No Disponible
-                </button>
-              }
-            </footer>
-
-            <!-- Hover effect -->
-            <div class="exam-hover-effect" aria-hidden="true"></div>
-          </article>
+      <!-- Desktop: Show selected view mode -->
+      <div class="desktop-view">
+        @if (viewMode() === 'grid') {
+          <div class="exams-grid" animate.enter="animate-fade-in-up" style="animation-delay: 0.2s;">
+            @for (exam of exams(); track exam.id) {
+              <app-exam-card
+                [exam]="exam"
+                [showActions]="true"
+                (examClick)="onExamClick($event)"
+                animate.enter="animate-fade-in-up"
+                [style.animation-delay]="($index * 0.1) + 's'">
+              </app-exam-card>
+            }
+          </div>
+        } @else {
+          <div class="exams-list" animate.enter="animate-fade-in-up" style="animation-delay: 0.2s;">
+            @for (exam of exams(); track exam.id) {
+              <app-exam-list-item
+                [exam]="exam"
+                [showActions]="true"
+                (examClick)="onExamClick($event)"
+                animate.enter="animate-fade-in-left"
+                [style.animation-delay]="($index * 0.05) + 's'">
+              </app-exam-list-item>
+            }
+          </div>
         }
+      </div>
+
+      <!-- Mobile: Always show grid view -->
+      <div class="mobile-view">
+        <div class="exams-grid" animate.enter="animate-fade-in-up" style="animation-delay: 0.2s;">
+          @for (exam of exams(); track exam.id) {
+            <app-exam-card
+              [exam]="exam"
+              [showActions]="true"
+              (examClick)="onExamClick($event)"
+              animate.enter="animate-fade-in-up"
+              [style.animation-delay]="($index * 0.1) + 's'">
+            </app-exam-card>
+          }
+        </div>
       </div>
 
       <!-- Summary Stats -->

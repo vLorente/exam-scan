@@ -6,6 +6,7 @@ import {
   Exam,
   ExamApiResponse,
   ExamMapper,
+  CreateExamRequest,
   Question,
   QuestionApiResponse,
   QuestionMapper
@@ -170,6 +171,80 @@ export class ExamsService {
     return new Observable(observer => {
       const totalQuestions = this.mockQuestions().length;
       observer.next(totalQuestions);
+      observer.complete();
+    });
+  }
+
+  /**
+   * Create a new exam
+   */
+  createExam(examData: CreateExamRequest): Observable<Exam> {
+    // TODO: Replace with real API call
+    // return this.http.post<ExamApiResponse>(this.apiUrl, ExamMapper.createRequestToApi(examData))
+    //   .pipe(map(ExamMapper.fromApi));
+
+    // Mock implementation
+    return new Observable(observer => {
+      const newExam: Exam = {
+        id: this.mockExams().length + 1,
+        title: examData.title,
+        description: examData.description,
+        createdBy: 1, // Mock current user ID
+        isActive: true,
+        timeLimit: examData.timeLimit,
+        totalQuestions: 0, // Will be updated when questions are added
+        passingScore: examData.passingScore,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+
+      // Add to mock data
+      this.mockExams.update(exams => [...exams, newExam]);
+
+      observer.next(newExam);
+      observer.complete();
+    });
+  }
+
+  /**
+   * Update an existing exam
+   */
+  updateExam(id: number, examData: Partial<CreateExamRequest>): Observable<Exam> {
+    // TODO: Replace with real API call
+    // return this.http.put<ExamApiResponse>(`${this.apiUrl}/${id}`, examData)
+    //   .pipe(map(ExamMapper.fromApi));
+
+    // Mock implementation
+    return new Observable(observer => {
+      this.mockExams.update(exams =>
+        exams.map(exam =>
+          exam.id === id
+            ? { ...exam, ...examData, updatedAt: new Date() }
+            : exam
+        )
+      );
+
+      const updatedExam = this.mockExams().find(exam => exam.id === id);
+      if (updatedExam) {
+        observer.next(updatedExam);
+      } else {
+        observer.error(new Error('Exam not found'));
+      }
+      observer.complete();
+    });
+  }
+
+  /**
+   * Delete an exam
+   */
+  deleteExam(id: number): Observable<boolean> {
+    // TODO: Replace with real API call
+    // return this.http.delete(`${this.apiUrl}/${id}`).pipe(map(() => true));
+
+    // Mock implementation
+    return new Observable(observer => {
+      this.mockExams.update(exams => exams.filter(exam => exam.id !== id));
+      observer.next(true);
       observer.complete();
     });
   }

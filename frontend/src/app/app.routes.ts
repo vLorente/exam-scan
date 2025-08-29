@@ -28,6 +28,16 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'exams/create',
+    loadComponent: () => import('./features/exams/pages/create-exam/create-exam.page').then(m => m.CreateExamPageComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'exams/:id/questions',
+    loadComponent: () => import('./features/exams/pages/create-questions/create-questions.page').then(m => m.CreateQuestionsPageComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: '**',
     redirectTo: '/'
   }

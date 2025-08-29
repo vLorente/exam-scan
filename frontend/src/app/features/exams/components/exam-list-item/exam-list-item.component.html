@@ -1,0 +1,88 @@
+<article
+  class="exam-list-item"
+  [class]="getExamStatusClass()"
+  [class.clickable]="exam().isActive"
+  (click)="onExamClick()"
+  [attr.aria-labelledby]="'exam-title-' + exam().id"
+  [attr.aria-describedby]="'exam-desc-' + exam().id + ' exam-meta-' + exam().id"
+  [attr.role]="exam().isActive ? 'button' : 'article'"
+  [attr.tabindex]="exam().isActive ? '0' : null"
+  (keydown)="onKeyDown($event)"
+  animate.enter="animate-fade-in-up">
+
+  <div class="exam-content">
+    <div class="exam-main-info">
+      <div class="exam-header">
+        <h3 [id]="'exam-title-' + exam().id" class="exam-title">
+          {{ exam().title }}
+        </h3>
+        <span
+          class="exam-status"
+          [class]="getExamStatusClass()"
+          [attr.aria-label]="'Estado: ' + getExamStatusText()">
+          {{ getExamStatusText() }}
+        </span>
+      </div>
+
+      @if (exam().description) {
+        <p [id]="'exam-desc-' + exam().id" class="exam-description">
+          {{ exam().description }}
+        </p>
+      }
+    </div>
+
+    <div class="exam-meta" [id]="'exam-meta-' + exam().id" aria-label="Información del examen">
+      <div class="meta-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path d="M9 12l2 2 4-4"/>
+          <circle cx="12" cy="12" r="10"/>
+        </svg>
+        <span class="meta-label">Preguntas:</span>
+        <span class="meta-value">{{ exam().totalQuestions }}</span>
+      </div>
+
+      <div class="meta-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12,6 12,12 16,14"/>
+        </svg>
+        <span class="meta-label">Duración:</span>
+        <span class="meta-value">{{ formatDuration(exam().timeLimit) }}</span>
+      </div>
+
+      <div class="meta-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+        </svg>
+        <span class="meta-label">Para aprobar:</span>
+        <span class="meta-value">{{ exam().passingScore }}%</span>
+      </div>
+    </div>
+  </div>
+
+  @if (showActions()) {
+    <div class="exam-actions">
+      @if (exam().isActive) {
+        <button
+          class="exam-button btn-primary"
+          (click)="onExamClick()"
+          [attr.aria-label]="'Comenzar examen: ' + exam().title">
+          <span>Comenzar</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <polygon points="5,3 19,12 5,21"/>
+          </svg>
+        </button>
+      } @else {
+        <button
+          class="exam-button btn-disabled"
+          disabled
+          [attr.aria-label]="'Examen no disponible: ' + exam().title">
+          No Disponible
+        </button>
+      }
+    </div>
+  }
+
+  <!-- Hover effect -->
+  <div class="exam-hover-effect" aria-hidden="true"></div>
+</article>

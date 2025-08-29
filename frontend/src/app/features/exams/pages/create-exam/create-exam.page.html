@@ -1,0 +1,198 @@
+<app-layout>
+  <main class="create-exam-page" role="main" aria-labelledby="page-title">
+    <div class="container">
+      <header class="page-header">
+        <h1 id="page-title" class="page-title">Crear Nuevo Examen</h1>
+        <p class="page-description">
+          Crea un examen de forma manual o cargando un archivo PDF
+        </p>
+      </header>
+
+      <!-- Mode Selection -->
+      @if (currentMode() === 'selection') {
+        <section class="mode-selection" aria-labelledby="mode-selection-title">
+          <h2 id="mode-selection-title" class="section-title">¿Cómo quieres crear el examen?</h2>
+
+          <div class="mode-cards">
+            <button
+              class="mode-card"
+              (click)="selectMode('manual')"
+              aria-describedby="manual-desc">
+              <div class="mode-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                  <path d="M12 2v20M2 12h20"/>
+                </svg>
+              </div>
+              <h3>Creación Manual</h3>
+              <p id="manual-desc">
+                Crea las preguntas una por una usando nuestro editor
+              </p>
+              <span class="mode-badge">Recomendado</span>
+            </button>
+
+            <button
+              class="mode-card"
+              (click)="selectMode('pdf')"
+              aria-describedby="pdf-desc">
+              <div class="mode-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                  <polyline points="14,2 14,8 20,8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10,9 9,9 8,9"/>
+                </svg>
+              </div>
+              <h3>Cargar PDF</h3>
+              <p id="pdf-desc">
+                Sube un archivo PDF y generaremos las preguntas automáticamente
+              </p>
+              <span class="mode-badge coming-soon">Próximamente</span>
+            </button>
+          </div>
+        </section>
+      }
+
+      <!-- Manual Creation Form -->
+      @if (currentMode() === 'manual') {
+        <section class="manual-creation" aria-labelledby="manual-creation-title">
+          <div class="creation-header">
+            <button
+              class="back-button"
+              (click)="goBack()"
+              aria-label="Volver a la selección de modo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              Volver
+            </button>
+            <h2 id="manual-creation-title" class="section-title">Información del Examen</h2>
+          </div>
+
+          <form [formGroup]="examForm" (ngSubmit)="onSubmit()" class="exam-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="title" class="form-label">
+                  Título del Examen *
+                </label>
+                <input
+                  type="text"
+                  id="title"
+                  formControlName="title"
+                  class="form-input"
+                  placeholder="Ej: Matemáticas - Álgebra Básica"
+                  [class.error]="examForm.get('title')?.invalid && examForm.get('title')?.touched">
+                @if (examForm.get('title')?.invalid && examForm.get('title')?.touched) {
+                  <span class="error-message" role="alert">
+                    El título es requerido
+                  </span>
+                }
+              </div>
+
+              <div class="form-group">
+                <label for="timeLimit" class="form-label">
+                  Tiempo Límite (minutos)
+                </label>
+                <input
+                  type="number"
+                  id="timeLimit"
+                  formControlName="timeLimit"
+                  class="form-input"
+                  placeholder="60"
+                  min="1"
+                  max="300">
+              </div>
+
+              <div class="form-group full-width">
+                <label for="description" class="form-label">
+                  Descripción
+                </label>
+                <textarea
+                  id="description"
+                  formControlName="description"
+                  class="form-textarea"
+                  placeholder="Describe el contenido y objetivos del examen..."
+                  rows="3"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="passingScore" class="form-label">
+                  Puntuación Mínima (%) *
+                </label>
+                <input
+                  type="number"
+                  id="passingScore"
+                  formControlName="passingScore"
+                  class="form-input"
+                  placeholder="70"
+                  min="1"
+                  max="100"
+                  [class.error]="examForm.get('passingScore')?.invalid && examForm.get('passingScore')?.touched">
+                @if (examForm.get('passingScore')?.invalid && examForm.get('passingScore')?.touched) {
+                  <span class="error-message" role="alert">
+                    La puntuación mínima es requerida
+                  </span>
+                }
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="goBack()">
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="examForm.invalid || isSubmitting()">
+                @if (isSubmitting()) {
+                  <span class="loading-spinner" aria-hidden="true"></span>
+                  Creando...
+                } @else {
+                  Crear Examen
+                }
+              </button>
+            </div>
+          </form>
+        </section>
+      }
+
+      <!-- PDF Upload (Future) -->
+      @if (currentMode() === 'pdf') {
+        <section class="pdf-upload" aria-labelledby="pdf-upload-title">
+          <div class="creation-header">
+            <button
+              class="back-button"
+              (click)="goBack()"
+              aria-label="Volver a la selección de modo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              Volver
+            </button>
+            <h2 id="pdf-upload-title" class="section-title">Cargar PDF</h2>
+          </div>
+
+          <div class="coming-soon-message">
+            <div class="coming-soon-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12,6 12,12 16,14"/>
+              </svg>
+            </div>
+            <h3>Funcionalidad en Desarrollo</h3>
+            <p>
+              La carga de PDF estará disponible próximamente.
+              Por ahora, puedes crear exámenes de forma manual.
+            </p>
+            <button class="btn btn-primary" (click)="selectMode('manual')">
+              Crear Manualmente
+            </button>
+          </div>
+        </section>
+      }
+    </div>
+  </main>
+</app-layout>
