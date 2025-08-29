@@ -1,0 +1,179 @@
+<form [formGroup]="registerForm"
+      (ngSubmit)="onSubmit()"
+      appPasswordMatch
+      class="register-form"
+      role="form"
+      aria-labelledby="register-form-title"
+      novalidate>
+
+  <h2 id="register-form-title" class="sr-only">Formulario de registro de cuenta</h2>
+
+  <!-- Full Name Field -->
+  <div class="form-field">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre Completo</mat-label>
+      <input
+        matInput
+        formControlName="fullName"
+        placeholder="Tu nombre completo"
+        autocomplete="name"
+        aria-describedby="name-error"
+        [attr.aria-invalid]="registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched"
+      >
+      <mat-icon matSuffix aria-hidden="true">person</mat-icon>
+      @if (registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched) {
+        <mat-error id="name-error" role="alert">El nombre es requerido</mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <!-- Username Field -->
+  <div class="form-field">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre de Usuario</mat-label>
+      <input
+        matInput
+        formControlName="username"
+        placeholder="Usuario único"
+        autocomplete="username"
+        aria-describedby="username-error"
+        [attr.aria-invalid]="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
+      >
+      <mat-icon matSuffix aria-hidden="true">account_circle</mat-icon>
+      @if (registerForm.get('username')?.invalid && registerForm.get('username')?.touched) {
+        <mat-error id="username-error" role="alert">El nombre de usuario es requerido</mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <!-- Email Field -->
+  <div class="form-field">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Correo Electrónico</mat-label>
+      <input
+        matInput
+        type="email"
+        formControlName="email"
+        placeholder="tu@email.com"
+        autocomplete="email"
+        aria-describedby="email-error"
+        [attr.aria-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+      >
+      <mat-icon matSuffix aria-hidden="true">email</mat-icon>
+      @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+        <mat-error id="email-error" role="alert">
+          @if (registerForm.get('email')?.errors?.['required']) {
+            El email es requerido
+          }
+          @if (registerForm.get('email')?.errors?.['email']) {
+            Ingresa un email válido
+          }
+        </mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <!-- Password Field -->
+  <div class="form-field">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Contraseña</mat-label>
+      <input
+        matInput
+        [type]="showPassword() ? 'text' : 'password'"
+        formControlName="password"
+        placeholder="Mínimo 6 caracteres"
+        autocomplete="new-password"
+        aria-describedby="password-error password-toggle-desc password-help"
+        [attr.aria-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+      >
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        (click)="togglePasswordVisibility()"
+        [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+        [attr.aria-pressed]="showPassword()"
+        aria-describedby="password-toggle-desc"
+        class="password-toggle"
+      >
+        <mat-icon aria-hidden="true">{{showPassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <span id="password-toggle-desc" class="sr-only">
+        {{ showPassword() ? 'La contraseña es visible' : 'La contraseña está oculta' }}
+      </span>
+      <span id="password-help" class="sr-only">Debe tener al menos 6 caracteres</span>
+      @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+        <mat-error id="password-error" role="alert">
+          @if (registerForm.get('password')?.errors?.['required']) {
+            La contraseña es requerida
+          }
+          @if (registerForm.get('password')?.errors?.['minlength']) {
+            La contraseña debe tener al menos 6 caracteres
+          }
+        </mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <!-- Confirm Password Field -->
+  <div class="form-field">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Confirmar Contraseña</mat-label>
+      <input
+        matInput
+        [type]="showConfirmPassword() ? 'text' : 'password'"
+        formControlName="confirmPassword"
+        placeholder="Repite tu contraseña"
+        autocomplete="new-password"
+        aria-describedby="confirm-password-error confirm-toggle-desc"
+        [attr.aria-invalid]="(registerForm.get('confirmPassword')?.invalid || registerForm.hasError('passwordMismatch')) && registerForm.get('confirmPassword')?.touched"
+      >
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        (click)="toggleConfirmPasswordVisibility()"
+        [attr.aria-label]="showConfirmPassword() ? 'Ocultar confirmación de contraseña' : 'Mostrar confirmación de contraseña'"
+        [attr.aria-pressed]="showConfirmPassword()"
+        aria-describedby="confirm-toggle-desc"
+        class="password-toggle"
+      >
+        <mat-icon aria-hidden="true">{{showConfirmPassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <span id="confirm-toggle-desc" class="sr-only">
+        {{ showConfirmPassword() ? 'La confirmación de contraseña es visible' : 'La confirmación de contraseña está oculta' }}
+      </span>
+      @if (registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched) {
+        <mat-error id="confirm-password-error" role="alert">
+          @if (registerForm.get('confirmPassword')?.errors?.['required']) {
+            Confirma tu contraseña
+          }
+        </mat-error>
+      }
+      @if (registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched) {
+        <mat-error role="alert">Las contraseñas no coinciden</mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <!-- Password Match Validator -->
+  @if (registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched) {
+    <mat-error role="alert">Las contraseñas no coinciden</mat-error>
+  }
+
+  <!-- Submit Button -->
+  <div class="form-actions">
+    <app-submit-button
+      text="Crear Cuenta"
+      icon="person_add"
+      [disabled]="registerForm.invalid"
+      [loading]="loading()"
+      loadingText="Creando cuenta..."
+      description="Registrarse en ExamScan"
+      descriptionId="submit-desc"
+      loadingDescription="Procesando registro, por favor espera"
+      loadingDescriptionId="loading-desc"
+      (onClick)="onSubmit()">
+    </app-submit-button>
+  </div>
+</form>

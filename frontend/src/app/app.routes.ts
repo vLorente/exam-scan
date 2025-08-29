@@ -9,17 +9,22 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () => import('./features/auth/pages/login-page/login-page').then(m => m.LoginPageComponent),
+    loadComponent: () => import('./features/auth/pages/login/login.page').then(m => m.LoginPageComponent),
     canActivate: [guestGuard]
   },
   {
     path: 'register',
-    loadComponent: () => import('./features/auth/pages/register-page/register-page').then(m => m.RegisterPageComponent),
+    loadComponent: () => import('./features/auth/pages/register/register.page').then(m => m.RegisterPageComponent),
     canActivate: [guestGuard]
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./features/dashboard/pages/dashboard-page/dashboard-page').then(m => m.DashboardPageComponent),
+    loadComponent: () => import('./features/dashboard/pages/dashboard/dashboard.page').then(m => m.DashboardPageComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'exams',
+    loadComponent: () => import('./features/exams/pages/exams-list/exams-list.page').then(m => m.ExamsListPageComponent),
     canActivate: [authGuard]
   },
   {

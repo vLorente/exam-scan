@@ -1,0 +1,170 @@
+<app-layout
+  title="ExamScan"
+  subtitle="Mis Exámenes"
+>
+  <section class="exams-page" animate.enter="animate-fade-in-up">
+    <header class="page-header">
+      <h1 class="page-title">
+        Mis Exámenes
+      </h1>
+      <p class="page-subtitle">
+        Accede a tus exámenes asignados y comienza a evaluarte
+      </p>
+    </header>
+
+    <!-- Loading State -->
+    @if (loading()) {
+      <div class="loading-container" role="status" aria-label="Cargando exámenes">
+        <div class="loading-spinner" aria-hidden="true"></div>
+        <p class="loading-text">Cargando exámenes...</p>
+      </div>
+    }
+
+    <!-- Error State -->
+    @if (error() && !loading()) {
+      <div class="error-container" role="alert">
+        <div class="error-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="15" y1="9" x2="9" y2="15"/>
+            <line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>
+        </div>
+        <h2 class="error-title">Error al cargar exámenes</h2>
+        <p class="error-message">{{ error() }}</p>
+        <button
+          class="btn btn-primary"
+          (click)="onRetry()"
+          aria-describedby="retry-desc">
+          Reintentar
+        </button>
+        <span id="retry-desc" class="sr-only">Volver a cargar la lista de exámenes</span>
+      </div>
+    }
+
+    <!-- Empty State -->
+    @if (!loading() && !error() && exams().length === 0) {
+      <div class="empty-container">
+        <div class="empty-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M9 12l2 2 4-4"/>
+            <circle cx="12" cy="12" r="10"/>
+          </svg>
+        </div>
+        <h2 class="empty-title">No hay exámenes disponibles</h2>
+        <p class="empty-message">
+          Actualmente no tienes exámenes asignados. Consulta con tu instructor para más información.
+        </p>
+      </div>
+    }
+
+    <!-- Exams Grid -->
+    @if (!loading() && !error() && exams().length > 0) {
+      <div class="exams-grid" animate.enter="animate-fade-in-up" style="animation-delay: 0.2s;">
+        @for (exam of exams(); track exam.id) {
+          <article
+            class="exam-card"
+            [class]="getExamStatusClass(exam)"
+            (click)="onExamClick(exam)"
+            [attr.aria-labelledby]="'exam-title-' + exam.id"
+            [attr.aria-describedby]="'exam-desc-' + exam.id"
+            role="button"
+            tabindex="0"
+            (keydown.enter)="onExamClick(exam)"
+            (keydown.space)="onExamClick(exam)">
+
+            <header class="exam-header">
+              <div class="exam-status">
+                <span
+                  class="status-badge"
+                  [class]="getExamStatusClass(exam)"
+                  [attr.aria-label]="'Estado: ' + getExamStatusText(exam)">
+                  {{ getExamStatusText(exam) }}
+                </span>
+              </div>
+              <h3 [id]="'exam-title-' + exam.id" class="exam-title">
+                {{ exam.title }}
+              </h3>
+            </header>
+
+            <div class="exam-body">
+              @if (exam.description) {
+                <p [id]="'exam-desc-' + exam.id" class="exam-description">
+                  {{ exam.description }}
+                </p>
+              }
+
+              <div class="exam-meta" aria-label="Información del examen">
+                <div class="meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12,6 12,12 16,14"/>
+                  </svg>
+                  <span>{{ formatDuration(exam.timeLimit) }}</span>
+                </div>
+                <div class="meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                    <path d="M9 12l2 2 4-4"/>
+                    <circle cx="12" cy="12" r="10"/>
+                  </svg>
+                  <span>{{ exam.totalQuestions }} preguntas</span>
+                </div>
+                <div class="meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+                  </svg>
+                  <span>{{ exam.passingScore }}% para aprobar</span>
+                </div>
+              </div>
+            </div>
+
+            <footer class="exam-footer">
+              @if (exam.isActive) {
+                <button
+                  class="exam-button btn-primary"
+                  (click)="onExamClick(exam)"
+                  [attr.aria-label]="'Comenzar examen: ' + exam.title">
+                  Comenzar Examen
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                    <polygon points="5,3 19,12 5,21"/>
+                  </svg>
+                </button>
+              } @else {
+                <button
+                  class="exam-button btn-disabled"
+                  disabled
+                  [attr.aria-label]="'Examen no disponible: ' + exam.title">
+                  No Disponible
+                </button>
+              }
+            </footer>
+
+            <!-- Hover effect -->
+            <div class="exam-hover-effect" aria-hidden="true"></div>
+          </article>
+        }
+      </div>
+
+      <!-- Summary Stats -->
+      <section class="exams-summary" aria-label="Resumen de exámenes">
+        <div class="summary-card">
+          <h2 class="summary-title">Resumen</h2>
+          <div class="summary-stats">
+            <div class="stat-item">
+              <span class="stat-value">{{ exams().length }}</span>
+              <span class="stat-label">Exámenes Totales</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{{ activeExamsCount() }}</span>
+              <span class="stat-label">Disponibles</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{{ totalQuestions() }}</span>
+              <span class="stat-label">Preguntas Totales</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    }
+  </section>
+</app-layout>

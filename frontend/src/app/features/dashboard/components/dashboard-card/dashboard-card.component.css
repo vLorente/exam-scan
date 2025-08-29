@@ -1,0 +1,285 @@
+/* Dashboard Card - Modern Design with Design Tokens */
+.dashboard-card {
+  background: white;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  height: 100%;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-medium);
+}
+
+.dashboard-card:hover .card-hover-effect {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.dashboard-card.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dashboard-card.disabled:hover {
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-hover-effect {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.05) 0%, transparent 70%);
+  opacity: 0;
+  transition: all var(--transition-slow);
+  transform: scale(0.8);
+  pointer-events: none;
+}
+
+.card-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.card-icon.icon-quiz {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.card-icon.icon-smart_toy {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.card-icon.icon-people {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.card-icon.icon-analytics {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.card-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.card-header {
+  margin: 0;
+}
+
+.card-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.card-body {
+  flex: 1;
+}
+
+.card-description {
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  color: var(--text-medium);
+  margin: 0;
+}
+
+.card-stats {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--accent-gold);
+  margin-top: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: rgba(255, 215, 0, 0.1);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.card-footer {
+  margin-top: auto;
+  padding-top: var(--spacing-sm);
+}
+
+.card-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-button.btn-primary {
+  background: var(--primary-gradient);
+  color: white;
+}
+
+.card-button.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.card-button.btn-secondary {
+  background: var(--glass-bg);
+  color: var(--text-medium);
+  border: 1px solid var(--border-medium);
+}
+
+.card-button.btn-secondary:hover {
+  background: var(--bg-gray);
+  color: var(--text-dark);
+}
+
+.card-button.btn-disabled {
+  background: var(--bg-gray);
+  color: var(--text-light);
+  cursor: not-allowed;
+}
+
+.card-button.btn-disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.card-button:focus {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.3);
+}
+
+.card-button svg {
+  width: 18px;
+  height: 18px;
+  transition: transform var(--transition-normal);
+}
+
+.card-button:hover svg {
+  transform: translateX(4px);
+}
+
+.card-button.btn-disabled svg {
+  display: none;
+}
+
+.card-button span {
+  position: relative;
+  z-index: 1;
+}
+
+/* Animation entrance effects */
+.dashboard-card {
+  animation: slideInUp 0.6s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .dashboard-card {
+    padding: var(--spacing-md);
+  }
+
+  .card-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .card-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .card-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .card-description {
+    font-size: var(--font-size-sm);
+  }
+
+  .card-button {
+    padding: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .dashboard-card {
+    border: 2px solid;
+  }
+
+  .card-button.btn-primary {
+    background: #000080;
+  }
+
+  .card-button.btn-secondary {
+    border: 2px solid;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-card,
+  .card-button,
+  .card-hover-effect {
+    transition: none;
+  }
+
+  .dashboard-card:hover {
+    transform: none;
+  }
+
+  .card-button:hover svg {
+    transform: none;
+  }
+
+  .dashboard-card {
+    animation: none;
+  }
+}
