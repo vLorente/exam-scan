@@ -1,11 +1,12 @@
 import { Component, input, output, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { DashboardCardIconComponent } from '../dashboard-card-icon/dashboard-card-icon.component';
 
 @Component({
   selector: 'app-dashboard-card',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, DashboardCardIconComponent],
   templateUrl: './dashboard-card.component.html',
   styleUrl: './dashboard-card.component.css'
 })

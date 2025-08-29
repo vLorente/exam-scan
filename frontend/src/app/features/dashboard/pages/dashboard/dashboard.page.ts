@@ -71,7 +71,7 @@ export class DashboardPageComponent implements OnInit {
         title: 'Modo Práctica',
         description: 'Practica con exámenes de muestra y mejora tus habilidades.',
         buttonText: 'Próximamente',
-        icon: 'fitness_center',
+        icon: 'fitness',
         disabled: true,
         buttonClass: 'btn-secondary'
       },
