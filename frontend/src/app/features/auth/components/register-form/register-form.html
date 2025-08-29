@@ -1,5 +1,6 @@
 <form [formGroup]="registerForm"
       (ngSubmit)="onSubmit()"
+      appPasswordMatch
       class="register-form"
       role="form"
       aria-labelledby="register-form-title"
@@ -68,37 +69,6 @@
             Ingresa un email válido
           }
         </mat-error>
-      }
-    </mat-form-field>
-  </div>
-
-  <!-- User Role Field -->
-  <div class="form-field">
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Tipo de Usuario</mat-label>
-      <mat-select
-        formControlName="role"
-        aria-describedby="role-error role-help"
-        [attr.aria-invalid]="registerForm.get('role')?.invalid && registerForm.get('role')?.touched">
-        <mat-option value="teacher" aria-describedby="teacher-desc">
-          <div class="option-content">
-            <mat-icon aria-hidden="true">school</mat-icon>
-            <span>Profesor</span>
-          </div>
-          <span id="teacher-desc" class="sr-only">Cuenta para educadores y profesores</span>
-        </mat-option>
-        <mat-option value="student" aria-describedby="student-desc">
-          <div class="option-content">
-            <mat-icon aria-hidden="true">menu_book</mat-icon>
-            <span>Estudiante</span>
-          </div>
-          <span id="student-desc" class="sr-only">Cuenta para estudiantes</span>
-        </mat-option>
-      </mat-select>
-      <mat-icon matSuffix aria-hidden="true">badge</mat-icon>
-      <span id="role-help" class="sr-only">Selecciona si eres profesor o estudiante</span>
-      @if (registerForm.get('role')?.invalid && registerForm.get('role')?.touched) {
-        <mat-error id="role-error" role="alert">Selecciona tu tipo de usuario</mat-error>
       }
     </mat-form-field>
   </div>
@@ -185,6 +155,11 @@
       }
     </mat-form-field>
   </div>
+
+  <!-- Password Match Validator -->
+  @if (registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched) {
+    <mat-error role="alert">Las contraseñas no coinciden</mat-error>
+  }
 
   <!-- Submit Button -->
   <div class="form-actions">

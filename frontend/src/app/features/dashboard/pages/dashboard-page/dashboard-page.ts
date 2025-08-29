@@ -13,7 +13,6 @@ interface DashboardCard {
   routerLink?: string;
   disabled?: boolean;
   buttonClass?: string;
-  requiresRole?: string[];
 }
 
 interface DashboardStat {
@@ -35,87 +34,75 @@ export class DashboardPageComponent {
   private allCards = signal<DashboardCard[]>([
     {
       id: 'exams',
-      title: 'Exámenes',
-      description: 'Gestiona tus exámenes, crea nuevos o revisa los existentes.',
+      title: 'Mis Exámenes',
+      description: 'Accede a tus exámenes asignados y revisa tus calificaciones.',
       buttonText: 'Ver Exámenes',
       icon: 'quiz',
       routerLink: '/exams'
     },
     {
-      id: 'ai-processing',
-      title: 'Procesamiento IA',
-      description: 'Sube archivos PDF para extraer preguntas automáticamente.',
+      id: 'practice',
+      title: 'Modo Práctica',
+      description: 'Practica con exámenes de muestra y mejora tus habilidades.',
       buttonText: 'Próximamente',
-      icon: 'smart_toy',
+      icon: 'fitness_center',
       disabled: true,
       buttonClass: 'btn-secondary'
     },
     {
-      id: 'users',
-      title: 'Usuarios',
-      description: 'Administra usuarios y permisos del sistema.',
-      buttonText: 'Gestionar Usuarios',
-      icon: 'people',
-      routerLink: '/users',
-      requiresRole: ['admin']
-    },
-    {
-      id: 'statistics',
-      title: 'Estadísticas',
-      description: 'Revisa el rendimiento y estadísticas de exámenes.',
+      id: 'results',
+      title: 'Mis Resultados',
+      description: 'Revisa tu historial de exámenes y progreso académico.',
       buttonText: 'Próximamente',
       icon: 'analytics',
+      disabled: true,
+      buttonClass: 'btn-secondary'
+    },
+    {
+      id: 'study-materials',
+      title: 'Material de Estudio',
+      description: 'Accede a recursos y materiales de estudio complementarios.',
+      buttonText: 'Próximamente',
+      icon: 'menu_book',
       disabled: true,
       buttonClass: 'btn-secondary'
     }
   ]);
 
   dashboardCards = computed(() => {
-    const user = this.authService.user();
-    if (!user) return [];
-
-    return this.allCards().filter(card => {
-      if (!card.requiresRole) return true;
-      return card.requiresRole.includes(user.role);
-    });
+    // Return all cards since we're focused on student functionality
+    return this.allCards();
   });
 
   dashboardStats = computed((): DashboardStat[] => {
     const user = this.authService.user();
     if (!user) return [];
 
-    // Base stats for all users
-    const baseStats: DashboardStat[] = [
+    // Student-focused statistics
+    const studentStats: DashboardStat[] = [
       {
-        value: '12',
-        label: 'Exámenes Creados',
-        ariaLabel: 'Doce exámenes creados'
+        value: '5',
+        label: 'Exámenes Completados',
+        ariaLabel: 'Cinco exámenes completados'
       },
       {
-        value: '89%',
-        label: 'Tasa de Éxito',
-        ariaLabel: 'Ochenta y nueve por ciento de tasa de éxito'
+        value: '85%',
+        label: 'Promedio General',
+        ariaLabel: 'Ochenta y cinco por ciento de promedio general'
       },
       {
-        value: '247',
-        label: 'Estudiantes',
-        ariaLabel: 'Doscientos cuarenta y siete estudiantes'
+        value: '3',
+        label: 'Exámenes Pendientes',
+        ariaLabel: 'Tres exámenes pendientes'
+      },
+      {
+        value: '24',
+        label: 'Días de Racha',
+        ariaLabel: 'Veinticuatro días de racha de estudio'
       }
     ];
 
-    // Admin-specific stats
-    if (user.role === 'admin') {
-      return [
-        ...baseStats,
-        {
-          value: '24/7',
-          label: 'Disponibilidad',
-          ariaLabel: 'Veinticuatro horas al día, siete días a la semana de disponibilidad'
-        }
-      ];
-    }
-
-    return baseStats;
+    return studentStats;
   });
 
   handleCardAction(cardId: string): void {
