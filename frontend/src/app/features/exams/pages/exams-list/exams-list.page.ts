@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { LayoutComponent } from '@shared/components';
 import { ExamsService } from '@features/exams/services/exams.service';
-import { ExamCardComponent, ExamListItemComponent } from '@features/exams/components';
+import { ExamCardComponent, ExamListItemComponent, CreateExamCtaComponent } from '@features/exams/components';
 import { Exam } from '@core/models';
 
 type ViewMode = 'grid' | 'list';
@@ -11,7 +11,7 @@ type ViewMode = 'grid' | 'list';
 @Component({
   selector: 'app-exams-list-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, LayoutComponent, ExamCardComponent, ExamListItemComponent],
+  imports: [CommonModule, LayoutComponent, ExamCardComponent, ExamListItemComponent, CreateExamCtaComponent],
   templateUrl: './exams-list.page.html',
   styleUrl: './exams-list.page.css'
 })
