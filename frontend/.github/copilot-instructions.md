@@ -54,9 +54,9 @@ You are an expert in TypeScript, Angular, and scalable web application developme
       - `src/app/features/exams/components/exam-card/exam-card.component.spec.ts`: Pruebas del componente de tarjeta de examen.
     - `src/app/features/exams/pages`: Contiene los componentes de contenedor (con lógica de negocio) que actúan como "páginas" dentro de la aplicación.
       - `src/app/features/exams/pages/exam/exam.page.ts`: Componente de página de examen.
-      - `src/app/features/exams/pages/exam/exam.page.html`: Plantilla de la tarjeta de examen.
-      - `src/app/features/exams/pages/exam/exam.page.css`: Estilos de la tarjeta de examen.
-      - `src/app/features/exams/pages/exam/exam.page.spec.ts`: Pruebas del componente de tarjeta de examen.
+      - `src/app/features/exams/pages/exam/exam.page.html`: Plantilla de la página de examen.
+      - `src/app/features/exams/pages/exam/exam.page.css`: Estilos de la página de examen.
+      - `src/app/features/exams/pages/exam/exam.page.spec.ts`: Pruebas de la página de examen.
     - `src/app/features/exams/services`: Contiene los servicios específicos para la funcionalidad de exámenes (por ejemplo, ExamsService para llamadas a la API).
 - `public`: Contiene activos estáticos como imágenes y fuentes.
 - `src/environments`: Almacena la configuración específica para cada entorno (desarrollo, producción, etc.).
