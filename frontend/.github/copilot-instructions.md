@@ -238,3 +238,77 @@ You are an expert in TypeScript, Angular, and scalable web application developme
   }
 }
 ```
+
+## Angular Reactive Forms
+- [Reactive Forms Guide](https://angular.dev/guide/forms/reactive-forms)
+### Reactive forms: FormGroup example
+``` javascript
+// Controller
+import {Component} from '@angular/core';
+import {FormGroup, FormControl, ReactiveFormsModule} from '@angular/forms';
+@Component({
+  selector: 'app-profile-editor',
+  templateUrl: './profile-editor.component.html',
+  styleUrls: ['./profile-editor.component.css'],
+  imports: [ReactiveFormsModule],
+})
+export class ProfileEditorComponent {
+  profileForm = new FormGroup({
+    firstName: new FormControl(''),
+    lastName: new FormControl(''),
+...
+  });
+...
+}
+```
+
+``` html
+<!-- Template -->
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+  <label for="first-name">First Name: </label>
+  <input id="first-name" type="text" formControlName="firstName" />
+  <label for="last-name">Last Name: </label>
+  <input id="last-name" type="text" formControlName="lastName" />
+...
+</form>
+```
+### Reactive forms: Neested Form example
+``` javascript
+// Controller
+import {Component} from '@angular/core';
+import {FormGroup, FormControl, ReactiveFormsModule} from '@angular/forms';
+@Component({
+  selector: 'app-profile-editor',
+  templateUrl: './profile-editor.component.html',
+  styleUrls: ['./profile-editor.component.css'],
+  imports: [ReactiveFormsModule],
+})
+export class ProfileEditorComponent {
+  profileForm = new FormGroup({
+    firstName: new FormControl(''),
+    lastName: new FormControl(''),
+    address: new FormGroup({
+      street: new FormControl(''),
+      city: new FormControl(''),
+      state: new FormControl(''),
+      zip: new FormControl(''),
+    }),
+  });
+...
+}
+```
+
+``` html
+<!-- Template -->
+<div formGroupName="address" (ngSubmit)="onSubmit()">
+    <h2>Address</h2>
+    <label for="street">Street: </label>
+    <input id="street" type="text" formControlName="street" />
+    <label for="city">City: </label>
+    <input id="city" type="text" formControlName="city" />
+    <label for="state">State: </label>
+    <input id="state" type="text" formControlName="state" />
+    <label for="zip">Zip Code: </label>
+    <input id="zip" type="text" formControlName="zip" />
+  </div>
+```
