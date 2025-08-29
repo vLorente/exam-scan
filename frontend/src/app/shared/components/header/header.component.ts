@@ -1,13 +1,23 @@
-import { Component, input, output, ChangeDetectionStrategy, OnInit, OnDestroy, signal, inject } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy, OnInit, OnDestroy, signal, inject, computed, Type } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { User } from '@core/models/user.model';
 import { AuthService } from '@core/services/auth';
+import { DocumentIconComponent } from '@shared/components/icons';
+
+export interface NavigationItem {
+  label: string;
+  route: string;
+  iconComponent: Type<any>;
+  ariaLabel: string;
+  description: string;
+  roles?: string[]; // Roles que pueden ver este item (opcional)
+}
 
 @Component({
   selector: 'app-header',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule],
+  imports: [CommonModule, DocumentIconComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
@@ -25,6 +35,47 @@ export class HeaderComponent implements OnInit, OnDestroy {
   logout = output<void>();
 
   isScrolled = signal(false);
+
+  // Navigation items configuration
+  private navigationItems: NavigationItem[] = [
+    {
+      label: 'Exámenes',
+      route: '/exams',
+      iconComponent: DocumentIconComponent,
+      ariaLabel: 'Ir a la página de exámenes',
+      description: 'Acceder a la gestión de exámenes'
+    }
+    // Ejemplo de cómo añadir más items de navegación:
+    // {
+    //   label: 'Usuarios',
+    //   route: '/users',
+    //   iconComponent: UsersIconComponent,
+    //   ariaLabel: 'Ir a la gestión de usuarios',
+    //   description: 'Acceder a la administración de usuarios',
+    //   roles: ['admin'] // Solo administradores pueden ver este item
+    // },
+    // {
+    //   label: 'Estadísticas',
+    //   route: '/stats',
+    //   iconComponent: BarChartIconComponent,
+    //   ariaLabel: 'Ver estadísticas',
+    //   description: 'Acceder a las estadísticas del sistema',
+    //   roles: ['admin', 'teacher'] // Admin y profesores pueden ver estadísticas
+    // }
+  ];
+
+  // Computed property para obtener los items de navegación filtrados por rol
+  visibleNavigationItems = computed(() => {
+    const currentUser = this.user();
+    if (!currentUser) return [];
+
+    return this.navigationItems.filter(item => {
+      // Si no se especifican roles, el item es visible para todos
+      if (!item.roles || item.roles.length === 0) return true;
+      // Si se especifican roles, verificar que el usuario tenga uno de esos roles
+      return item.roles.includes(currentUser.role);
+    });
+  });
 
   ngOnInit(): void {
     this.addScrollListener();
@@ -72,5 +123,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     // Emitir evento para casos especiales donde la página padre necesite saberlo
     this.logout.emit();
+  }
+
+  navigateToDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
+  navigateToExams(): void {
+    this.router.navigate(['/exams']);
+  }
+
+  navigateToRoute(route: string): void {
+    this.router.navigate([route]);
   }
 }

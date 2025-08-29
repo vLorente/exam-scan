@@ -1,6 +1,9 @@
 <header class="header" role="banner" [attr.aria-label]="'Encabezado de ' + subtitle()" [class.scrolled]="isScrolled()">
   <div class="header-container">
-    <div class="header-brand">
+    <button class="header-brand"
+            (click)="navigateToDashboard()"
+            aria-label="Ir al dashboard"
+            [attr.aria-describedby]="'brand-desc'">
       <div class="brand-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
@@ -12,9 +15,27 @@
         <h1 class="brand-title">{{ title() }}</h1>
         <span class="brand-subtitle">{{ subtitle() }}</span>
       </div>
-    </div>
+    </button>
+    <span id="brand-desc" class="sr-only">Navegar al panel de control principal</span>
 
     @if (user(); as currentUser) {
+      <nav class="header-nav" aria-label="Navegación principal">
+        <ul class="nav-list" role="list">
+          @for (navItem of visibleNavigationItems(); track navItem.route) {
+            <li>
+              <button class="nav-item"
+                      (click)="navigateToRoute(navItem.route)"
+                      [attr.aria-label]="navItem.ariaLabel"
+                      [attr.aria-describedby]="navItem.route.substring(1) + '-desc'">
+                <app-document-icon [size]="'18'" [ariaHidden]="true" />
+                <span class="nav-text">{{ navItem.label }}</span>
+              </button>
+              <span [id]="navItem.route.substring(1) + '-desc'" class="sr-only">{{ navItem.description }}</span>
+            </li>
+          }
+        </ul>
+      </nav>
+
       <div class="header-user">
         <div class="user-welcome">
           <div class="user-role">
