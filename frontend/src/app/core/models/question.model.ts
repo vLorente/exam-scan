@@ -6,10 +6,11 @@ export interface QuestionApiResponse {
   id: number;
   exam_id: number;
   question_text: string;
-  question_type: 'multiple_choice' | 'true_false' | 'short_answer';
-  options?: string[]; // For multiple choice questions
+  question_type: 'multiple_choice' | 'true_false' | 'short_answer' | 'single_choice';
+  options?: string[]; // For multiple choice and single choice questions
   correct_answer: string | boolean;
   points: number;
+  difficulty: 'easy' | 'medium' | 'hard';
   order_index: number;
   created_at: string;
   updated_at: string;
@@ -18,10 +19,11 @@ export interface QuestionApiResponse {
 export interface CreateQuestionApiRequest {
   exam_id: number;
   question_text: string;
-  question_type: 'multiple_choice' | 'true_false' | 'short_answer';
+  question_type: 'multiple_choice' | 'true_false' | 'short_answer' | 'single_choice';
   options?: string[];
   correct_answer: string | boolean;
   points: number;
+  difficulty: 'easy' | 'medium' | 'hard';
   order_index: number;
 }
 
@@ -29,16 +31,17 @@ export interface CreateQuestionApiRequest {
 // QUESTION DOMAIN INTERFACES (camelCase)
 // ==========================================
 
-export type QuestionType = 'multiple_choice' | 'true_false' | 'short_answer';
+export type QuestionType = 'multiple_choice' | 'true_false' | 'short_answer' | 'single_choice';
 
 export interface Question {
   id: number;
   examId: number;
   questionText: string;
   questionType: QuestionType;
-  options?: string[]; // For multiple choice questions
+  options?: string[]; // For multiple choice and single choice questions
   correctAnswer: string | boolean;
   points: number;
+  difficulty: 'easy' | 'medium' | 'hard';
   orderIndex: number;
   createdAt: Date;
   updatedAt: Date;
@@ -51,6 +54,7 @@ export interface CreateQuestionRequest {
   options?: string[];
   correctAnswer: string | boolean;
   points: number;
+  difficulty: 'easy' | 'medium' | 'hard';
   orderIndex: number;
 }
 
@@ -79,6 +83,7 @@ export class QuestionMapper {
       options: apiQuestion.options,
       correctAnswer: apiQuestion.correct_answer,
       points: apiQuestion.points,
+      difficulty: apiQuestion.difficulty,
       orderIndex: apiQuestion.order_index,
       createdAt: new Date(apiQuestion.created_at),
       updatedAt: new Date(apiQuestion.updated_at)
@@ -96,6 +101,7 @@ export class QuestionMapper {
       options: request.options,
       correct_answer: request.correctAnswer,
       points: request.points,
+      difficulty: request.difficulty,
       order_index: request.orderIndex
     };
   }

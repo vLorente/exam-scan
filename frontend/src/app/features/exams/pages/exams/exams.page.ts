@@ -12,8 +12,8 @@ type ViewMode = 'grid' | 'list';
   selector: 'app-exams-list-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, LayoutComponent, ExamCardComponent, ExamListItemComponent, CreateExamCtaComponent],
-  templateUrl: './exams-list.page.html',
-  styleUrl: './exams-list.page.css'
+  templateUrl: './exams.page.html',
+  styleUrl: './exams.page.css'
 })
 export class ExamsListPageComponent implements OnInit {
   private examsService = inject(ExamsService);

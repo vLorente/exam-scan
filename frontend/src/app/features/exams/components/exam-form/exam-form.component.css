@@ -1,0 +1,172 @@
+/* Exam Form Component with Material Design */
+.exam-form-card {
+  width: 100%;
+  margin: var(--spacing-lg) 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  border-radius: var(--radius-lg) !important;
+  overflow: visible;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  align-items: start;
+}
+
+.form-row:last-of-type {
+  grid-template-columns: 1fr;
+  max-width: 50%;
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-field {
+  width: 100%;
+  display: block;
+}
+
+.description-field {
+  width: 100%;
+  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  display: block;
+}
+
+.form-actions {
+  padding: var(--spacing-lg) !important;
+  gap: var(--spacing-md) !important;
+  border-top: 1px solid var(--border-light);
+}
+
+.form-actions button {
+  min-width: 120px;
+  font-weight: 500;
+}
+
+/* Material Form Field Customizations */
+::ng-deep .mat-mdc-form-field {
+  margin-bottom: var(--spacing-sm);
+}
+
+::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper {
+  background-color: transparent;
+}
+
+::ng-deep .mat-mdc-form-field.mat-form-field-appearance-outline .mat-mdc-form-field-outline {
+  color: var(--border-light);
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mat-mdc-form-field-outline-thick {
+  color: var(--primary-blue);
+}
+
+::ng-deep .mat-mdc-form-field .mat-mdc-form-field-label {
+  color: var(--text-medium);
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mat-mdc-form-field-label {
+  color: var(--primary-blue);
+}
+
+::ng-deep .mat-mdc-input-element {
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+}
+
+/* Material Button Customizations for Cancel Button */
+::ng-deep .mat-mdc-stroked-button {
+  border-radius: var(--radius-md) !important;
+  text-transform: none !important;
+  font-weight: 500 !important;
+  font-size: var(--font-size-sm) !important;
+  height: 36px !important;
+  line-height: 36px !important;
+}
+
+/* Material Card Customizations */
+::ng-deep .mat-mdc-card {
+  border-radius: var(--radius-lg) !important;
+}
+
+::ng-deep .form-content {
+  padding: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+}
+
+.form-actions {
+  padding: var(--spacing-md) var(--spacing-lg);
+  gap: var(--spacing-md);
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-light);
+}
+
+/* Material Icon Customizations */
+::ng-deep .mat-icon {
+  font-size: 18px !important;
+  height: 18px !important;
+  width: 18px !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .exam-form-card {
+    margin: var(--spacing-md) 0;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .form-row:last-of-type {
+    max-width: 100%;
+  }
+
+  .form-actions {
+    flex-direction: column !important;
+    padding: var(--spacing-md) !important;
+    gap: var(--spacing-sm) !important;
+  }
+
+  .form-actions button,
+  .form-actions app-submit-button {
+    width: 100% !important;
+    margin-bottom: var(--spacing-xs) !important;
+  }
+
+  ::ng-deep .mat-mdc-card-content {
+    padding: var(--spacing-md) !important;
+    padding-bottom: var(--spacing-sm) !important;
+  }
+
+  .description-field {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .form-content {
+    padding: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .exam-form-card {
+    margin: var(--spacing-sm) 0;
+  }
+
+  ::ng-deep .mat-mdc-card-content {
+    padding: var(--spacing-sm) !important;
+    padding-bottom: var(--spacing-xs) !important;
+  }
+
+  .form-row {
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .description-field {
+    margin-bottom: var(--spacing-sm);
+  }
+}

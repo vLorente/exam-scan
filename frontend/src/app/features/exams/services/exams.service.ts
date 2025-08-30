@@ -76,6 +76,7 @@ export class ExamsService {
       options: ['3', '4', '5', '6'],
       correctAnswer: '4',
       points: 5,
+      difficulty: 'easy',
       orderIndex: 1,
       createdAt: new Date('2024-01-15'),
       updatedAt: new Date('2024-01-15')
@@ -87,6 +88,7 @@ export class ExamsService {
       questionType: 'true_false',
       correctAnswer: true,
       points: 3,
+      difficulty: 'medium',
       orderIndex: 2,
       createdAt: new Date('2024-01-15'),
       updatedAt: new Date('2024-01-15')

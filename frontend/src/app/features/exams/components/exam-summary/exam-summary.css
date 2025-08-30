@@ -1,0 +1,300 @@
+/* Exam Summary Component - Minimalist Design */
+.exam-summary-card {
+  background: white;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+  max-width: 800px;
+  margin: var(--spacing-md) 0;
+  position: relative;
+  border: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+}
+
+.exam-summary-card.editing {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.exam-summary-card:focus-within {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+/* Header Styles - Simplified */
+.exam-summary-header {
+  background: var(--bg-light);
+  border-bottom: 1px solid var(--border-light);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.exam-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.exam-title mat-icon {
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
+  color: var(--text-medium);
+  flex-shrink: 0;
+}
+
+.exam-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-medium);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Content Styles - Compact */
+.exam-content {
+  padding: var(--spacing-lg);
+  flex: 1;
+}
+
+.exam-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.info-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-label mat-icon {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+  color: var(--text-medium);
+  flex-shrink: 0;
+}
+
+.info-value {
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  color: var(--text-dark);
+  padding: var(--spacing-sm);
+  background: transparent;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  word-break: break-word;
+}
+
+/* Description Section - Simplified */
+.description-section {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border-light);
+}
+
+.description-text {
+  font-size: var(--font-size-base);
+  color: var(--text-medium);
+  line-height: 1.5;
+  padding: var(--spacing-sm);
+  background: transparent;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  margin-top: var(--spacing-xs);
+  word-break: break-word;
+}
+
+/* Actions Styles - Minimalist */
+.exam-actions {
+  padding: var(--spacing-lg);
+  background: var(--bg-light);
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
+}
+
+.action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  min-width: 140px;
+  background: white;
+  color: var(--text-dark);
+}
+
+.action-button:focus {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+.action-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.action-button.btn-primary {
+  background: var(--primary-blue);
+  color: white;
+  border-color: var(--primary-blue);
+}
+
+.action-button.btn-primary:hover:not(:disabled) {
+  background: var(--primary-blue-dark);
+  border-color: var(--primary-blue-dark);
+  transform: translateY(-1px);
+}
+
+.action-button.btn-secondary:hover:not(:disabled) {
+  background: var(--bg-gray);
+  transform: translateY(-1px);
+}
+
+.action-button mat-icon {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+  transition: transform var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.action-button.btn-primary:hover:not(:disabled) mat-icon {
+  transform: translateX(2px);
+}
+
+/* Responsive Design - Compact */
+@media (max-width: 768px) {
+  .exam-summary-card {
+    margin: var(--spacing-sm) 0;
+  }
+
+  .exam-summary-header {
+    padding: var(--spacing-md);
+  }
+
+  .exam-title {
+    font-size: var(--font-size-lg);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+  }
+
+  .exam-content {
+    padding: var(--spacing-md);
+  }
+
+  .exam-info-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+
+  .exam-actions {
+    flex-direction: column;
+    padding: var(--spacing-md);
+    gap: var(--spacing-sm);
+  }
+
+  .action-button {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .exam-summary-card {
+    margin: var(--spacing-xs) 0;
+  }
+
+  .exam-summary-header {
+    padding: var(--spacing-sm);
+  }
+
+  .exam-title {
+    font-size: var(--font-size-base);
+  }
+
+  .exam-content {
+    padding: var(--spacing-sm);
+  }
+
+  .info-value,
+  .description-text {
+    padding: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+  }
+
+  .exam-actions {
+    padding: var(--spacing-sm);
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .exam-summary-card {
+    border: 2px solid var(--text-dark);
+  }
+
+  .action-button.btn-primary {
+    background: #000080;
+    border: 2px solid #000080;
+  }
+
+  .info-value,
+  .description-text {
+    border: 2px solid var(--text-dark);
+  }
+}
+
+/* Reduced Motion - Only for buttons */
+@media (prefers-reduced-motion: reduce) {
+  .action-button {
+    transition: none;
+  }
+
+  .action-button:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .action-button svg,
+  .action-button mat-icon {
+    transition: none;
+  }
+}

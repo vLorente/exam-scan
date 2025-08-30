@@ -24,7 +24,7 @@ export const routes: Routes = [
   },
   {
     path: 'exams',
-    loadComponent: () => import('./features/exams/pages/exams-list/exams-list.page').then(m => m.ExamsListPageComponent),
+    loadComponent: () => import('./features/exams/pages/exams/exams.page').then(m => m.ExamsListPageComponent),
     canActivate: [authGuard]
   },
   {

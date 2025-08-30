@@ -63,6 +63,7 @@ export class CreateQuestionsPageComponent implements OnInit {
     return this.fb.group({
       questionText: ['', [Validators.required, Validators.minLength(10)]],
       questionType: ['multiple_choice' as QuestionType, Validators.required],
+      difficulty: ['medium', Validators.required],
       points: [5, [Validators.required, Validators.min(1), Validators.max(100)]],
       options: this.fb.array([
         this.fb.control('', Validators.required),
@@ -75,7 +76,7 @@ export class CreateQuestionsPageComponent implements OnInit {
   onTypeChange(): void {
     const type = this.questionForm.get('questionType')?.value;
 
-    if (type === 'multiple_choice') {
+    if (type === 'multiple_choice' || type === 'single_choice') {
       this.resetOptionsArray();
       this.questionForm.get('correctAnswer')?.setValue('');
       this.correctAnswerIndex.set(0);
@@ -126,7 +127,7 @@ export class CreateQuestionsPageComponent implements OnInit {
     let correctAnswer: string | boolean;
     let options: string[] | undefined;
 
-    if (formValue.questionType === 'multiple_choice') {
+    if (formValue.questionType === 'multiple_choice' || formValue.questionType === 'single_choice') {
       options = formValue.options.filter((option: string) => option.trim());
       correctAnswer = options?.[this.correctAnswerIndex()] || '';
     } else {
@@ -137,6 +138,7 @@ export class CreateQuestionsPageComponent implements OnInit {
       examId: examData.id,
       questionText: formValue.questionText,
       questionType: formValue.questionType,
+      difficulty: formValue.difficulty,
       options,
       correctAnswer,
       points: formValue.points,
@@ -166,11 +168,12 @@ export class CreateQuestionsPageComponent implements OnInit {
     this.questionForm.patchValue({
       questionText: question.questionText,
       questionType: question.questionType,
+      difficulty: question.difficulty,
       points: question.points,
-      correctAnswer: question.questionType !== 'multiple_choice' ? question.correctAnswer : ''
+      correctAnswer: (question.questionType !== 'multiple_choice' && question.questionType !== 'single_choice') ? question.correctAnswer : ''
     });
 
-    if (question.questionType === 'multiple_choice' && question.options) {
+    if ((question.questionType === 'multiple_choice' || question.questionType === 'single_choice') && question.options) {
       this.resetOptionsArray();
       question.options.forEach((option, i) => {
         if (i >= this.optionsArray.length) {
@@ -204,6 +207,7 @@ export class CreateQuestionsPageComponent implements OnInit {
     this.questionForm.reset({
       questionText: '',
       questionType: 'multiple_choice',
+      difficulty: 'medium',
       points: 5,
       correctAnswer: ''
     });
@@ -225,6 +229,7 @@ export class CreateQuestionsPageComponent implements OnInit {
   getTypeLabel(type: QuestionType): string {
     const labels = {
       'multiple_choice': 'Opción Múltiple',
+      'single_choice': 'Opción Única',
       'true_false': 'V/F',
       'short_answer': 'Respuesta Corta'
     };

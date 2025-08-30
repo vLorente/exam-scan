@@ -1,0 +1,54 @@
+<article class="exam-summary-card" [class.editing]="isEditing()">
+  <header class="exam-summary-header">
+    <h2 class="exam-title">
+      <mat-icon>description</mat-icon>
+      {{ exam().title }}
+    </h2>
+    <p class="exam-subtitle" id="exam-info-label">
+      Información del Examen
+    </p>
+  </header>
+
+  <div class="exam-content" role="region" aria-labelledby="exam-info-label">
+    <div class="exam-info-grid">
+      <div class="info-item">
+        <div class="info-label">
+          <mat-icon>schedule</mat-icon>
+          Tiempo Límite
+        </div>
+        <div class="info-value">
+          {{ exam().timeLimit || 'Sin límite' }} minutos
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-label">
+          <mat-icon>grade</mat-icon>
+          Puntuación Mínima
+        </div>
+        <div class="info-value">{{ exam().passingScore }}%</div>
+      </div>
+    </div>
+
+    @if (exam().description) {
+      <div class="description-section">
+        <div class="info-label">
+          <mat-icon>info</mat-icon>
+          Descripción
+        </div>
+        <div class="description-text">{{ exam().description }}</div>
+      </div>
+    }
+  </div>
+
+  <footer class="exam-actions">
+    <button
+      class="action-button btn-secondary"
+      (click)="editExam.emit()"
+      [disabled]="isEditing()"
+      [attr.aria-label]="'Editar información del examen: ' + exam().title">
+      <mat-icon>edit</mat-icon>
+      <span>Editar Información</span>
+    </button>
+  </footer>
+</article>

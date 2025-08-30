@@ -1,0 +1,78 @@
+<mat-card class="exam-form-card" [formGroup]="examForm" (ngSubmit)="onSubmit()">
+  <mat-card-content class="form-content">
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Título del Examen</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="title"
+          placeholder="Ej: Matemáticas - Álgebra Básica"
+          required>
+        <mat-icon matSuffix>title</mat-icon>
+        @if (examForm.get('title')?.invalid && examForm.get('title')?.touched) {
+          <mat-error>
+            El título es requerido (mínimo 3 caracteres)
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Tiempo Límite (minutos)</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="timeLimit"
+          placeholder="60"
+          min="1"
+          max="300">
+        <mat-icon matSuffix>schedule</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Puntuación Mínima (%)</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="passingScore"
+          placeholder="70"
+          min="1"
+          max="100"
+          required>
+        <mat-icon matSuffix>grade</mat-icon>
+        @if (examForm.get('passingScore')?.invalid && examForm.get('passingScore')?.touched) {
+          <mat-error>
+            La puntuación mínima es requerida (1-100%)
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="description-field">
+      <mat-label>Descripción</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        placeholder="Describe el contenido y objetivos del examen..."
+        rows="2"
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="2"
+        cdkAutosizeMaxRows="4"></textarea>
+      <mat-icon matSuffix>description</mat-icon>
+    </mat-form-field>
+  </mat-card-content>
+
+  <mat-card-actions align="end" class="form-actions">
+    @if (showSubmitButton()) {
+      <app-submit-button
+        [text]="submitButtonText()"
+        [loading]="isSubmitting()"
+        [disabled]="examForm.invalid"
+        [loadingText]="submitLoadingText()"
+        (onClick)="onSubmit()">
+      </app-submit-button>
+    }
+  </mat-card-actions>
+</mat-card>
