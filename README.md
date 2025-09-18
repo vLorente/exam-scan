@@ -1,6 +1,39 @@
-# Estructura del Proyecto
+<!-- Hero Section -->
+<div align="center">
+  <img src="./portada.png" alt="Exam Scan Hero Image" width="800"/>
+</div>
 
-``` text
+# Exam Scan
+
+Exam Scan es una plataforma innovadora diseñada para facilitar la creación, gestión y realización de exámenes tipo test. Utilizando inteligencia artificial y herramientas colaborativas, esta aplicación permite a los usuarios automatizar procesos, colaborar en tiempo real y analizar resultados de manera eficiente.
+
+---
+
+## 🚀 Características Principales
+
+- **Subida de Exámenes**: Permite cargar archivos PDF de exámenes tipo test.
+- **Extracción Automática**: Utiliza IA para extraer y estructurar preguntas automáticamente.
+- **Gestión de Preguntas**: Crear, editar y organizar preguntas de forma manual o automática.
+- **Colaboración**: Herramientas para revisión, comentarios y control de versiones.
+- **Exámenes Interactivos**: Realización de exámenes en línea con resultados inmediatos.
+- **Estadísticas y Análisis**: Consulta de estadísticas detalladas de los exámenes.
+
+---
+
+## 🛠️ Tecnologías Utilizadas
+
+- **Frontend**: Angular 20+ con Angular Material para una interfaz moderna y responsiva.
+- **Backend**: FastAPI y SQLModel para un backend rápido y eficiente.
+- **Base de Datos**: PostgreSQL con migraciones gestionadas por Alembic.
+- **Cache**: Redis para almacenamiento en caché.
+- **Monitorización**: Prometheus y Grafana para métricas y visualización.
+- **Contenedores**: Docker y Docker Compose para desarrollo y despliegue.
+
+---
+
+## 📂 Estructura del Proyecto
+
+```text
 exam_scan/
 │
 ├── docker-compose.yml                # Orquestación de servicios para producción
@@ -37,4 +70,22 @@ exam_scan/
 ├── prometheus/                       # Configuración de Prometheus
 └── ...
 ```
+
+---
+
+## 🧑‍💻 Contribuir
+
+¡Las contribuciones son bienvenidas! Si deseas colaborar, sigue estos pasos:
+
+1. Haz un fork del repositorio.
+2. Crea una nueva rama (`git checkout -b feature/nueva-funcionalidad`).
+3. Realiza tus cambios y haz commit (`git commit -m 'Añadir nueva funcionalidad'`).
+4. Sube tus cambios (`git push origin feature/nueva-funcionalidad`).
+5. Abre un Pull Request.
+
+---
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
 

@@ -3,11 +3,12 @@
       <div class="container">
         <app-page-title
           title="Crear Nuevo Examen"
-          description="Crea un nuevo examen: añade preguntas manualmente, importa desde un PDF o utiliza nuestras herramientas para generar preguntas automáticamente."
+          description="Crea un nuevo examen: añade preguntas manualmente o importa desde un PDF para generar preguntas automáticamente."
           backButtonText="Volver"
           backButtonAriaLabel="Volver a exámenes"
           (backClick)="goBack()">
         </app-page-title>
+
       <!-- PDF Upload Section -->
       @if (!examData()) {
         <section class="pdf-section" aria-labelledby="pdf-section-title">
