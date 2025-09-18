@@ -1,0 +1,92 @@
+# Development and testing files
+.devcontainer
+.github
+.vscode
+.vs
+.idea
+
+# Git files (keep .git for version control but exclude others)
+.gitignore
+.gitattributes
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Node.js dependencies (will be installed in container)
+frontend/node_modules
+backend/node_modules
+**/node_modules
+.npm
+.yarn-integrity
+
+# Python cache and virtual environments
+backend/__pycache__
+**/__pycache__
+*.py[cod]
+*$py.class
+backend/.venv
+backend/venv
+backend/env
+
+# Build outputs
+frontend/dist
+frontend/build
+backend/dist
+**/dist
+**/build
+
+# Environment files (should be handled separately)
+.env
+.env.local
+.env.*.local
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Documentation that's not needed in container
+README.md
+LICENSE
+*.md
+Requisitos.md
+
+# Docker files (avoid recursive Docker builds)
+**/Dockerfile*
+**/docker-compose*
+**/.dockerignore
+
+# Monitoring and external services configs
+prometheus/
+grafana/
+
+# Angular specific temporary files
+frontend/.angular/cache
+frontend/tmp/
+frontend/out-tsc/
+
+# Editor temporary files
+*.swp
+*.swo
+*~
+
+# Backup files
+*.bak
+*.backup

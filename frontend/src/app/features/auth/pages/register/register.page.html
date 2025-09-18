@@ -1,0 +1,32 @@
+<main class="register-page" role="main" aria-labelledby="register-title">
+  <div class="register-container">
+    <section class="register-card" aria-labelledby="register-title">
+      <header class="register-header">
+        <div class="register-icon-wrapper" aria-hidden="true">
+          <mat-icon class="register-icon">person_add</mat-icon>
+        </div>
+        <h1 id="register-title" class="register-title">Crear Cuenta</h1>
+        <p class="register-subtitle">Únete a ExamScan y comienza tu experiencia</p>
+      </header>
+
+      <div class="register-content">
+        <app-register-form
+          [loading]="loading()"
+          (submitRegister)="handleRegister($event)"
+        />
+      </div>
+
+      <footer class="register-actions">
+        <p class="login-link">
+          ¿Ya tienes cuenta?
+          <a routerLink="/login"
+             class="login-button"
+             aria-describedby="login-desc">
+            Inicia sesión aquí
+          </a>
+          <span id="login-desc" class="sr-only">Acceder a tu cuenta existente en ExamScan</span>
+        </p>
+      </footer>
+    </section>
+  </div>
+</main>

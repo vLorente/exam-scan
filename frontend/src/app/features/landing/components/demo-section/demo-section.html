@@ -1,0 +1,164 @@
+<section class="demo-section" aria-labelledby="demo-title">
+  <div class="demo-container">
+    <header class="demo-header" animate.enter="animate-fade-in-up">
+      <h2 id="demo-title" class="demo-title">
+        Así de <span class="gradient-text">simple</span> es crear un examen
+      </h2>
+      <p class="demo-description">
+        En solo 4 pasos transforma tu PDF en un examen interactivo listo para usar
+      </p>
+    </header>
+
+    <div class="demo-content">
+      <nav class="demo-steps" aria-label="Pasos del proceso de creación de exámenes">
+        <ol class="steps-list" role="list">
+          @for (step of steps; track step.id; let i = $index) {
+            <li class="step-item-wrapper">
+              <button
+                class="step-item"
+                animate.enter="animate-fade-in-left"
+                [style.animation-delay]="(i * 0.2) + 's'"
+                [class.active]="activeStep() === step.id"
+                (click)="selectStep(step.id)"
+                [attr.aria-label]="'Paso ' + step.id + ': ' + step.title"
+                [attr.aria-describedby]="'step-desc-' + step.id"
+                [attr.aria-pressed]="activeStep() === step.id"
+                type="button">
+                <div class="step-number" aria-hidden="true">{{ step.id }}</div>
+                <div class="step-content">
+                  <h3 class="step-title">{{ step.title }}</h3>
+                  <p [id]="'step-desc-' + step.id" class="step-description">{{ step.description }}</p>
+                </div>
+                <div class="step-indicator" aria-hidden="true"></div>
+              </button>
+            </li>
+          }
+        </ol>
+      </nav>
+
+      <div class="demo-visual"
+           animate.enter="animate-fade-in-right"
+           role="img"
+           [attr.aria-label]="getVisualDescription()"
+           [attr.aria-describedby]="'visual-desc-' + activeStep()">
+        @switch (activeStep()) {
+          @case (1) {
+            <div class="visual-upload">
+              <div class="upload-area">
+                <div class="upload-icon">📄</div>
+                <div class="upload-text">
+                  <h4>Arrastra tu PDF aquí</h4>
+                  <p>o haz clic para seleccionar</p>
+                </div>
+                <div class="upload-file">
+                  <div class="file-icon">📄</div>
+                  <div class="file-info">
+                    <div class="file-name">examen_matematicas.pdf</div>
+                    <div class="file-size">2.4 MB</div>
+                  </div>
+                  <div class="file-progress">
+                    <div class="progress-bar"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+          @case (2) {
+            <div class="visual-processing">
+              <div class="processing-container">
+                <div class="ai-brain">
+                  <div class="brain-core">🤖</div>
+                  <div class="brain-waves">
+                    <div class="wave wave-1"></div>
+                    <div class="wave wave-2"></div>
+                    <div class="wave wave-3"></div>
+                  </div>
+                </div>
+                <div class="processing-text">
+                  <h4>Analizando contenido...</h4>
+                  <div class="processing-steps">
+                    <div class="process-step completed">✓ Texto extraído</div>
+                    <div class="process-step completed">✓ Preguntas identificadas</div>
+                    <div class="process-step active">⟳ Opciones procesadas</div>
+                    <div class="process-step">◯ Validación final</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+          @case (3) {
+            <div class="visual-editing">
+              <div class="editor-interface">
+                <div class="editor-header">
+                  <h4>Editor de preguntas</h4>
+                  <span class="question-count">25 preguntas encontradas</span>
+                </div>
+                <div class="question-editor">
+                  <div class="question-item">
+                    <div class="question-text">
+                      ¿Cuál es la derivada de la función f(x) = x²?
+                    </div>
+                    <div class="options-list">
+                      <div class="option-item correct">
+                        <span class="option-letter">a)</span>
+                        <span class="option-text">2x</span>
+                        <span class="correct-badge">✓</span>
+                      </div>
+                      <div class="option-item">
+                        <span class="option-letter">b)</span>
+                        <span class="option-text">x²</span>
+                      </div>
+                      <div class="option-item">
+                        <span class="option-letter">c)</span>
+                        <span class="option-text">2x²</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+          @case (4) {
+            <div class="visual-sharing">
+              <div class="sharing-interface">
+                <div class="exam-card">
+                  <div class="exam-header">
+                    <h4>Examen de Matemáticas</h4>
+                    <span class="exam-status published">Publicado</span>
+                  </div>
+                  <div class="exam-stats">
+                    <div class="stat">
+                      <span class="stat-number">25</span>
+                      <span class="stat-label">Preguntas</span>
+                    </div>
+                    <div class="stat">
+                      <span class="stat-number">45min</span>
+                      <span class="stat-label">Duración</span>
+                    </div>
+                    <div class="stat">
+                      <span class="stat-number">127</span>
+                      <span class="stat-label">Estudiantes</span>
+                    </div>
+                  </div>
+                  <div class="sharing-options">
+                    <button class="share-btn">🔗 Copiar enlace</button>
+                    <button class="share-btn">📧 Enviar por email</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        }
+      </div>
+    </div>
+
+    <div class="demo-cta" animate.enter="animate-fade-in-up" style="animation-delay: 1s;">
+      <button class="demo-cta-button">
+        Prueba el proceso completo
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>

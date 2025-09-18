@@ -2,7 +2,7 @@ from typing import Optional, List, TYPE_CHECKING
 from sqlmodel import Field, SQLModel, Relationship
 from enum import Enum
 from datetime import datetime
-from .base import BaseModel
+from .base import BaseModel, TimestampMixin
 
 if TYPE_CHECKING:
     from .exam import Exam, ExamRead
@@ -41,14 +41,14 @@ class ExamSession(ExamSessionBase, BaseModel, table=True):
 class ExamSessionCreate(SQLModel):
     """Modelo para crear sesión de examen"""
     exam_id: int
+    student_id: int
+    status: SessionStatus = Field(default=SessionStatus.IN_PROGRESS)
 
-class ExamSessionRead(ExamSessionBase):
+class ExamSessionRead(ExamSessionBase, TimestampMixin):
     """Modelo para leer sesión de examen"""
     id: int
     exam_id: int
     student_id: int
-    created_at: str
-    updated_at: Optional[str] = None
 
 class ExamSessionReadWithExam(ExamSessionRead):
     """Modelo para leer sesión con información del examen"""
@@ -94,14 +94,12 @@ class StudentAnswerCreate(SQLModel):
     question_id: int
     selected_option_id: Optional[int] = None
 
-class StudentAnswerRead(StudentAnswerBase):
+class StudentAnswerRead(StudentAnswerBase, TimestampMixin):
     """Modelo para leer respuesta de estudiante"""
     id: int
     session_id: int
     question_id: int
     selected_option_id: Optional[int] = None
-    created_at: str
-    updated_at: Optional[str] = None
 
 class StudentAnswerReadWithDetails(StudentAnswerRead):
     """Modelo para leer respuesta con detalles"""
@@ -113,3 +111,20 @@ class StudentAnswerUpdate(SQLModel):
     selected_option_id: Optional[int] = None
     is_correct: Optional[bool] = None
     points_earned: Optional[float] = Field(default=None, ge=0.0)
+
+# =====================================================
+# Response Models for business logic endpoints
+# =====================================================
+
+class SessionFinishResponse(SQLModel):
+    """Respuesta para finalizar sesión"""
+    id: int
+    status: SessionStatus
+    end_time: Optional[datetime]
+    score: Optional[float]
+    earned_points: Optional[float]
+    total_points: Optional[float]
+
+class TimeRemainingResponse(SQLModel):
+    """Respuesta para tiempo restante"""
+    time_remaining: Optional[int]

@@ -1,5 +1,9 @@
 ### Test Authentication Endpoints
 
+# Variables para reutilizar
+@baseUrl = http://localhost:8000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
 # Registro de usuario
 POST http://localhost:8000/api/v1/auth/register
 Content-Type: application/json
@@ -27,12 +31,6 @@ Content-Type: application/json
 # Obtener información del usuario actual (requiere token)
 GET http://localhost:8000/api/v1/auth/me
 Authorization: Bearer {{token}}
-
-###
-
-# Variables para reutilizar
-@baseUrl = http://localhost:8000
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 ### Test con variables
 POST {{baseUrl}}/api/v1/auth/register

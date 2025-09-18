@@ -1,0 +1,158 @@
+  <app-layout>
+    <div class="create-exam-page" aria-labelledby="page-title">
+      <div class="container">
+        <app-page-title
+          title="Crear Nuevo Examen"
+          description="Crea un nuevo examen: añade preguntas manualmente o importa desde un PDF para generar preguntas automáticamente."
+          backButtonText="Volver"
+          backButtonAriaLabel="Volver a exámenes"
+          (backClick)="goBack()">
+        </app-page-title>
+
+      <!-- PDF Upload Section -->
+      @if (!examData()) {
+        <section class="pdf-section" aria-labelledby="pdf-section-title">
+          <app-drag-drop-upload
+            title="Arrastra tu archivo PDF aquí"
+            description="o haz clic para seleccionar un archivo"
+            accept=".pdf"
+            [maxSizeInMB]="10"
+            allowedFormats="PDF"
+            processingMessage="Extrayendo preguntas del PDF..."
+            (fileSelected)="onPdfSelected($event)"
+            (fileRemoved)="onPdfRemoved()"
+            (processingComplete)="onPdfProcessingComplete($event)">
+          </app-drag-drop-upload>
+
+          @if (pdfProcessingData()) {
+            <div class="pdf-results">
+              <div class="results-header">
+                <h3>Resultados de la extracción</h3>
+                <span class="results-count">
+                  {{ pdfProcessingData().questionsExtracted }} preguntas encontradas
+                </span>
+              </div>
+              <p class="results-description">
+                Las preguntas extraídas se añadirán a la lista. Puedes editarlas o crear preguntas adicionales.
+              </p>
+            </div>
+          }
+        </section>
+      }
+
+      <!-- Exam Information Section -->
+      @if (!examData() || isEditingExam()) {
+        <section class="exam-info-section" aria-labelledby="exam-info-title">
+          <h2 id="exam-info-title" class="section-title">
+            @if (isEditingExam()) {
+              Editar Información del Examen
+            } @else {
+              Información del Examen
+            }
+          </h2>
+          <p class="section-description">
+            @if (isEditingExam()) {
+              Modifica los datos básicos del examen
+            } @else {
+              Define los datos básicos del examen
+            }
+          </p>
+
+          <app-exam-form
+            [isSubmitting]="isSubmitting()"
+            [submitButtonText]="isEditingExam() ? 'Actualizar Examen' : 'Crear Examen y Continuar'"
+            [submitLoadingText]="isEditingExam() ? 'Actualizando...' : 'Creando examen...'"
+            [showSubmitButton]="true"
+            [initialData]="isEditingExam() ? examToCreateExamRequest(examData()!) : undefined"
+            (formSubmit)="isEditingExam() ? onExamFormEditSubmit($event) : onExamFormSubmit($event)">
+          </app-exam-form>
+        </section>
+      }
+
+      <!-- Exam Summary Section -->
+      @if (examData() && !isEditingExam()) {
+        <section class="exam-summary-section" aria-labelledby="exam-summary-title">
+          <h2 id="exam-summary-title" class="section-title">
+            Resumen del Examen
+          </h2>
+          <p class="section-description">
+            Revisa la información del examen creado y continúa con las preguntas
+          </p>
+
+          <app-exam-summary
+            [exam]="examData()!"
+            [isEditing]="isEditingExam()"
+            (editExam)="onEditExam()"
+            (continueToQuestions)="onContinueToQuestions()">
+          </app-exam-summary>
+        </section>
+      }
+
+      <!-- Questions Section -->
+      @if (examData()) {
+        <section class="questions-section" aria-labelledby="questions-section-title">
+          <h2 id="questions-section-title" class="section-title">
+            Preguntas del Examen
+          </h2>
+          <p class="section-description">
+            Añade las preguntas para tu examen
+          </p>
+
+          <!-- Question Form -->
+          <div class="question-form-container">
+            <app-question-form
+              [examId]="examData()!.id"
+              [editingQuestion]="editingQuestion()"
+              [isSubmitting]="isSubmittingQuestion()"
+              (questionSubmit)="onQuestionSubmit($event)"
+              (cancelEdit)="onQuestionEditCancel()">
+            </app-question-form>
+          </div>
+
+          <!-- Question List -->
+          <div class="question-list-container">
+            <app-question-list
+              [questions]="questions()"
+              (editQuestion)="onEditQuestion($event)"
+              (deleteQuestion)="onDeleteQuestion($event)">
+            </app-question-list>
+          </div>
+
+          <!-- Finish Exam -->
+          @if (canFinishExam()) {
+            <div class="finish-section">
+              <div class="finish-summary">
+                <h3>Resumen del Examen</h3>
+                <div class="summary-stats">
+                  <div class="stat-item">
+                    <span class="stat-value">{{ questions().length }}</span>
+                    <span class="stat-label">Preguntas</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-value">{{ totalPoints() }}</span>
+                    <span class="stat-label">Puntos totales</span>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                class="btn btn-primary btn-large"
+                (click)="finishExam()"
+                [disabled]="isSubmitting()">
+                @if (isSubmitting()) {
+                  <span class="loading-spinner" aria-hidden="true"></span>
+                  Creando Examen...
+                } @else {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                    <polyline points="20,6 9,17 4,12"/>
+                  </svg>
+                  Crear Examen Completo
+                }
+              </button>
+            </div>
+          }
+        </section>
+      }
+    </div>
+  </div>
+</app-layout>

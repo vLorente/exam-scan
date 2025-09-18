@@ -1,0 +1,32 @@
+<main class="login-page" role="main" aria-labelledby="login-title">
+  <div class="login-container">
+    <section class="login-card" aria-labelledby="login-title">
+      <header class="login-header">
+        <div class="login-icon-wrapper" aria-hidden="true">
+          <mat-icon class="login-icon">account_circle</mat-icon>
+        </div>
+        <h1 id="login-title" class="login-title">Iniciar Sesión</h1>
+        <p class="login-subtitle">Accede a tu cuenta de ExamScan</p>
+      </header>
+
+      <div class="login-content">
+        <app-login-form
+          [loading]="loading()"
+          (submitLogin)="handleLogin($event)"
+        />
+      </div>
+
+      <footer class="login-actions">
+        <p class="register-link">
+          ¿No tienes cuenta?
+          <a routerLink="/register"
+             class="register-button"
+             aria-describedby="register-desc">
+            Regístrate aquí
+          </a>
+          <span id="register-desc" class="sr-only">Crear una nueva cuenta en ExamScan</span>
+        </p>
+      </footer>
+    </section>
+  </div>
+</main>

@@ -1,0 +1,44 @@
+{
+  "name": "Angular Frontend DevContainer",
+  "dockerComposeFile": [
+    "../docker-compose.devcontainer.yml"
+  ],
+  "service": "frontend",
+  "workspaceFolder": "/app/frontend",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "angular.ng-template",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "ms-azuretools.vscode-docker",
+        "pnpm.pnpm-vscode-helper",
+        "rvest.vs-code-prettier-eslint",
+        "yzhang.markdown-all-in-one",
+        "ms-vscode.live-server",
+        "AykutSarac.jsoncrack-vscode",
+        "EditorConfig.EditorConfig",
+        "pranaygp.vscode-css-peek",
+        "GitHub.vscode-pull-request-github",
+        "humao.rest-client",
+        "cyrilletuzi.angular-schematics",
+        "ecmel.vscode-html-css"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.cwd": "/app/frontend"
+      }
+    }
+  },
+  "forwardPorts": [4200],
+  
+  "portsAttributes": {
+    "4200": {
+      "label": "Angular App",
+      "onAutoForward": "notify"
+    }
+  },
+
+  // En desarrollo usar usuario root, en producción usar usuario node
+  "remoteUser": "root"
+}

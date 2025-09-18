@@ -5,7 +5,7 @@
       "path": "."
     },
     {
-      "name": "Backend", 
+      "name": "Backend",
       "path": "backend"
     },
     {
@@ -13,5 +13,23 @@
       "path": "frontend"
     }
   ],
-  "settings": {}
+  "settings": {
+    // Permite que las extensiones (como Copilot) tengan contexto global
+    "remote.containers.workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+    "remote.containers.workspaceFolder": "/workspace",
+    // Ejemplo: oculta archivos de configuración y carpetas no relevantes en el explorador
+    // "files.exclude": {
+    //   "**/.env": true,
+    //   "**/.venv": true,
+    //   "**/node_modules": true,
+    //   "**/.git": false
+    // },
+    // Ejemplo: configuración de búsqueda para evitar resultados en node_modules y entornos virtuales
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/.venv": true
+    },
+    // Puedes agregar aquí configuraciones globales de formateo, linting, etc.
+    "editor.formatOnSave": true
+  }
 }

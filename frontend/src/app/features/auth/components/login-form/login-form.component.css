@@ -1,0 +1,128 @@
+/* Login Form Styles - Following Design Token Standards */
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Form Field Styling */
+.form-field {
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Custom Material Form Field Styling */
+::ng-deep .mat-mdc-form-field {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+::ng-deep .mat-mdc-form-field .mat-mdc-floating-label {
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
+  color: var(--accent-gold);
+}
+
+::ng-deep .mat-mdc-form-field .mat-mdc-input-element {
+  color: #333333;
+  caret-color: var(--accent-gold);
+}
+
+::ng-deep .mat-mdc-form-field .mat-mdc-input-element::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+::ng-deep .mat-mdc-form-field-outline {
+  color: rgba(0, 0, 0, 0.3);
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mat-mdc-form-field-outline {
+  color: var(--accent-gold);
+}
+
+::ng-deep .mat-mdc-form-field:not(.mat-form-field-disabled):hover .mat-mdc-form-field-outline {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+/* Icon Styling */
+::ng-deep .mat-mdc-form-field mat-icon {
+  color: var(--accent-gold);
+}
+
+/* Password Toggle Button */
+.password-toggle {
+  color: var(--accent-gold) !important;
+}
+
+.password-toggle:hover {
+  background: rgba(255, 215, 0, 0.1);
+  color: #fff !important;
+}
+
+.password-toggle:focus {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+/* Error Messages */
+::ng-deep .mat-mdc-form-field .mat-mdc-form-field-error {
+  color: #ff6b6b;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  margin-top: var(--spacing-xs);
+}
+
+/* Form Actions */
+.form-actions {
+  width: 100%;
+  margin-top: var(--spacing-md);
+}
+
+/* Accessibility Utilities */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .login-form {
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .login-form {
+    gap: var(--spacing-sm);
+  }
+
+  .form-actions {
+    margin-top: var(--spacing-sm);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  /* No animations needed for static design */
+}
+
+/* High Contrast Support */
+@media (prefers-contrast: high) {
+  ::ng-deep .mat-mdc-form-field-outline {
+    color: #000;
+  }
+}

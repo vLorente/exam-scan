@@ -2,6 +2,19 @@
 
 API desarrollada con **FastAPI** y **SQLModel** para gestionar exámenes tipo test, preguntas, sesiones y resultados, con autenticación JWT y PostgreSQL.
 
+## 🎉 Estado del Proyecto
+
+**🟢 Fase 1 y 2: COMPLETADAS** (Infraestructura + Autenticación)  
+**🟡 Fase 3: 70% COMPLETADA** (CRUD + Lógica de Negocio)
+
+### ✅ Funcionalidades Implementadas
+- **Usuarios**: CRUD completo con validaciones (10 tests ✅)
+- **Exámenes**: CRUD + lógica de negocio (publicar, archivar, estadísticas)
+- **Preguntas/Opciones**: CRUD + validaciones avanzadas por tipo
+- **Servicios**: ExamService, QuestionService, SessionService
+- **Autenticación JWT**: Login/registro completo
+- **Base de datos**: PostgreSQL con migraciones Alembic
+
 ---
 
 ## 🚀 Tecnologías
@@ -17,24 +30,45 @@ API desarrollada con **FastAPI** y **SQLModel** para gestionar exámenes tipo te
 
 ---
 
-## 📁 Estructura
+## 📁 Estructura del Proyecto
 
 ```text
 backend/
 ├── app/
-│   ├── api/           # Endpoints y routers
-│   ├── core/          # Configuración, seguridad, excepciones
-│   ├── models/        # Modelos SQLModel
-│   ├── services/      # Lógica de negocio
-│   ├── main.py        # Punto de entrada FastAPI
-│   └── ...
-├── alembic/           # Migraciones
-├── .env               # Variables de entorno
-├── pyproject.toml     # Dependencias
-├── uv.lock            # Lockfile uv
-├── Dockerfile         # Devcontainer
-├── README.md
-└── ...
+│   ├── api/v1/
+│   │   ├── routers/
+│   │   │   ├── auth.py        ✅ Autenticación JWT
+│   │   │   ├── users.py       ✅ CRUD usuarios
+│   │   │   ├── exams.py       ✅ CRUD + lógica de negocio
+│   │   │   ├── questions.py   ✅ CRUD preguntas/opciones
+│   │   │   └── sessions.py    ⏳ Pendiente
+│   │   └── api.py            # Router principal
+│   ├── core/
+│   │   ├── config.py         ✅ Configuración
+│   │   ├── database.py       ✅ Conexión PostgreSQL
+│   │   ├── security.py       ✅ JWT y hashing
+│   │   └── exceptions.py     # Excepciones custom
+│   ├── models/               ✅ Modelos SQLModel completos
+│   │   ├── user.py          # Usuario con relaciones
+│   │   ├── exam.py          # Examen con estados
+│   │   ├── question.py      # Preguntas + opciones
+│   │   ├── session.py       # Sesiones + respuestas
+│   │   └── tag.py           # Tags para categorización
+│   ├── services/             ✅ Lógica de negocio
+│   │   ├── exam_service.py   # Validaciones y estadísticas
+│   │   ├── question_service.py # Validaciones por tipo
+│   │   └── session_service.py  # Gestión de sesiones
+│   ├── tests/                ✅ Tests organizados
+│   │   ├── test_users.py     # 10 tests ✅
+│   │   ├── test_exams.py     # CRUD + services
+│   │   ├── test_questions.py # CRUD + validaciones
+│   │   ├── test_sessions.py  # Services
+│   │   └── test_*.py         # 38+ tests base
+│   └── main.py               ✅ FastAPI app
+├── alembic/                  ✅ Migraciones DB
+├── .env                      # Variables entorno
+├── pyproject.toml           ✅ uv dependencies
+└── README.md                # Este archivo
 ```
 
 ---
@@ -55,111 +89,298 @@ ALLOWED_ORIGINS=["http://localhost:4200", "http://localhost:3000"]
 
 ## 🐳 Docker & Dev Containers
 
-El proyecto incluye un `docker-compose.yml` que levanta:
-- **app**: backend FastAPI
-- **db**: PostgreSQL
-- **redis**: (opcional)
-
-Para desarrollo, asegúrate de exponer el puerto 5432 en el servicio `db`:
-
-```yaml
-  db:
-    image: postgres:latest
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: app
-      POSTGRES_USER: app_user
-      POSTGRES_PASSWORD: app_password
-```
-
----
-
-## 🧪 Arranque rápido
-
-1. **Rebuild del devcontainer** (VSCode → Dev Containers: Rebuild)
-2. **Configura tu `.env`** (ver ejemplo arriba)
-3. **Instala dependencias**
-   ```bash
-   uv sync
-   ```
-4. **Arranca el backend**
-   ```bash
-   uv run fastapi dev app/main.py --reload
-   ```
-5. **Accede a la API**
-   - Documentación Swagger: [http://localhost:8000/docs](http://localhost:8000/docs)
-
----
-
-## 🛠️ Troubleshooting
-
-- Si ves `psycopg2.OperationalError: role "user" does not exist`, revisa tu `.env` y asegúrate de usar `app_user` y la base de datos `app`.
-- Si no se crean las tablas, asegúrate de importar los modelos antes de llamar a `SQLModel.metadata.create_all(engine)`.
-- Si el puerto 5432 no está accesible, revisa el mapeo de puertos en `docker-compose.yml` y haz rebuild del devcontainer.
-
----
-
-## 📦 Endpoints principales (planificados)
-
-- POST /api/v1/upload → Subir y procesar PDF
-- GET /api/v1/questions → Listar preguntas
-- GET /api/v1/exams → Consultar exámenes
-- POST /api/v1/exams → Crear exámenes
-- POST /api/v1/answer → Enviar respuestas
-- POST /api/v1/auth/login → Login JWT
-- POST /api/v1/auth/register → Registro de usuario
-
-> La documentación Swagger estará disponible en `/docs` al levantar la API.
-
----
-
-## 🧪 Comandos útiles con uv
+### 🔧 Desarrollo con Docker Compose
 
 ```bash
+# Configurar variables de entorno
+cp .env.example .env
+
+# Levantar entorno de desarrollo (con hot reload)
+./scripts/docker.sh dev-up
+
+# Ver logs en tiempo real
+./scripts/docker.sh dev-logs
+
+# Ejecutar migraciones
+./scripts/docker.sh migrate
+
+# Parar entorno
+./scripts/docker.sh dev-down
+```
+
+### 🚀 Producción con Docker
+
+```bash
+# Configurar variables de producción
+cp .env.example .env
+# Editar .env con valores de producción
+
+# Levantar en producción
+./scripts/docker.sh prod-up
+
+# Ver estado
+./scripts/docker.sh status
+```
+
+### 🛠️ Características Docker
+
+- **✅ Migraciones automáticas** al arrancar
+- **🔄 Hot reload** en desarrollo  
+- **🏥 Health checks** en todos los servicios
+- **📦 Volúmenes persistentes** para datos
+- **🔧 Scripts de utilidad** incluidos
+
+### 📋 Servicios Incluidos
+
+| Servicio | Desarrollo | Producción |
+|----------|------------|------------|
+| **FastAPI** | localhost:8000 | localhost:8000 |
+| **PostgreSQL** | localhost:5433 | localhost:5432 |
+| **Redis** | localhost:6380 | localhost:6379 |
+| **Swagger Docs** | /docs | /docs |
+
+El proyecto incluye configuración completa para:
+- **Dev Containers** (VSCode)
+- **Docker Compose** (desarrollo y producción)
+- **Scripts automatizados** para gestión
+
+---
+
+## 🚀 Arranque Rápido
+
+### 🐳 Opción 1: Docker (Recomendado)
+
+```bash
+# 1. Configurar entorno
+cp .env.example .env
+# Editar .env si es necesario
+
+# 2. Levantar todo el stack
+./scripts/docker.sh dev-up
+
+# 3. ¡Listo! La API está en http://localhost:8000
+# - Documentación: http://localhost:8000/docs
+# - Health Check: http://localhost:8000/health
+```
+
+### 💻 Opción 2: Desarrollo Local
+
+#### 1. Configuración del entorno
+
+Crear archivo `.env`:
+```env
+DATABASE_URL=postgresql+psycopg2://app_user:app_password@localhost:5432/app
+SECRET_KEY=your-super-secret-key-change-in-production
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+ALLOWED_ORIGINS=["http://localhost:4200", "http://localhost:3000"]
+```
+
+#### 2. Instalación y arranque
+
+```bash
+# En Dev Container (recomendado)
+# VSCode → Dev Containers: Rebuild Container
+
 # Instalar dependencias
 uv sync
 
-# Agregar nueva dependencia
-uv add nombre-paquete
+# Ejecutar migraciones
+./scripts/migrate.sh apply
 
-# Ejecutar scripts
-uv run python script.py
-uv run fastapi dev app/main.py
+# Arrancar servidor de desarrollo
+uv run fastapi dev app/main.py --reload
+```
 
-# Ejecutar tests
+#### 3. Acceso a la API
+
+- **Documentación Swagger**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+- **Health Check**: http://localhost:8000/health
+
+---
+
+## 📋 Endpoints Disponibles
+
+### 🔐 Autenticación
+- `POST /api/v1/auth/login` - Login con JWT
+- `POST /api/v1/auth/register` - Registro de usuarios
+
+### 👥 Usuarios
+- `GET /api/v1/users/` - Listar usuarios
+- `POST /api/v1/users/` - Crear usuario
+- `GET /api/v1/users/{id}` - Obtener usuario
+- `PUT /api/v1/users/{id}` - Actualizar usuario
+- `DELETE /api/v1/users/{id}` - Eliminar usuario
+
+### 📝 Exámenes
+- `GET /api/v1/exams/` - Listar exámenes
+- `POST /api/v1/exams/` - Crear examen
+- `GET /api/v1/exams/{id}` - Obtener examen
+- `PUT /api/v1/exams/{id}` - Actualizar examen
+- `DELETE /api/v1/exams/{id}` - Eliminar examen
+
+#### Lógica de Negocio
+- `POST /api/v1/exams/{id}/publish` - Publicar examen
+- `POST /api/v1/exams/{id}/archive` - Archivar examen
+- `GET /api/v1/exams/{id}/validate` - Validar examen
+- `GET /api/v1/exams/{id}/statistics` - Estadísticas
+
+### ❓ Preguntas y Opciones
+- `GET /api/v1/questions/` - Listar preguntas
+- `POST /api/v1/questions/` - Crear pregunta
+- `GET /api/v1/questions/{id}` - Obtener pregunta con opciones
+- `PUT /api/v1/questions/{id}` - Actualizar pregunta
+- `DELETE /api/v1/questions/{id}` - Eliminar pregunta
+
+#### Opciones
+- `GET /api/v1/questions/{id}/options` - Opciones de pregunta
+- `POST /api/v1/questions/{id}/options` - Crear opción
+- `PUT /api/v1/questions/options/{id}` - Actualizar opción
+- `DELETE /api/v1/questions/options/{id}` - Eliminar opción
+
+#### Validaciones Avanzadas
+- `POST /api/v1/questions/{id}/validate` - Validar pregunta
+- `POST /api/v1/questions/{id}/auto-fix` - Auto-corrección
+- `GET /api/v1/questions/exam/{id}/validate-all` - Validar todas
+- `POST /api/v1/questions/exam/{id}/reorder` - Reordenar preguntas
+
+---
+
+## 🏗️ Arquitectura del Sistema
+
+### Patrón Híbrido: CRUD + Services
+
+```text
+🌐 API Layer (FastAPI Routers)
+├── CRUD básico (GET, POST, PUT, DELETE)
+└── Endpoints de lógica de negocio
+
+🧠 Service Layer (Lógica de Negocio)
+├── ExamService (validaciones, estadísticas)
+├── QuestionService (validaciones por tipo)
+└── SessionService (gestión de sesiones)
+
+📄 Model Layer (SQLModel + PostgreSQL)
+├── User (usuarios y relaciones)
+├── Exam (exámenes con estados)
+├── Question + Option (preguntas tipificadas)
+└── ExamSession + StudentAnswer (sesiones)
+```
+
+### Tipos de Preguntas Soportadas
+- **Multiple Choice**: Múltiples opciones, varias correctas
+- **Single Choice**: Múltiples opciones, una correcta
+- **True/False**: Verdadero o falso
+
+### Estados de Examen
+- **Draft**: Borrador (editable)
+- **Published**: Publicado (disponible para estudiantes)
+- **Archived**: Archivado (no disponible)
+
+---
+
+## 🧪 Testing
+
+### Ejecutar Tests
+```bash
+# Todos los tests
 uv run pytest
 
-# Formatear código
+# Tests específicos
+uv run pytest app/tests/test_users.py -v
+uv run pytest app/tests/test_exams.py -v
+uv run pytest app/tests/test_questions.py -v
+
+# Con cobertura
+uv run pytest --cov=app --cov-report=html
+```
+
+### Cobertura Actual
+- **Usuarios**: 10/10 tests ✅
+- **Exámenes**: CRUD + Services ✅  
+- **Preguntas**: CRUD + Validaciones ✅
+- **Sesiones**: Services ✅
+- **Base**: 38+ tests de infraestructura ✅
+
+---
+
+## 🔧 Comandos Útiles
+
+```bash
+# Desarrollo
+uv run fastapi dev app/main.py --reload
+
+# Migraciones (recomendado usar el script)
+./scripts/migrate.sh status          # Ver estado actual
+./scripts/migrate.sh generate "desc" # Generar migración
+./scripts/migrate.sh apply           # Aplicar migraciones
+
+# Migraciones (comandos directos)
+uv run alembic revision --autogenerate -m "descripción"
+uv run alembic upgrade head
+
+# Calidad de código
 uv run black .
 uv run isort .
-
-# Linting
 uv run ruff check .
+
+# Base de datos
+uv run python -c "from app.core.database import create_tables; create_tables()"
 ```
 
 ---
 
-## 📦 Endpoints principales (planificados)
+## 🗄️ Migraciones de Base de Datos
 
-- POST /api/v1/upload → Subir y procesar un PDF
-- GET /api/v1/questions → Listar preguntas
-- GET /api/v1/exams → Consultar exámenes
-- POST /api/v1/exams → Crear exámenes manualmente
-- POST /api/v1/answer → Enviar respuestas del alumno
+### Sistema de Control de Versiones
+- **Herramienta**: Alembic (SQLAlchemy migration tool)
+- **Estado actual**: Migración `4de3509c4210` (sincronizado)
+- **Ubicación**: `/alembic/versions/`
 
-> La documentación Swagger estará disponible en /docs al levantar la API.
+### 🚀 Script de Migraciones (Recomendado)
+```bash
+# Verificar estado y cambios pendientes
+./scripts/migrate.sh status
+
+# Generar migración después de cambios en modelos
+./scripts/migrate.sh generate "add user preferences field"
+
+# Aplicar migraciones pendientes
+./scripts/migrate.sh apply
+
+# Ver historial completo
+./scripts/migrate.sh history
+```
+
+### ⚡ Flujo de Trabajo Recomendado
+1. **Modificar modelos** en `app/models/*.py`
+2. **Verificar cambios**: `./scripts/migrate.sh check`
+3. **Generar migración**: `./scripts/migrate.sh generate "descripción"`
+4. **Revisar archivo** generado en `alembic/versions/`
+5. **Aplicar migración**: `./scripts/migrate.sh apply`
+6. **Ejecutar tests**: `uv run pytest`
+
+### 📖 Documentación Completa
+Ver [`MIGRATIONS.md`](./MIGRATIONS.md) para guía detallada y mejores prácticas.
 
 ---
 
-## 🛠️ Dev Containers (VSCode)
+## 📚 Documentación Adicional
 
-Este backend está preparado para ejecutarse en Dev Containers con uv preinstalado. Solo abre la carpeta backend/ con VSCode y selecciona:
-
-> Dev Containers: Reopen in Container
+- **Swagger UI**: `/docs` - Documentación interactiva
+- **ReDoc**: `/redoc` - Documentación alternativa  
+- **Esquemas**: `/openapi.json` - OpenAPI schema
+- **Steps**: `steps.md` - Progreso detallado del desarrollo
 
 ---
 
-## 📚 Créditos y licencia
+## 🏆 Créditos
 
-Desarrollado por vLorente. MIT License.
+Desarrollado por **vLorente** con:
+- FastAPI + SQLModel para APIs modernas
+- PostgreSQL para persistencia robusta
+- uv para gestión de dependencias rápida
+- Dev Containers para desarrollo consistente
+
+**Licencia**: MIT

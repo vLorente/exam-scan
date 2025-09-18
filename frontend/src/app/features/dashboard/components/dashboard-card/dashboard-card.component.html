@@ -1,0 +1,64 @@
+<article class="dashboard-card"
+         [class.disabled]="disabled()"
+         [attr.aria-labelledby]="titleId()"
+         [attr.aria-describedby]="descId()">
+
+  <app-dashboard-card-icon [icon]="icon()" />
+
+  <div class="card-content">
+    <header class="card-header">
+      <h3 [id]="titleId()" class="card-title">
+        {{ title() }}
+      </h3>
+    </header>
+
+    <div class="card-body">
+      <p [id]="descId()" class="card-description">
+        {{ description() }}
+      </p>
+      @if (stats()) {
+        <div class="card-stats" aria-label="Estadísticas de la tarjeta">
+          {{ stats() }}
+        </div>
+      }
+    </div>
+
+    <footer class="card-footer">
+      @if (routerLink(); as link) {
+        <a class="card-button btn-primary"
+           [routerLink]="link"
+           [attr.aria-describedby]="btnDescId()">
+          <span>{{ buttonText() }}</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      } @else {
+        <button
+          class="card-button"
+          [class]="disabled() ? 'btn-disabled' : (buttonClass() || 'btn-primary')"
+          [disabled]="disabled()"
+          (click)="onButtonClick()"
+          [attr.aria-describedby]="btnDescId()">
+          <span>{{ buttonText() }}</span>
+          @if (!disabled()) {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          }
+        </button>
+      }
+      <span [id]="btnDescId()" class="sr-only">
+        @if (disabled()) {
+          Esta función estará disponible próximamente
+        } @else if (routerLink()) {
+          Navegar a {{ title().toLowerCase() }}
+        } @else {
+          Ejecutar acción de {{ title().toLowerCase() }}
+        }
+      </span>
+    </footer>
+  </div>
+
+  <div class="card-hover-effect" aria-hidden="true"></div>
+</article>

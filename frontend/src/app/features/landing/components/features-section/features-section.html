@@ -1,0 +1,47 @@
+<section class="features-section" aria-labelledby="features-title">
+  <div class="features-container">
+    <header class="features-header" animate.enter="animate-fade-in-up">
+      <h2 id="features-title" class="features-title">
+        Potencia tu proceso de evaluación con
+        <span class="gradient-text">tecnología avanzada</span>
+      </h2>
+      <p class="features-description">
+        Descubre cómo nuestra plataforma revoluciona la creación y gestión de exámenes
+        con herramientas inteligentes y colaborativas.
+      </p>
+    </header>
+
+    <div class="features-grid" role="list" aria-label="Lista de características principales">
+      @for (feature of features; track feature.title; let i = $index) {
+        <article
+          class="feature-card"
+          animate.enter="animate-fade-in-up"
+          [style.animation-delay]="(i * 0.1) + 's'"
+          role="listitem"
+          [attr.aria-labelledby]="'feature-title-' + i"
+          [attr.aria-describedby]="'feature-desc-' + i">
+          <div class="feature-icon" [class]="'bg-gradient-to-r ' + feature.color" aria-hidden="true">
+            <span>{{ feature.icon }}</span>
+          </div>
+          <h3 [id]="'feature-title-' + i" class="feature-title">{{ feature.title }}</h3>
+          <p [id]="'feature-desc-' + i" class="feature-description">{{ feature.description }}</p>
+          <div class="feature-hover-effect" aria-hidden="true"></div>
+        </article>
+      }
+    </div>
+
+    <section class="features-cta" animate.enter="animate-fade-in-up" style="animation-delay: 0.8s;" aria-labelledby="cta-title">
+      <div class="cta-content">
+        <h3 id="cta-title">¿Listo para transformar tus exámenes?</h3>
+        <p>Únete a más de 1,000 educadores que ya confían en nuestra plataforma</p>
+        <button class="cta-button" aria-describedby="cta-button-desc">
+          Prueba todas las funciones
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+        <span id="cta-button-desc" class="sr-only">Accede a una prueba gratuita de todas las funcionalidades de la plataforma</span>
+      </div>
+    </section>
+  </div>
+</section>

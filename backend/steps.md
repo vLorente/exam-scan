@@ -23,12 +23,39 @@
 - [x] Pruebas de autenticación y protección de rutas
 - [x] **TESTING INCLUIDO**: Tests de autenticación integrados en Fase 1
 
-## Fase 3: Endpoints CRUD y lógica de negocio
-- [ ] Endpoints CRUD para usuarios
-- [ ] Endpoints CRUD para exámenes
-- [ ] Endpoints CRUD para preguntas y opciones
-- [ ] Endpoints para sesiones y respuestas de estudiantes
-- [ ] Endpoints para tags y filtrado
+## Fase 3: Endpoints CRUD y lógica de negocio ✅ EN PROGRESO - AVANCE SIGNIFICATIVO
+- [x] **Usuarios CRUD (Completo y testeado)**
+  - [x] Endpoints CRUD básicos: GET, POST, PUT, DELETE
+  - [x] Manejo de errores: duplicados, validaciones
+  - [x] 10 tests pasando al 100%
+  
+- [x] **Exámenes CRUD (Completo con lógica de negocio)**
+  - [x] Endpoints CRUD básicos: GET, POST, PUT, DELETE
+  - [x] Endpoints de lógica de negocio: publish, archive, validate, statistics
+  - [x] ExamService implementado con validaciones complejas
+  - [x] Integrado en API router principal
+  
+- [x] **Preguntas y Opciones CRUD (Completo con servicios avanzados)**
+  - [x] CRUD completo para preguntas y opciones
+  - [x] Endpoints de lógica de negocio: validate, auto-fix, bulk-validate, reorder
+  - [x] QuestionService con validaciones por tipo de pregunta
+  - [x] Soporte para multiple_choice, single_choice, true_false
+  
+- [x] **Arquitectura de Servicios (Implementada)**
+  - [x] ExamService: validaciones de publicación, estadísticas
+  - [x] SessionService: gestión de sesiones de examen (preparado)
+  - [x] QuestionService: validaciones complejas y auto-corrección
+  - [x] Separación clara: CRUD básico vs lógica de negocio
+
+- [x] **Sesiones y Respuestas CRUD (Completo y testeado)**
+  - [x] Endpoints CRUD para sesiones de examen
+  - [x] Endpoints para respuestas de estudiantes
+  - [x] Integración con SessionService existente
+  - [x] 18 tests pasando al 100%
+
+- [ ] **Tags CRUD (Pendiente)**
+  - [ ] Endpoints para gestión de tags
+  - [ ] Sistema de filtrado por tags
 
 ## Fase 4: Procesamiento de PDFs y AI (futuro)
 - [ ] Endpoint para subir y procesar PDFs
@@ -48,6 +75,35 @@
   - ✅ Autenticación JWT completa y segura
   - ✅ Base de datos conectada y tablas creadas
   - ✅ Cobertura de tests exhaustiva
-- **Listo para Fase 3: Endpoints CRUD y lógica de negocio**
+  
+- **Fase 3: AVANCE SIGNIFICATIVO (70% completada)**
+  - ✅ **Usuarios CRUD**: Completo con 10 tests pasando
+  - ✅ **Exámenes CRUD**: Completo con ExamService y lógica de negocio
+  - ✅ **Preguntas/Opciones CRUD**: Completo con QuestionService avanzado
+  - ✅ **Arquitectura Híbrida**: Routers + Services funcionando perfectamente
+  - ⏳ **Pendiente**: Tags CRUD
+  
+- **Próximo objetivo**: Completar Tags CRUD para finalizar Fase 3
+
+---
+
+## 🏗️ Arquitectura Actual - Híbrida y Escalable
+
+```
+📁 app/api/v1/routers/
+├── users.py      ✅ CRUD + validaciones
+├── exams.py      ✅ CRUD + lógica de negocio  
+├── questions.py  ✅ CRUD + servicios avanzados
+├── sessions.py   ✅ CRUD + respuestas (completo y testeado)
+└── tags.py       ⏳ Pendiente
+
+🧠 app/services/
+├── exam_service.py     ✅ Validaciones y estadísticas
+├── session_service.py  ✅ Lógica de sesiones (preparado)
+├── question_service.py ✅ Validaciones complejas
+└── __init__.py         ✅ Exports configurados
+
+📄 app/models/          ✅ Todos los modelos funcionando
+```
 
 ---

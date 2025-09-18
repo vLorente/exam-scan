@@ -1,0 +1,99 @@
+<div class="question-list">
+  <div class="list-header">
+    <h3 class="list-title">
+      Preguntas del Examen ({{ questions().length }})
+    </h3>
+    <div class="list-stats">
+      <span class="total-points">
+        Total: {{ totalPoints() }} puntos
+      </span>
+    </div>
+  </div>
+
+  @if (questions().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M9 11H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2h-4m-6 0V9a2 2 0 012-2h2a2 2 0 012 2v2m-6 0h6"/>
+        </svg>
+      </div>
+      <h4>No hay preguntas aún</h4>
+      <p>Comienza añadiendo preguntas usando el formulario de arriba.</p>
+    </div>
+  } @else {
+    <div class="questions-container">
+      @for (question of questions(); track $index; let i = $index) {
+        <div class="question-item" [attr.aria-label]="'Pregunta ' + (i + 1)">
+          <div class="question-header">
+            <div class="question-number">{{ i + 1 }}</div>
+            <div class="question-meta">
+              <span class="question-type">{{ getTypeLabel(question.questionType) }}</span>
+              <span class="question-points">{{ question.points }} pts</span>
+            </div>
+            <div class="question-actions">
+              <button
+                type="button"
+                class="action-btn edit-btn"
+                (click)="editQuestion.emit(i)"
+                [attr.aria-label]="'Editar pregunta ' + (i + 1)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                  <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="action-btn delete-btn"
+                (click)="deleteQuestion.emit(i)"
+                [attr.aria-label]="'Eliminar pregunta ' + (i + 1)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                  <polyline points="3,6 5,6 21,6"/>
+                  <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                  <line x1="10" y1="11" x2="10" y2="17"/>
+                  <line x1="14" y1="11" x2="14" y2="17"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="question-content">
+            <p class="question-text">{{ question.questionText }}</p>
+
+            @if (question.questionType === 'multiple_choice' && question.options) {
+              <div class="question-options">
+                <h5 class="options-title">Opciones:</h5>
+                <ul class="options-list">
+                  @for (option of question.options; track $index; let optIndex = $index) {
+                    <li class="option-item" [class.correct]="option === question.correctAnswer">
+                      <span class="option-letter">{{ getOptionLetter(optIndex) }})</span>
+                      <span class="option-text">{{ option }}</span>
+                      @if (option === question.correctAnswer) {
+                        <span class="correct-badge" aria-label="Respuesta correcta">✓</span>
+                      }
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+
+            @if (question.questionType === 'true_false') {
+              <div class="answer-display">
+                <strong>Respuesta correcta:</strong>
+                <span class="answer-value correct">
+                  {{ question.correctAnswer ? 'Verdadero' : 'Falso' }}
+                </span>
+              </div>
+            }
+
+            @if (question.questionType === 'short_answer') {
+              <div class="answer-display">
+                <strong>Respuesta correcta:</strong>
+                <span class="answer-value correct">{{ question.correctAnswer }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

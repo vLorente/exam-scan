@@ -1,0 +1,41 @@
+<section class="create-exam-cta" aria-labelledby="cta-title">
+  <div class="cta-content">
+    <div class="cta-text">
+      <div class="cta-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
+      </div>
+      <div class="cta-message">
+        <h2 id="cta-title" class="cta-title">
+          ¿Listo para crear tu próximo examen?
+        </h2>
+        <p class="cta-subtitle">
+          Crea exámenes personalizados en minutos con nuestro intuitivo creador
+        </p>
+      </div>
+    </div>
+
+    <div class="cta-actions">
+      <button
+        class="btn-primary-cta"
+        (click)="navigateToCreateExam()"
+        aria-describedby="create-btn-desc">
+        <span class="btn-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </span>
+        Crear Nuevo Examen
+      </button>
+      <span id="create-btn-desc" class="sr-only">
+        Navegar a la página de creación de exámenes
+      </span>
+    </div>
+  </div>
+
+  <div class="cta-background" aria-hidden="true">
+    <div class="gradient-orb gradient-orb-1"></div>
+    <div class="gradient-orb gradient-orb-2"></div>
+  </div>
+</section>

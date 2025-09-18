@@ -1,0 +1,68 @@
+/* Dashboard Card Icon - Isolated Icon Component */
+.card-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.card-icon.icon-quiz {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.card-icon.icon-smart_toy {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.card-icon.icon-people {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.card-icon.icon-analytics {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.card-icon.icon-fitness {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.card-icon.icon-menu_book {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+}
+
+.card-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .card-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .card-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .card-icon {
+    border: 2px solid white;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .card-icon {
+    transition: none;
+  }
+}

@@ -1,0 +1,88 @@
+<form [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+      class="login-form"
+      role="form"
+      aria-labelledby="login-form-title"
+      novalidate>
+
+  <h2 id="login-form-title" class="sr-only">Formulario de inicio de sesión</h2>
+
+  <!-- Email Field -->
+  <div class="form-field">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        type="email"
+        formControlName="email"
+        placeholder="tu@email.com"
+        autocomplete="email"
+        aria-describedby="email-error"
+        [attr.aria-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+      >
+      <mat-icon matSuffix aria-hidden="true">email</mat-icon>
+      @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+        <mat-error id="email-error" role="alert">
+          @if (loginForm.get('email')?.errors?.['required']) {
+            El email es requerido
+          }
+          @if (loginForm.get('email')?.errors?.['email']) {
+            Ingresa un email válido
+          }
+        </mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <!-- Password Field -->
+  <div class="form-field">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Contraseña</mat-label>
+      <input
+        matInput
+        [type]="hidePassword ? 'password' : 'text'"
+        formControlName="password"
+        placeholder="Tu contraseña"
+        autocomplete="current-password"
+        aria-describedby="password-error password-toggle-desc"
+        [attr.aria-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+      >
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        (click)="togglePasswordVisibility()"
+        [attr.aria-label]="hidePassword ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+        [attr.aria-pressed]="!hidePassword"
+        aria-describedby="password-toggle-desc"
+        class="password-toggle"
+      >
+        <mat-icon aria-hidden="true">{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+      </button>
+      <span id="password-toggle-desc" class="sr-only">
+        {{ hidePassword ? 'La contraseña está oculta' : 'La contraseña es visible' }}
+      </span>
+      @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+        <mat-error id="password-error" role="alert">
+          La contraseña es requerida
+        </mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <!-- Submit Button -->
+  <div class="form-actions">
+    <app-submit-button
+      text="Iniciar Sesión"
+      icon="login"
+      [disabled]="loginForm.invalid"
+      [loading]="loading()"
+      loadingText="Iniciando sesión..."
+      description="Acceder a tu cuenta de ExamScan"
+      descriptionId="submit-desc"
+      loadingDescription="Procesando inicio de sesión, por favor espera"
+      loadingDescriptionId="loading-desc"
+      (onClick)="onSubmit()">
+    </app-submit-button>
+  </div>
+</form>

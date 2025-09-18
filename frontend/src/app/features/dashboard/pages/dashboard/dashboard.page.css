@@ -1,0 +1,127 @@
+/* Dashboard Page - Content Styles */
+.dashboard-welcome {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+  padding: 0 var(--spacing-sm);
+}
+
+.dashboard-title {
+  font-size: var(--font-size-4xl);
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.2;
+}
+
+.dashboard-subtitle {
+  font-size: var(--font-size-xl);
+  color: var(--text-medium);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+  width: 100%;
+  box-sizing: border-box;
+  align-items: stretch;
+  grid-auto-rows: 1fr;
+}
+
+@media (min-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.dashboard-grid > * {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-2xl);
+  width: 100%;
+}
+
+.stat-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  text-align: center;
+  transition: all var(--transition-normal);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-number {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--spacing-xs);
+}
+
+.stat-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-medium);
+  font-weight: 500;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .dashboard-welcome {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .dashboard-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .dashboard-subtitle {
+    font-size: var(--font-size-lg);
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-grid {
+    gap: var(--spacing-sm);
+  }
+
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+}

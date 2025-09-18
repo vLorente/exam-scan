@@ -1,0 +1,73 @@
+<article
+  class="exam-card"
+  [class]="getExamStatusClass()"
+  [class.clickable]="exam().isActive"
+  (click)="onExamClick()"
+  [attr.aria-labelledby]="'exam-title-' + exam().id"
+  [attr.aria-describedby]="'exam-desc-' + exam().id + ' exam-stats-' + exam().id"
+  [attr.role]="exam().isActive ? 'button' : 'article'"
+  [attr.tabindex]="exam().isActive ? '0' : null"
+  (keydown)="onKeyDown($event)"
+  animate.enter="animate-fade-in-up">
+
+  <header class="exam-header">
+    <h3 [id]="'exam-title-' + exam().id" class="exam-title">
+      {{ exam().title }}
+    </h3>
+    <span
+      class="exam-status"
+      [class]="getExamStatusClass()"
+      [attr.aria-label]="'Estado: ' + getExamStatusText()">
+      {{ getExamStatusText() }}
+    </span>
+  </header>
+
+  @if (exam().description) {
+    <div class="exam-body">
+      <p [id]="'exam-desc-' + exam().id" class="exam-description">
+        {{ exam().description }}
+      </p>
+    </div>
+  }
+
+  <div class="exam-stats" [id]="'exam-stats-' + exam().id" aria-label="Estadísticas del examen">
+    <div class="stat">
+      <span class="stat-number">{{ exam().totalQuestions }}</span>
+      <span class="stat-label">Preguntas</span>
+    </div>
+    <div class="stat">
+      <span class="stat-number">{{ formatDuration(exam().timeLimit) }}</span>
+      <span class="stat-label">Duración</span>
+    </div>
+    <div class="stat">
+      <span class="stat-number">{{ exam().passingScore }}%</span>
+      <span class="stat-label">Para aprobar</span>
+    </div>
+  </div>
+
+  @if (showActions()) {
+    <footer class="exam-footer">
+      @if (exam().isActive) {
+        <button
+          class="exam-button btn-primary"
+          (click)="onExamClick()"
+          [attr.aria-label]="'Comenzar examen: ' + exam().title">
+          <span>Comenzar Examen</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <polygon points="5,3 19,12 5,21"/>
+          </svg>
+        </button>
+      } @else {
+        <button
+          class="exam-button btn-disabled"
+          disabled
+          [attr.aria-label]="'Examen no disponible: ' + exam().title">
+          No Disponible
+        </button>
+      }
+    </footer>
+  }
+
+  <!-- Hover effect -->
+  <div class="exam-hover-effect" aria-hidden="true"></div>
+</article>

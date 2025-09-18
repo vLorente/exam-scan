@@ -1,0 +1,194 @@
+<mat-card class="question-form-card">
+  <mat-card-header class="form-header">
+    <mat-card-title class="form-title">
+      {{ editingMode() ? 'Editar Pregunta' : 'Nueva Pregunta' }}
+    </mat-card-title>
+    @if (editingMode()) {
+      <button
+        mat-icon-button
+        type="button"
+        color="accent"
+        (click)="cancelEdit.emit()"
+        aria-label="Cancelar edición">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="questionForm" (ngSubmit)="onSubmit()" class="question-form-content">
+      <div class="form-grid">
+        <!-- Question Text -->
+        <mat-form-field appearance="outline" class="form-field full-width">
+          <mat-label>Texto de la Pregunta</mat-label>
+          <textarea
+            matInput
+            formControlName="questionText"
+            placeholder="Escribe aquí el texto de la pregunta..."
+            rows="3"
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="3"
+            cdkAutosizeMaxRows="6"
+            required></textarea>
+          <mat-icon matSuffix>help_outline</mat-icon>
+          @if (questionForm.get('questionText')?.invalid && questionForm.get('questionText')?.touched) {
+            <mat-error>
+              El texto de la pregunta es requerido (mínimo 10 caracteres)
+            </mat-error>
+          }
+          <mat-hint>Escribe una pregunta clara y específica</mat-hint>
+        </mat-form-field>
+
+        <!-- Question Type, Difficulty and Points Row -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Tipo de Pregunta</mat-label>
+            <mat-select formControlName="questionType" (selectionChange)="onTypeChange()">
+              <mat-option value="multiple_choice">
+                <mat-icon>list</mat-icon>
+                Opción Múltiple
+              </mat-option>
+              <mat-option value="single_choice">
+                <mat-icon>radio_button_checked</mat-icon>
+                Opción Única
+              </mat-option>
+              <mat-option value="true_false">
+                <mat-icon>check_circle</mat-icon>
+                Verdadero/Falso
+              </mat-option>
+            </mat-select>
+            <mat-icon matSuffix>category</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Dificultad</mat-label>
+            <mat-select formControlName="difficulty">
+              <mat-option value="easy">
+                <mat-icon>sentiment_satisfied</mat-icon>
+                Fácil
+              </mat-option>
+              <mat-option value="medium">
+                <mat-icon>sentiment_neutral</mat-icon>
+                Media
+              </mat-option>
+              <mat-option value="hard">
+                <mat-icon>sentiment_dissatisfied</mat-icon>
+                Difícil
+              </mat-option>
+            </mat-select>
+            <mat-icon matSuffix>psychology</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Puntos</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="points"
+              placeholder="5"
+              min="1"
+              max="100"
+              required>
+            <mat-icon matSuffix>stars</mat-icon>
+            @if (questionForm.get('points')?.invalid && questionForm.get('points')?.touched) {
+              <mat-error>
+                Los puntos son requeridos (1-100)
+              </mat-error>
+            }
+            <mat-hint>Valor de la pregunta</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Multiple Choice and Single Choice Options -->
+      @if (questionForm.get('questionType')?.value === 'multiple_choice' || questionForm.get('questionType')?.value === 'single_choice') {
+        <div class="options-section">
+          <mat-divider></mat-divider>
+          <h4 class="section-title">
+            <mat-icon>{{ questionForm.get('questionType')?.value === 'multiple_choice' ? 'check_box' : 'radio_button_checked' }}</mat-icon>
+            Opciones de Respuesta
+          </h4>
+          <div class="options-container">
+            @for (option of optionsControls(); track $index; let i = $index) {
+              <div class="option-item" [class.correct]="correctAnswerIndex() === i">
+                <mat-radio-group class="option-radio-group">
+                  <mat-radio-button
+                    [value]="i"
+                    [checked]="correctAnswerIndex() === i"
+                    (change)="setCorrectAnswer(i)"
+                    color="primary">
+                    <mat-form-field appearance="outline" class="option-field">
+                      <mat-label>Opción {{ i + 1 }}</mat-label>
+                      <input
+                        matInput
+                        [formControl]="option"
+                        [placeholder]="'Opción ' + (i + 1)">
+                      @if (option.invalid && option.touched) {
+                        <mat-error>Esta opción es requerida</mat-error>
+                      }
+                    </mat-form-field>
+                  </mat-radio-button>
+                </mat-radio-group>
+
+                @if (optionsControls().length > 2) {
+                  <button
+                    mat-icon-button
+                    type="button"
+                    color="warn"
+                    (click)="removeOption(i)"
+                    [attr.aria-label]="'Eliminar opción ' + (i + 1)"
+                    class="remove-option-btn">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                }
+              </div>
+            }
+
+            @if (optionsControls().length < 6) {
+              <button
+                mat-stroked-button
+                type="button"
+                color="primary"
+                (click)="addOption()"
+                class="add-option-btn">
+                <mat-icon>add</mat-icon>
+                Añadir Opción
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- True/False Options -->
+      @if (questionForm.get('questionType')?.value === 'true_false') {
+        <div class="options-section">
+          <mat-divider></mat-divider>
+          <h4 class="section-title">
+            <mat-icon>check_circle</mat-icon>
+            Respuesta Correcta
+          </h4>
+          <mat-radio-group formControlName="correctAnswer" class="true-false-group">
+            <mat-radio-button value="true" color="primary" class="true-false-option">
+              <mat-icon class="option-icon">check</mat-icon>
+              Verdadero
+            </mat-radio-button>
+            <mat-radio-button value="false" color="primary" class="true-false-option">
+              <mat-icon class="option-icon">close</mat-icon>
+              Falso
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      }
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions align="end" class="form-actions">
+    <app-submit-button
+      [text]="editingMode() ? 'Actualizar Pregunta' : 'Añadir Pregunta'"
+      [loading]="isSubmitting()"
+      [disabled]="questionForm.invalid"
+      [loadingText]="editingMode() ? 'Actualizando...' : 'Añadiendo...'"
+      (onClick)="onSubmit()">
+    </app-submit-button>
+  </mat-card-actions>
+</mat-card>

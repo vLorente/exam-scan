@@ -1,0 +1,83 @@
+<div
+  class="drag-drop-container"
+  [class.drag-over]="isDragOver()"
+  [class.has-file]="selectedFile()"
+  (drop)="onDrop($event)"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (click)="fileInput.click()"
+  role="button"
+  tabindex="0"
+  (keydown)="onKeyDown($event)"
+  [attr.aria-label]="ariaLabel()">
+
+  <input
+    #fileInput
+    type="file"
+    [accept]="accept()"
+    (change)="onFileSelect($event)"
+    class="file-input"
+    [attr.aria-describedby]="'file-description-' + componentId">
+
+  @if (!selectedFile()) {
+    <div class="upload-content">
+      <div class="upload-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14,2 14,8 20,8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10,9 9,9 8,9"/>
+        </svg>
+      </div>
+
+      <h3 class="upload-title">{{ title() }}</h3>
+      <p class="upload-description" [id]="'file-description-' + componentId">
+        {{ description() }}
+      </p>
+
+      <div class="upload-formats">
+        <span class="format-label">Formatos soportados:</span>
+        <span class="format-list">{{ allowedFormats() }}</span>
+      </div>
+    </div>
+  } @else {
+    <div class="file-preview">
+      <div class="file-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14,2 14,8 20,8"/>
+        </svg>
+      </div>
+
+      <div class="file-info">
+        <h4 class="file-name">{{ selectedFile()?.name }}</h4>
+        <p class="file-size">{{ formatFileSize(selectedFile()?.size || 0) }}</p>
+      </div>
+
+      <button
+        type="button"
+        class="remove-file"
+        (click)="removeFile($event)"
+        aria-label="Eliminar archivo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  }
+
+  @if (isProcessing()) {
+    <div class="processing-overlay">
+      <div class="processing-spinner" aria-hidden="true"></div>
+      <p>{{ processingMessage() }}</p>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="error-message" role="alert">
+      {{ errorMessage() }}
+    </div>
+  }
+</div>
