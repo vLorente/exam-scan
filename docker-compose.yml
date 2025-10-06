@@ -1,3 +1,7 @@
+# TODO: Actualmente es un Mockup de docker-compose
+# TODO: Actualizar para el primer despliegue real
+# La configuración completa actual está en los dev containers
+
 services:
   db:
     image: postgres:16
