@@ -108,51 +108,6 @@ export class DashboardPageComponent {
 export class LoginPageComponent {}
 ```
 
-## Migración de API Anterior
-
-### ❌ Antes (API Compleja)
-```html
-<app-layout
-  [user]="currentUser()"
-  [title]="'ExamScan'"
-  [subtitle]="'Dashboard'"
-  [appName]="'ExamScan'"
-  [version]="'v1.0.0'"
-  [companyName]="'Tu Institución'"
-  [showFooterLinks]="true"
-  (logout)="handleLogout()"
->
-```
-
-### ✅ Ahora (API Simplificada)
-```html
-<app-layout
-  [title]="'ExamScan'"
-  [subtitle]="'Dashboard'"
->
-```
-
-### Cambios en el Componente TypeScript
-
-**❌ Antes:**
-```typescript
-export class DashboardPageComponent {
-  private authService = inject(AuthService);
-  currentUser = this.authService.user;
-
-  handleLogout(): void {
-    // Lógica de logout manual
-  }
-}
-```
-
-**✅ Ahora:**
-```typescript
-export class DashboardPageComponent {
-  // ✅ Nada más que hacer - el layout es autónomo
-}
-```
-
 ## Estructura del Layout
 
 ```
@@ -168,15 +123,6 @@ export class DashboardPageComponent {
 │        Footer                   │  ← Información de la empresa
 └─────────────────────────────────┘
 ```
-
-## Ventajas de la Nueva API
-
-1. **🚀 Simplicidad**: Solo 2 props requeridas vs múltiples props anteriores
-2. **🔒 Autonomía**: El header gestiona su propio estado y datos
-3. **📱 Menos Código**: No necesitas gestionar usuario o logout en cada página
-4. **🔄 Reutilizable**: API consistente entre todas las páginas
-5. **🐛 Menos Errores**: Menor superficie de API reduce bugs
-6. **⚡ Performance**: Menos prop drilling mejora el rendimiento
 
 ## Accesibilidad
 

@@ -1,3 +1,7 @@
+# TODO: Actualmente es un Mockup de Dockerfile para una aplicación Python FastAPI
+# TODO: Actualizar para el primer despliegue real
+# La configuración completa actual está en los dev containers
+
 FROM python:3.12-slim
 
 ENV PYTHONUNBUFFERED=1
