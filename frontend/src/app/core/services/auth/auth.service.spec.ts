@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { AuthService } from './auth.service';
-import { User } from '@core/models/user.model';
-import { LoginRequest, LoginResponse, RegisterRequest } from '@core/models/auth.model';
+import { User, UserMapper } from '@core/models/user.model';
+import { LoginRequest, LoginResponse, RegisterRequest, AuthMapper } from '@core/models/auth.model';
 import { environment } from '@environments/environment';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -13,26 +14,35 @@ describe('AuthService', () => {
     id: 1,
     email: 'test@example.com',
     username: 'testuser',
-    full_name: 'Test User',
+    fullName: 'Test User',
     role: 'student',
-    is_active: true,
-    created_at: '2025-08-28T09:12:08.129Z',
-    updated_at: '2025-08-28T09:12:08.129Z'
+    isActive: true,
+    createdAt: new Date('2025-08-28T09:12:08.129Z'),
+    updatedAt: new Date('2025-08-28T09:12:08.129Z')
   };
 
   const mockLoginResponse: LoginResponse = {
-    access_token: 'mock-jwt-token',
-    token_type: 'bearer',
-    current_user: mockUser
+    accessToken: 'mock-jwt-token',
+    tokenType: 'bearer',
+    currentUser: mockUser
   };
+
+  // Helper to create API response from domain LoginResponse
+  const createMockApiResponse = () => ({
+    access_token: mockLoginResponse.accessToken,
+    token_type: mockLoginResponse.tokenType,
+    current_user: UserMapper.toApi(mockLoginResponse.currentUser)
+  });
 
   beforeEach(() => {
     // Clear localStorage before each test
     localStorage.clear();
-
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [AuthService]
+      providers: [
+        AuthService,
+        provideHttpClient(),
+        provideHttpClientTesting(),
+      ]
     });
 
     service = TestBed.inject(AuthService);
@@ -49,33 +59,62 @@ describe('AuthService', () => {
   });
 
   describe('Constructor', () => {
+    let testService: AuthService;
+
+    beforeEach(() => {
+      // Reset TestBed for constructor tests to get fresh instances
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        providers: [
+          AuthService,
+          provideHttpClient(),
+          provideHttpClientTesting(),
+        ]
+      });
+    });
+
+    afterEach(() => {
+      // Clean up localStorage after each constructor test
+      localStorage.clear();
+    });
+
     it('should initialize with no user when localStorage is empty', () => {
-      expect(service.user()).toBeNull();
-      expect(service.authenticated()).toBeFalse();
+      testService = TestBed.inject(AuthService);
+
+      expect(testService.user()).toBeNull();
+      expect(testService.authenticated()).toBeFalse();
     });
 
     it('should restore session from localStorage', () => {
-      // Setup localStorage
+      // Setup localStorage before creating service
       localStorage.setItem('access_token', 'test-token');
       localStorage.setItem('current_user', JSON.stringify(mockUser));
 
       // Create new service instance to trigger constructor
-      const newService = TestBed.inject(AuthService);
+      testService = TestBed.inject(AuthService);
 
-      expect(newService.user()).toEqual(mockUser);
-      expect(newService.authenticated()).toBeTrue();
+      // When restoring from localStorage, dates are strings, not Date objects
+      const expectedUser = {
+        ...mockUser,
+        createdAt: mockUser.createdAt.toISOString(),
+        updatedAt: mockUser.updatedAt.toISOString()
+      };
+
+      expect(testService.user()).toEqual(expectedUser as any);
+      expect(testService.authenticated()).toBeTrue();
     });
 
     it('should logout if localStorage contains invalid JSON', () => {
       localStorage.setItem('access_token', 'test-token');
       localStorage.setItem('current_user', 'invalid-json');
 
-      spyOn(service, 'logout');
+      // Spy on the prototype before creating the new instance
+      const logoutSpy = spyOn(AuthService.prototype, 'logout');
 
       // Create new service instance to trigger constructor
-      TestBed.inject(AuthService);
+      testService = TestBed.inject(AuthService);
 
-      expect(service.logout).toHaveBeenCalled();
+      expect(logoutSpy).toHaveBeenCalled();
     });
   });
 
@@ -86,14 +125,14 @@ describe('AuthService', () => {
         password: 'password123'
       };
 
-      service.login(loginData).subscribe(response => {
+      service.login(loginData).subscribe((response: LoginResponse) => {
         expect(response).toEqual(mockLoginResponse);
       });
 
       const req = httpMock.expectOne(`${environment.apiUrl}/v1/auth/login`);
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(loginData);
-      req.flush(mockLoginResponse);
+      req.flush(createMockApiResponse());
     });
 
     it('should handle login error', () => {
@@ -104,7 +143,7 @@ describe('AuthService', () => {
 
       service.login(loginData).subscribe({
         next: () => fail('should have failed'),
-        error: (error) => {
+        error: (error: any) => {
           expect(error.message).toBe('Credenciales inválidas');
         }
       });
@@ -119,35 +158,28 @@ describe('AuthService', () => {
       const registerData: RegisterRequest = {
         email: 'new@example.com',
         username: 'newuser',
-        full_name: 'New User',
+        fullName: 'New User',
         role: 'teacher',
         password: 'password123'
       };
 
-      const expectedBackendData = {
-        email: 'new@example.com',
-        username: 'newuser',
-        full_name: 'New User',
-        role: 'teacher',
-        is_active: true,
-        password: 'password123'
-      };
+      const expectedBackendData = AuthMapper.registerRequestToApi(registerData);
 
-      service.register(registerData).subscribe(response => {
+      service.register(registerData).subscribe((response: LoginResponse) => {
         expect(response).toEqual(mockLoginResponse);
       });
 
       const req = httpMock.expectOne(`${environment.apiUrl}/v1/auth/register`);
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(expectedBackendData);
-      req.flush(mockLoginResponse);
+      req.flush(createMockApiResponse());
     });
 
     it('should default role to student if not provided', () => {
       const registerData: RegisterRequest = {
         email: 'new@example.com',
         username: 'newuser',
-        full_name: 'New User',
+        fullName: 'New User',
         password: 'password123'
       };
 
@@ -155,30 +187,36 @@ describe('AuthService', () => {
 
       const req = httpMock.expectOne(`${environment.apiUrl}/v1/auth/register`);
       expect(req.request.body.role).toBe('student');
-      req.flush(mockLoginResponse);
+      req.flush(createMockApiResponse());
     });
 
     it('should handle registration error for existing email', () => {
       const registerData: RegisterRequest = {
         email: 'existing@example.com',
         username: 'newuser',
-        full_name: 'New User',
+        fullName: 'New User',
         password: 'password123'
       };
 
       service.register(registerData).subscribe({
         next: () => fail('should have failed'),
-        error: (error) => {
+        error: (error: Error) => {
           expect(error.message).toBe('El email ya está registrado');
         }
       });
 
       const req = httpMock.expectOne(`${environment.apiUrl}/v1/auth/register`);
+      expect(req.request.method).toBe('POST');
       req.flush({ message: 'Email already exists' }, { status: 409, statusText: 'Conflict' });
     });
   });
 
   describe('logout', () => {
+    afterEach(() => {
+      // Ensure clean state after logout tests
+      localStorage.clear();
+    });
+
     it('should clear user data and localStorage', () => {
       // Setup initial state
       service.setSession(mockLoginResponse);
@@ -196,6 +234,11 @@ describe('AuthService', () => {
   });
 
   describe('setSession', () => {
+    afterEach(() => {
+      // Clean localStorage after setSession tests
+      localStorage.clear();
+    });
+
     it('should store token and user data', () => {
       service.setSession(mockLoginResponse);
 
@@ -215,13 +258,14 @@ describe('AuthService', () => {
 
       service.login(loginData).subscribe({
         next: () => fail('should have failed'),
-        error: (error) => {
+        error: (error: Error) => {
           expect(error.message).toContain('Error:');
         }
       });
 
       const req = httpMock.expectOne(`${environment.apiUrl}/v1/auth/login`);
-      req.error(new ProgressEvent('Network error'));
+      // Simulate a client-side/network error
+      req.error(new ProgressEvent('error'));
     });
 
     it('should handle 400 Bad Request', () => {
@@ -232,7 +276,7 @@ describe('AuthService', () => {
 
       service.login(loginData).subscribe({
         next: () => fail('should have failed'),
-        error: (error) => {
+        error: (error: any) => {
           expect(error.message).toBe('Datos inválidos');
         }
       });
@@ -249,7 +293,7 @@ describe('AuthService', () => {
 
       service.login(loginData).subscribe({
         next: () => fail('should have failed'),
-        error: (error) => {
+        error: (error: any) => {
           expect(error.message).toBe('Password too short');
         }
       });
@@ -266,7 +310,7 @@ describe('AuthService', () => {
 
       service.login(loginData).subscribe({
         next: () => fail('should have failed'),
-        error: (error) => {
+        error: (error: any) => {
           expect(error.message).toBe('Error interno del servidor');
         }
       });
@@ -283,7 +327,7 @@ describe('AuthService', () => {
 
       service.login(loginData).subscribe({
         next: () => fail('should have failed'),
-        error: (error) => {
+        error: (error: any) => {
           expect(error.message).toContain('Error 418:');
         }
       });
@@ -294,6 +338,11 @@ describe('AuthService', () => {
   });
 
   describe('signals', () => {
+    afterEach(() => {
+      // Reset service state after signals tests
+      service.logout();
+    });
+
     it('should provide readonly signals', () => {
       const userSignal = service.user();
       const authSignal = service.authenticated();

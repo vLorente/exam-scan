@@ -93,9 +93,9 @@ export class AuthService {
   private handleError = (error: HttpErrorResponse): Observable<never> => {
     let errorMessage = 'Ha ocurrido un error inesperado';
 
-    if (error.error instanceof ErrorEvent) {
-      // Error del lado del cliente
-      errorMessage = `Error: ${error.error.message}`;
+    if (error.error instanceof ProgressEvent) {
+      // Error del lado del cliente (red, timeout, etc.)
+      errorMessage = `Error: ${error.message || 'Error de conexión'}`;
     } else {
       // Error del servidor
       switch (error.status) {
