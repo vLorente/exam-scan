@@ -158,8 +158,18 @@ export class QuestionFormComponent implements OnInit {
     let options: string[] | undefined;
 
     if (formValue.questionType === 'multiple_choice' || formValue.questionType === 'single_choice') {
-      options = formValue.options.filter((option: string) => option.trim());
-      correctAnswer = options?.[this.correctAnswerIndex()] || '';
+      // Filter out empty options and trim whitespace
+      options = formValue.options
+        .filter((opt: string) => opt && opt.trim())
+        .map((opt: string) => opt.trim());
+
+      // Validate minimum options for multiple choice
+      if (!options || options.length < 2) {
+        console.error('Multiple choice questions require at least 2 valid options');
+        return;
+      }
+
+      correctAnswer = options[this.correctAnswerIndex()] || '';
     } else {
       correctAnswer = formValue.correctAnswer;
     }
