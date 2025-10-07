@@ -12,8 +12,14 @@ describe('PageTitleComponent', () => {
     .compileComponents();
 
     fixture = TestBed.createComponent(PageTitleComponent);
+    fixture.componentRef.setInput('title', 'Test Title');
+    fixture.componentRef.setInput('description', 'Test Description');
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture.destroy();
   });
 
   it('should create', () => {
@@ -43,12 +49,7 @@ describe('PageTitleComponent', () => {
   });
 
   it('should not display description when empty', () => {
-    Object.defineProperty(component, 'title', {
-      value: () => 'Test Title'
-    });
-    Object.defineProperty(component, 'description', {
-      value: () => ''
-    });
+    fixture.componentRef.setInput('description', '');
     fixture.detectChanges();
     const descriptionElement = fixture.nativeElement.querySelector('.page-description');
     expect(descriptionElement).toBeNull();
@@ -64,12 +65,7 @@ describe('PageTitleComponent', () => {
   });
 
   it('should hide back button when showBackButton is false', () => {
-    Object.defineProperty(component, 'title', {
-      value: () => 'Test Title'
-    });
-    Object.defineProperty(component, 'showBackButton', {
-      value: () => false
-    });
+    fixture.componentRef.setInput('showBackButton', false);
     fixture.detectChanges();
     const backButton = fixture.nativeElement.querySelector('.back-button');
     expect(backButton).toBeNull();
@@ -77,22 +73,13 @@ describe('PageTitleComponent', () => {
 
   it('should emit backClick when back button is clicked', () => {
     spyOn(component.backClick, 'emit');
-    Object.defineProperty(component, 'title', {
-      value: () => 'Test Title'
-    });
-    fixture.detectChanges();
     const backButton = fixture.nativeElement.querySelector('.back-button');
     backButton.click();
     expect(component.backClick.emit).toHaveBeenCalled();
   });
 
   it('should use custom back button text', () => {
-    Object.defineProperty(component, 'title', {
-      value: () => 'Test Title'
-    });
-    Object.defineProperty(component, 'backButtonText', {
-      value: () => 'Go Back'
-    });
+    fixture.componentRef.setInput('backButtonText', 'Go Back');
     fixture.detectChanges();
     const backButton = fixture.nativeElement.querySelector('.back-button');
     expect(backButton.textContent.trim()).toContain('Go Back');

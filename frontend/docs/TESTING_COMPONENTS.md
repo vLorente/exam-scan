@@ -12,3 +12,13 @@ La solución fue usar overrideComponent para agregar los providers (los mocks) d
 2. **Uso de overrideComponent**: Esto permite inyectar los mocks directamente en el componente standalone.
 3. **Resetear spies en beforeEach**: Esto asegura que cada test comience con un estado limpio.
 4. **Eliminar tests innecesarios**: Algunos tests que verificaban comportamientos negativos no eran necesarios y fueron eliminados para simplificar el suite de tests.
+
+## 2. Problema con tests en ExamSummaryComponent y uso de Inputs
+### Descripción del problema
+El problema era que el componente ExamSummaryComponent tiene un Input obligatorio `exam`. En los tests, no se estaba proporcionando este Input, lo que causaba errores al intentar renderizar el componente.
+### Solución implementada
+La solución fue usar `fixture.componentRef.setInput('exam', mockExam)` para proporcionar el Input necesario antes de llamar a `fixture.detectChanges()`.
+### Detalles técnicos
+1. **Proveer el Input obligatorio**: Esto asegura que el componente tenga todos los datos necesarios para renderizar correctamente.
+2. **Llamar a detectChanges después de setInput**: Esto es crucial para que Angular procese el nuevo Input y actualice la vista del componente. 
+3. **Verificar la renderización del componente**: Asegurarse de que el componente se renderiza correctamente con los datos proporcionados.
