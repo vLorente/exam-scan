@@ -22,7 +22,11 @@
         "GitHub.vscode-pull-request-github",
         "humao.rest-client",
         "cyrilletuzi.angular-schematics",
-        "ecmel.vscode-html-css"
+        "pflannery.vscode-versionlens",
+        "lucono.karma-test-explorer",
+        "meganrogge.template-string-converter",
+        "VisualStudioExptTeam.vscodeintellicode",
+        "christian-kohler.npm-intellisense"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
@@ -30,7 +34,7 @@
       }
     }
   },
-  "forwardPorts": [4200],
+  "forwardPorts": [4200, 9876],
   
   "portsAttributes": {
     "4200": {

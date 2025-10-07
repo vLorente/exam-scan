@@ -39,11 +39,6 @@ export class LoginPageComponent {
       const response = await firstValueFrom(this.authService.login(loginData));
       this.authService.setSession(response);
 
-      this.snackBar.open('¡Bienvenido! Inicio de sesión exitoso', 'Cerrar', {
-        duration: 3000,
-        panelClass: ['success-snackbar']
-      });
-
       this.router.navigate(['/dashboard']);
     } catch (error: any) {
       console.error('Error en login:', error);

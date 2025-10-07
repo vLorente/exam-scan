@@ -1,19 +1,35 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExamSummary } from './exam-summary';
+import { ExamSummaryComponent } from './exam-summary';
+import { Exam } from '@core/models';
+import { signal } from '@angular/core';
 
-describe('ExamSummary', () => {
-  let component: ExamSummary;
-  let fixture: ComponentFixture<ExamSummary>;
+describe('ExamSummaryComponent', () => {
+  let component: ExamSummaryComponent;
+  let fixture: ComponentFixture<ExamSummaryComponent>;
+  const mockExam: Exam = {
+    id: 1,
+    title: 'Test Exam',
+    description: 'Test exam description',
+    createdBy: 1,
+    isActive: true,
+    timeLimit: 60,
+    totalQuestions: 10,
+    passingScore: 70,
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-01')
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ExamSummary]
+      imports: [ExamSummaryComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ExamSummary);
+    fixture = TestBed.createComponent(ExamSummaryComponent);
     component = fixture.componentInstance;
+    // Set the exam input, which is required
+    fixture.componentRef.setInput('exam', mockExam);
     fixture.detectChanges();
   });
 

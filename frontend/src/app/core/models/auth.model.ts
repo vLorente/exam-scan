@@ -70,7 +70,7 @@ export class AuthMapper {
       email: request.email,
       username: request.username,
       full_name: request.fullName,
-      role: request.role,
+      role: request.role || 'student',
       password: request.password
     };
   }

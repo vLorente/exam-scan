@@ -1,3 +1,7 @@
+# TODO: Actualmente es un Mockup de Dockerfile para una aplicación Angular
+# TODO: Actualizar para el primer despliegue real
+# La configuración actual está en los dev containers
+
 # Imagen base con Node.js
 FROM node:lts-alpine AS build-stage
 

@@ -8,23 +8,44 @@ ARG NODE_VERSION=22.14.0-alpine
 # Set the base image for development
 FROM node:${NODE_VERSION} AS dev
 
-# Install dependencies
-RUN apk add --no-cache bash curl git
+# Install dependencies including Chromium for testing
+RUN apk add --no-cache \
+    bash \
+    curl \
+    git \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont
+
+# Set environment variables for Chromium
+ENV CHROME_BIN=/usr/bin/chromium-browser \
+    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 # Set environment variable to indicate development mode
 ENV NODE_ENV=development
 
-# Set the working directory inside the container
-WORKDIR /app/frontend
+# Set the working directory to the root of the project
+WORKDIR /app
 
-# Copy only the dependency files first to optimize Docker caching
-COPY ./frontend/package.json ./frontend/package-lock.json ./
+# Copy only the frontend dependency files first to optimize Docker caching
+COPY ./frontend/package.json ./frontend/package-lock.json ./frontend/
+
+# Set working directory to frontend for npm install
+WORKDIR /app/frontend
 
 # Install dependencies using npm with caching to speed up subsequent builds
 RUN --mount=type=cache,target=/root/.npm npm install
 
-# Copy all application source files into the container
-COPY . ../
+# Go back to root and copy all project files
+WORKDIR /app
+COPY . .
+
+# Set working directory back to frontend for running the app
+WORKDIR /app/frontend
 
 # Expose the port Angular uses for the dev server (default is 4200)
 EXPOSE 4200
